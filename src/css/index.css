@@ -1,0 +1,235 @@
+@font-face {
+  font-family: "IRANYekanWebLight";
+  src: url("../assets/fonts/IRANYekanWebLight.eot") format("eot"),
+    url("../assets/fonts/IRANYekanWebLight.woff") format("woff"),
+    url("../assets/fonts/IRANYekanWebLight.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+/* //////////// */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* /////////////// */
+@layer base {
+  * {
+    user-select: none; /* Non-prefixed version, currently*/
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    scrollbar-width: none !important;
+    font-family: "IRANYekanWebLight";
+  }
+  ::-webkit-scrollbar {
+    width: 0px !important;
+  }
+  html {
+    direction: rtl !important;
+  }
+}
+/* /////////////// */
+@layer components {
+  .ParentLogin {
+    @apply w-full flex justify-center items-center;
+    background-image: url(../assets/image/BgLogin.jpg);
+    background-size: cover;
+    height: 100vh;
+  }
+  .login {
+    @apply flex flex-col justify-center shadow-xl rounded-md items-center p-4;
+    background-color: rgba(255, 255, 255, 0.13);
+    backdrop-filter: blur(20px);
+  }
+  .Logo {
+    width: 100px;
+    height: 100px;
+  }
+  .LoginInput {
+    @apply outline-none mt-5 bg-[#2726299c]  shadow-2xl text-center border-[#1716187c] text-white  rounded-lg;
+    width: 250px;
+    height: 50px;
+  }
+  .loginBtn {
+    @apply flex justify-center  hover:opacity-70 items-center p-3 mt-4 bg-blue-700  opacity-100 duration-500 transition-all rounded-md text-white;
+    width: 100px;
+  }
+  /* //////////////////////////// */
+  .ParentRegister {
+    @apply w-full flex overflow-y-scroll justify-start items-center;
+    background-image: url(../assets/image/BgRegister.jpg);
+    background-size: cover;
+    padding-right: 15vw;
+    height: 100vh;
+  }
+  .Register {
+    @apply flex flex-col justify-center rounded-md items-center p-4;
+    width: 550px;
+  }
+  .FormInputRegister {
+    @apply flex w-full flex-wrap justify-evenly items-center;
+  }
+  .RegisterBtn {
+    @apply flex justify-center  hover:opacity-70 items-center p-3 mt-4 bg-blue-700  opacity-100 duration-500 transition-all rounded-md text-white;
+    width: 100px;
+  }
+  .RegisterInput {
+    @apply outline-none mt-5 bg-white shadow-2xl text-center text-black rounded-sm;
+    width: 250px;
+    height: 50px;
+  }
+  .ErrorMessage {
+    @apply mt-2 flex items-center justify-center bg-red-700 opacity-80 px-7 p-2 rounded-md text-white;
+    width: 250px;
+  }
+  @media only screen and (max-width: 750px) {
+    .ParentLogin {
+      @apply w-full flex justify-center items-start pt-4;
+      background-image: url(../assets/image/BgLoginMobile.jpg);
+      background-size: cover;
+      overflow: hidden;
+    }
+    .login {
+      @apply bg-transparent;
+    }
+    .ParentRegister {
+      @apply w-full p-0 flex justify-center  items-start;
+      background-image: url(../assets/image/BgRegisterMobile.jpg);
+      background-size: cover;
+      height: 100vh;
+    }
+    .ParentInputRegister {
+      @apply flex-col justify-center items-center;
+    }
+  }
+  .ParentHome {
+    @apply flex flex-col overflow-y-scroll justify-start items-center;
+    background-image: url(../assets/image/BgHome.jpg);
+    background-size: cover;
+    height: 100vh;
+  }
+  .ParentMain {
+    @apply flex justify-evenly items-center mt-4 flex-wrap w-full p-2;
+    height: 100vh;
+  }
+  /* /////////////////////////////////// */
+  .Console {
+    @apply flex relative flex-col justify-between mb-8 p-3 pt-8 items-center bg-white bg-opacity-90 shadow-md rounded-xl;
+    height: 200px;
+    width: 300px;
+  }
+  .ConsoleNumber {
+    @apply bg-white rounded-full;
+    position: absolute;
+    top: -25px;
+  }
+  .ConsoleTimer {
+    @apply flex items-center justify-center text-2xl;
+  }
+  .SelectedMoneyConsole {
+    @apply flex items-center justify-center text-center cursor-pointer bg-slate-300 rounded-md p-3;
+    width: 109px;
+  }
+  .UlMoney {
+    @apply flex flex-col bg-white items-center justify-center mt-1 rounded-md shadow-md overflow-hidden absolute;
+    z-index: 99999;
+    width: 109px;
+  }
+  .UlMoney li {
+    @apply p-1 w-full text-lg text-center cursor-pointer hover:bg-slate-300 transition-all;
+  }
+  .ConsoleMoney {
+    @apply flex my-2 items-center justify-center text-3xl transition-all;
+  }
+  .BtnConsoleStart {
+    @apply flex items-center justify-between p-2 px-5 rounded-md text-green-900 bg-green-300 hover:bg-green-400 transition-all;
+  }
+  .BtnConsoleFinish {
+    @apply flex items-center justify-between p-2 px-5 rounded-md text-red-900 bg-red-300 hover:bg-red-400 transition-all;
+  }
+  /* ///////////////////////////////////// */
+  .ParentFoods {
+    @apply flex items-start pt-5 px-3 justify-center w-full;
+    background-image: url(../assets/image/BgFood.jpg);
+    background-size: cover;
+    height: 100vh;
+  }
+  .TableFoods {
+    @apply w-full bg-white rounded-md overflow-hidden;
+  }
+  .TdHeaderFoods {
+    @apply flex justify-center items-center p-3;
+  }
+  .TableFoods tbody tr td {
+    @apply text-center p-3;
+  }
+  .TableFoods tbody tr {
+    border-bottom: 1px dashed #e4e6ef;
+  }
+  .BtnRemove {
+    @apply flex items-center justify-between p-2 px-3 mr-1 rounded-md text-red-900 bg-red-200 hover:bg-red-400 transition-all;
+  }
+  .BtnChange {
+    @apply mr-2 flex items-center justify-between p-2 px-5 rounded-md text-yellow-900 bg-yellow-200 hover:bg-yellow-400 transition-all;
+  }
+  .ParentModal {
+    @apply fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto;
+  }
+  .ModalDivOne {
+    @apply relative  pointer-events-none;
+  }
+  .ModalDivTwo {
+    @apply modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current;
+  }
+  .ModalHeader {
+    @apply flex items-center justify-between p-3 border-b border-gray-200 rounded-t-md;
+  }
+  .ModalMain {
+    @apply flex flex-col justify-center items-center w-full relative py-4 px-3;
+  }
+  .ModalFooter {
+    @apply flex items-center justify-evenly flex-wrap p-3 border-t border-gray-200 rounded-b-md;
+  }
+  .BtnAccept {
+    @apply flex items-center justify-between p-2 px-5 rounded-md text-green-900 bg-green-200 hover:bg-green-400 transition-all;
+  }
+  .Parent-food-store {
+    @apply p-3  flex w-full text-center justify-evenly items-center;
+  }
+  .consolePay {
+    @apply p-2 text-3xl;
+  }
+  .table-faktor {
+    @apply text-center w-full rounded-lg shadow-md overflow-hidden;
+  }
+  .faktor-header {
+    @apply bg-red-300;
+    border-bottom: dashed 1px black;
+  }
+  .faktor-header-td {
+    @apply p-2 flex items-center justify-evenly;
+  }
+  .faktor-main:nth-child(odd) {
+    @apply bg-slate-200;
+  }
+  .faktor-main:nth-child(even) {
+    @apply bg-slate-300;
+  }
+  .faktor-main td {
+    @apply p-3;
+  }
+  .faktor-footer {
+    @apply bg-yellow-300;
+    border-top: dashed 1px black;
+  }
+  .faktor-footer tr td {
+    @apply p-3  text-lg font-bold;
+  }
+  @media only screen and (min-width: 576px) {
+  .ModalDivOne {
+    max-width: 600px !important;
+  }
+}
+}
+

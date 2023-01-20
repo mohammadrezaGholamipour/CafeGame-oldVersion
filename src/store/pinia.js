@@ -137,7 +137,6 @@ export const cafePinia = defineStore({
     ],
     listMoney: ["12,000", "15,000", "20,000", "25,000", "30,000"],
     console: {},
-    food: {},
     storeOrFaktor: true,
   }),
   actions: {
@@ -242,6 +241,10 @@ export const cafePinia = defineStore({
       if (this.foodList[index].count > 0) {
         this.foodList[index].count--
       }
+    },
+    // /////////////////////////////////
+    handleRemoveFood(name) {
+      this.foodList = this.foodList.filter((items) => items.name !== name)
     },
     // /////////////////////////////////
     handleAcceptPay() {

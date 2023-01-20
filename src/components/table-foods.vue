@@ -1,7 +1,10 @@
 <script setup>
 import ChangeNewFood from "./change-new-food.vue";
+import { cafePinia } from "../store/pinia";
 import { reactive } from "vue";
 /////////////////////////////
+const store = cafePinia();
+//////////////////////////
 const state = reactive({
   headerFoods: [
     { name: "ردیف", icon: "fa-duotone fa-arrow-down-wide-short" },
@@ -9,18 +12,7 @@ const state = reactive({
     { name: "قیمت محصول", icon: "fa-duotone fa-money-bill-1-wave" },
     { name: "تغییرات", icon: "fa-duotone fa-cash-register" },
   ],
-  mainFoods: [
-    { name: "اب کوچک", money: "4000", count: 0, total: "" },
-    { name: "چیپس", money: "12000", count: 0, total: "" },
-    { name: "نوشابه", money: "8000", count: 0, total: "" },
-    { name: "پفک", money: "10000", count: 0, total: "" },
-    { name: "کلوچه", money: "5000", count: 0, total: "" },
-  ],
-  removeFood: false,
 });
-const handleRemoveFood = (food) => {
-  state.mainFoods = state.mainFoods.filter((items) => items.name !== food);
-};
 </script>
 <template>
   <div class="ParentFoods">
@@ -36,13 +28,16 @@ const handleRemoveFood = (food) => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(items, index) in state.mainFoods" :key="index">
+        <tr v-for="(items, index) in store.foodList" :key="index">
           <td>{{ index + 1 }}</td>
           <td>{{ items.name }}</td>
           <td>{{ Number(items.money).toLocaleString() }}</td>
           <td>
             <div class="inline-flex justify-center items-center">
-              <button class="BtnRemove" @click="handleRemoveFood(items.name)">
+              <button
+                @click="store.handleRemoveFood(items.name)"
+                class="BtnRemove"
+              >
                 <p class="ml-1">حذف</p>
                 <i class="fa-duotone fa-trash"></i>
               </button>

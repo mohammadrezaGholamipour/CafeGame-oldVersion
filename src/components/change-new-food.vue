@@ -1,9 +1,11 @@
+<script setup>
+import { cafePinia } from "../store/pinia";
+// ///////////////////////////////
+const store = cafePinia();
+// /////////////////////
+</script>
 <template>
-  <div
-    class="modal fade ParentModal"
-    data-bs-backdrop="static"
-    id="tableForm"
-  >
+  <div class="modal fade ParentModal" data-bs-backdrop="static" id="tableForm">
     <div class="modal-dialog ModalDivOne">
       <div class="ModalDivTwo">
         <div class="ModalHeader">
@@ -13,7 +15,7 @@
             data-bs-dismiss="modal"
           ></i>
         </div>
-        <div class="ModalMain">main</div>
+        <div class="ModalMain">dssdfsd</div>
         <div class="ModalFooter">
           <button class="BtnAccept">
             <p>ثبت</p>

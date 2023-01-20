@@ -226,10 +226,12 @@
   .faktor-footer tr td {
     @apply p-3  text-lg font-bold;
   }
+  .food-input {
+    @apply p-3 rounded-md bg-slate-200 outline-none;
+  }
   @media only screen and (min-width: 576px) {
-  .ModalDivOne {
-    max-width: 600px !important;
+    .ModalDivOne {
+      max-width: 600px !important;
+    }
   }
 }
-}
-

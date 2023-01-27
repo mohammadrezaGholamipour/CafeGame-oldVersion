@@ -16,6 +16,13 @@ const state = reactive({
 </script>
 <template>
   <div class="ParentFoods">
+    <button
+      data-bs-target="#tableForm"
+      data-bs-toggle="modal"
+      class="btn-new-food"
+    >
+      افزودن خوارکی
+    </button>
     <table class="TableFoods">
       <thead class="bg-[#d1d1d180]">
         <tr>
@@ -42,6 +49,7 @@ const state = reactive({
                 <i class="fa-duotone fa-trash"></i>
               </button>
               <button
+                @click="store.handleChangefoodInfo(items)"
                 data-bs-target="#tableForm"
                 data-bs-toggle="modal"
                 class="BtnChange"

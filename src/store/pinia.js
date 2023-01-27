@@ -129,15 +129,16 @@ export const cafePinia = defineStore({
       },
     ],
     foodList: [
-      { name: "اب کوچک", money: "4000", count: 0, total: '' },
-      { name: "چیپس", money: "12000", count: 0, total: '' },
-      { name: "نوشابه", money: "8000", count: 0, total: '' },
-      { name: "پفک", money: "10000", count: 0, total: '' },
-      { name: "کلوچه", money: "5000", count: 0, total: '' },
+      { id: 1, name: "اب کوچک", money: "4000", count: 0, total: '' },
+      { id: 2, name: "چیپس", money: "12000", count: 0, total: '' },
+      { id: 3, name: "نوشابه", money: "8000", count: 0, total: '' },
+      { id: 4, name: "پفک", money: "10000", count: 0, total: '' },
+      { id: 5, name: "کلوچه", money: "5000", count: 0, total: '' },
     ],
     listMoney: ["12,000", "15,000", "20,000", "25,000", "30,000"],
-    console: {},
     storeOrFaktor: true,
+    console: {},
+    food: {},
   }),
   actions: {
     handleStatusConsole(index) {
@@ -243,8 +244,28 @@ export const cafePinia = defineStore({
       }
     },
     // /////////////////////////////////
+    handleChangefoodInfo(food) {
+      this.food = food
+    },
+    ////////////////////////////////
+    handleCloseFoodModal() {
+      setTimeout(() => {
+        this.food = {}
+      }, 500);
+    },
+    ////////////////////////////////
     handleRemoveFood(name) {
       this.foodList = this.foodList.filter((items) => items.name !== name)
+    },
+    // /////////////////////////////////
+    handleAcceptFood(food) {
+      const foodItem = this.foodList.find((items) => items.id === food.id)
+      if (foodItem) {
+        foodItem.name = food.name
+        foodItem.money = food.money
+      } else {
+        this.foodList.push(food)
+      }
     },
     // /////////////////////////////////
     handleAcceptPay() {

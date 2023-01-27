@@ -14,15 +14,15 @@ const store = cafePinia();
             <img
               v-if="store.storeOrFaktor"
               class="shadow-md border border-yellow-700 transition-all bg-yellow-500 rounded-full cursor-pointer hover:scale-110 p-1"
-              src="../assets/image/food.png"
               @click="store.handleStoreOrFaktor()"
+              src="../assets/image/food.png"
               width="50"
             />
             <img
               v-else
               class="shadow-md rounded-full border-2 border-yellow-600 transition-all cursor-pointer hover:scale-110"
-              src="../assets/image/faktor.jpg"
               @click="store.handleStoreOrFaktor()"
+              src="../assets/image/faktor.jpg"
               width="50"
             />
           </transition-slide>
@@ -33,15 +33,16 @@ const store = cafePinia();
         </div>
         <div class="ModalMain">
           <div class="w-full">
-            <transition-scale group>
+            <transition-slide group>
               <Faktor v-if="store.storeOrFaktor" />
               <FoodStore v-else />
-            </transition-scale>
+            </transition-slide>
           </div>
         </div>
         <div class="ModalFooter">
           <button
             @click="store.handleAcceptPay"
+            v-if="store.storeOrFaktor"
             data-bs-dismiss="modal"
             class="BtnAccept"
           >

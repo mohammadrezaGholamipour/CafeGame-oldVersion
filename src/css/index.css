@@ -110,12 +110,12 @@
     height: 100vh;
   }
   .ParentMain {
-    @apply flex justify-evenly items-center mt-4 flex-wrap w-full p-2;
+    @apply flex justify-evenly items-center  flex-wrap w-full p-2;
     height: 100vh;
   }
   /* /////////////////////////////////// */
   .Console {
-    @apply flex relative flex-col justify-between mb-8 p-3 pt-8 items-center bg-white bg-opacity-90 shadow-md rounded-xl;
+    @apply flex relative flex-col justify-between  p-3 m-4 pt-8 items-center bg-white bg-opacity-90 shadow-md rounded-xl;
     height: 200px;
     width: 300px;
   }
@@ -150,13 +150,16 @@
   }
   /* ///////////////////////////////////// */
   .ParentFoods {
-    @apply flex items-start pt-5 px-3 justify-center w-full;
+    @apply flex items-center flex-col pt-5 px-3 justify-start w-full;
     background-image: url(../assets/image/BgFood.jpg);
     background-size: cover;
     height: 100vh;
   }
   .TableFoods {
     @apply w-full bg-white rounded-md overflow-hidden;
+  }
+  .btn-new-food {
+    @apply my-3 mt-0 p-2 bg-red-500 border-2 border-white text-white hover:bg-red-600 transition-all rounded-full shadow-md;
   }
   .TdHeaderFoods {
     @apply flex justify-center items-center p-3;
@@ -228,6 +231,17 @@
   }
   .food-input {
     @apply p-3 rounded-md bg-slate-200 outline-none;
+  }
+  .menu-setting {
+    @apply offcanvas-top fixed bottom-0 flex flex-col  bg-white invisible  shadow-xl outline-none transition duration-300 ease-in-out text-gray-700 top-0 left-0 mx-auto right-0 border-none rounded-b-md;
+    height: 215px;
+    max-width: 300px;
+  }
+  .parent-main-menu-setting {
+    @apply flex w-full flex-col justify-center items-center px-2;
+  }
+  .menu-setting-items {
+    @apply w-full p-2 flex items-center justify-start shadow-md bg-slate-200 rounded-md cursor-pointer hover:scale-105 transition-all duration-300 my-1;
   }
   @media only screen and (min-width: 576px) {
     .ModalDivOne {

@@ -2,6 +2,7 @@
 import { cafePinia } from "../store/pinia";
 ///////////////////////////////
 const store = cafePinia();
+
 </script>
 <template>
   <div v-for="(items, index) in store.listConsole" class="Console" :key="index">

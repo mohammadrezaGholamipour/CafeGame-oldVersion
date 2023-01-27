@@ -1,8 +1,10 @@
 import VueTransitions from '@morev/vue-transitions';
+
 import "vue-toastification/dist/index.css";
 import '@morev/vue-transitions/styles';
 import Toast from "vue-toastification";
 import { createPinia } from 'pinia'
+import './util/convert-numbers'
 import { createApp } from 'vue'
 import router from './router'
 import App from './App.vue'

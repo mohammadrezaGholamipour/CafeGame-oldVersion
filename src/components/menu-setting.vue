@@ -17,7 +17,7 @@ const state = reactive({
     },
     {
       id: 3,
-      name: "لیست اکانت ها",
+      name: "مدیریت اکانت ها",
       path: "",
       icon: "fa-duotone fa-clipboard-list text-blue-500",
     },
@@ -37,15 +37,11 @@ const state = reactive({
       ></i>
     </div>
     <div class="parent-main-menu-setting">
-      <div
-        v-for="items in state.settingList"
-        class="menu-setting-items"
-        :key="items.id"
-      >
-        <i class="text-xl" :class="items.icon"></i>
-        <router-link class="text-lg mr-2" :to="items.path">{{
-          items.name
-        }}</router-link>
+      <div class="w-full" v-for="items in state.settingList" :key="items.id">
+        <router-link class="menu-setting-items" :to="items.path">
+          <i class="text-xl" :class="items.icon"></i>
+          <p class="text-lg mr-2">{{ items.name }}</p>
+          </router-link>
       </div>
     </div>
   </div>

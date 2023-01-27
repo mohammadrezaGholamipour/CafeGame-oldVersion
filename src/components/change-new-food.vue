@@ -1,13 +1,23 @@
 <script setup>
+import { filterNumbersWithSep } from "../util/filter-numbers";
+import { useForm, useField } from "vee-validate";
 import { useToast } from "vue-toastification";
 import { cafePinia } from "../store/pinia";
 import { reactive, watch } from "vue";
+import * as yup from "yup";
 // ///////////////////////////////
 const store = cafePinia();
 const toast = useToast();
 ///////////////////////
 const state = reactive({
   food: { id: "", name: "", money: "", count: 0, total: "" },
+  schema: yup.object({
+    name: yup
+      .string()
+      .min(2, "لطفا نام محصول را کامل وارد کنید")
+      .required("لطفا نام محصول را وارد کنید")
+      .nullable("لطفا نام محصول را وارد کنید"),
+  }),
 });
 ///////////////////////
 watch(
@@ -16,6 +26,12 @@ watch(
     state.food.name = value.name;
     state.food.money = value.money;
     state.food.id = value.id;
+  }
+);
+watch(
+  () => state.food.money,
+  (value) => {
+    state.food.money = filterNumbersWithSep(value);
   }
 );
 ///////////////////////

@@ -10,7 +10,7 @@ import PayModal from "../components/pay-modal.vue";
       data-bs-target="#menuSetting"
       data-bs-toggle="offcanvas"
       class="cursor-pointer"
-      width="30"
+      width="40"
     />
     <div class="ParentMain">
       <MenuSetting />

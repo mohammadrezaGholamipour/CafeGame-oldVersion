@@ -38,7 +38,7 @@ const state = reactive({
         <tr v-for="(items, index) in store.foodList" :key="index">
           <td>{{ index + 1 }}</td>
           <td>{{ items.name }}</td>
-          <td>{{ Number(items.money).toLocaleString() }}</td>
+          <td>{{ items.money }}</td>
           <td>
             <div class="inline-flex justify-center items-center">
               <button

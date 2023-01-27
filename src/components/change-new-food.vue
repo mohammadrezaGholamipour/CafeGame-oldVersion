@@ -5,53 +5,67 @@ import { useToast } from "vue-toastification";
 import { cafePinia } from "../store/pinia";
 import { reactive, watch } from "vue";
 import * as yup from "yup";
-// ///////////////////////////////
+/////////////////////////
 const store = cafePinia();
 const toast = useToast();
 ///////////////////////
 const state = reactive({
-  food: { id: "", name: "", money: "", count: 0, total: "" },
   schema: yup.object({
     name: yup
       .string()
       .min(2, "لطفا نام محصول را کامل وارد کنید")
       .required("لطفا نام محصول را وارد کنید")
       .nullable("لطفا نام محصول را وارد کنید"),
+    money: yup
+      .string()
+      .min(4, "قیمت محصول درست نمیباشد")
+      .required("لطفا قیمت را وارد کنید")
+      .nullable("لطفا قیمت را وارد کنید"),
   }),
 });
-///////////////////////
-watch(
-  () => store.food,
-  (value) => {
-    state.food.name = value.name;
-    state.food.money = value.money;
-    state.food.id = value.id;
-  }
-);
-watch(
-  () => state.food.money,
-  (value) => {
-    state.food.money = filterNumbersWithSep(value);
-  }
-);
-///////////////////////
+const { handleSubmit } = useForm({ validationSchema: state.schema });
+///////////////////////////////
+const { value: name } = useField("name");
+const { value: money } = useField("money");
+///////////////////////////////
+function onInvalidSubmit({ errors }) {
+  toast.error(errors.name ? errors.name : errors.money);
+}
+//////////////////////////////
+const onSubmit = handleSubmit(() => {
+  handleAcceptFood();
+}, onInvalidSubmit);
+////////////////////////////////
 const handleAcceptFood = () => {
   const closeModal = document.getElementsByClassName("close");
-  const name = state.food.name;
-  const money = state.food.money;
-  if (store.food.money === money && store.food.name === name) {
+  if (store.food.money === money.value && store.food.name === name.value) {
     closeModal[0].click();
   } else {
     store.handleAcceptFood({
-      id: state.food.id,
-      name: state.food.name,
-      money: state.food.money,
+      id: store.food.id,
+      name: name.value,
+      money: money.value,
       count: 0,
       total: "",
     });
     closeModal[0].click();
   }
 };
+//////////////////
+watch(
+  () => store.food,
+  (value) => {
+    name.value = value.name;
+    money.value = value.money;
+  }
+);
+// /////////////////////
+watch(
+  () => money.value,
+  (value) => {
+    money.value = filterNumbersWithSep(value);
+  }
+);
 </script>
 <template>
   <div class="modal fade ParentModal" data-bs-backdrop="static" id="tableForm">
@@ -68,21 +82,21 @@ const handleAcceptFood = () => {
         <div class="ModalMain">
           <div class="flex w-full justify-evenly items-center">
             <input
-              v-model="state.food.name"
               placeholder="نام محصول"
               class="food-input"
+              v-model="name"
               type="text"
             />
             <input
-              v-model="state.food.money"
               placeholder="قیمت محصول"
               class="food-input"
+              v-model="money"
               type="text"
             />
           </div>
         </div>
         <div class="ModalFooter">
-          <button @click="handleAcceptFood()" class="BtnAccept">
+          <button @click="onSubmit" class="BtnAccept">
             <p>ثبت</p>
             <i class="fa-duotone fa-badge-check mr-2"></i>
           </button>

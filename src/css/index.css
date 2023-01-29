@@ -234,14 +234,37 @@
   }
   .menu-setting {
     @apply offcanvas-top fixed bottom-0 flex flex-col  bg-white invisible  shadow-xl outline-none transition duration-300 ease-in-out text-gray-700 top-0 left-0 mx-auto right-0 border-none rounded-b-md;
-    height: 215px;
     max-width: 300px;
+    height: 265px;
   }
   .parent-main-menu-setting {
-    @apply flex w-full flex-col justify-center items-center px-2;
+    @apply flex w-full  flex-col justify-center items-center px-2;
   }
   .menu-setting-items {
     @apply w-full p-2 flex items-center justify-start shadow-md bg-slate-200 rounded-md cursor-pointer hover:scale-105 transition-all duration-300 my-1;
+  }
+  .parent-consols {
+    @apply w-full flex flex-col justify-start overflow-y-scroll items-center;
+    background-image: url(../assets/image/bg-consols.jpg);
+    background-size: cover;
+    height: 100vh;
+  }
+  .manage-consols {
+    @apply flex flex-col m-5  relative justify-evenly items-center shadow-md bg-white rounded-md;
+    width: 200px;
+    height: 70px;
+  }
+  .number-manage-console {
+    @apply flex justify-center items-center bg-white rounded-full shadow-sm absolute;
+    top: -30px;
+    right: 10px;
+  }
+  .console-icon {
+    @apply m-2 text-2xl cursor-pointer;
+  }
+  .new-console {
+    @apply flex cursor-pointer justify-center p-2 shadow-lg items-center rounded-b-lg bg-green-500 ;
+   
   }
   @media only screen and (min-width: 576px) {
     .ModalDivOne {

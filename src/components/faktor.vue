@@ -1,39 +1,12 @@
-<script setup>
-import { cafePinia } from "../store/pinia";
-import { computed } from "vue";
-///////////////////////////////
-const store = cafePinia();
-// /////////////////////////
-const handleTotalFoods = computed(() => {
-  let foodsMoney = [];
-  store.console.foods.forEach((items) => {
-    foodsMoney.push(items.total);
-  });
-  const total = foodsMoney.reduce((money, items) => {
-    return money + items;
-  });
-  return total;
-});
-</script>
 <template>
   <div class="flex items-center justify-center">
-    <div
-      v-if="!store.console.foods?.length"
-      class="flex flex-col items-center justify-center"
-    >
+    <div v-if="true" class="flex flex-col items-center justify-center">
       <div class="ConsoleTimer">
-        <p class="ml-2 mt-2 flex items-baseline">
-          زمان بازی شده :
-          {{
-            `${store.console?.time?.hours}:${store.console?.time?.minutes}:${store.console?.time?.seconds}`
-          }}
-        </p>
+        <p class="ml-2 mt-2 flex items-baseline">زمان بازی شده :2:57:32</p>
         <img src="../assets/image/time.svg" width="40" />
       </div>
       <div class="flex items-center">
-        <p class="consolePay">
-          {{ Number(store.console.money).toLocaleString() }} تومان
-        </p>
+        <p class="consolePay">20,0000 تومان</p>
         <img src="../assets/image/money.svg" width="50" />
       </div>
     </div>
@@ -74,41 +47,26 @@ const handleTotalFoods = computed(() => {
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="(items, index) in store.console.foods"
-            class="faktor-main"
-            :key="index"
-          >
-            <td>{{ index + 1 }}</td>
-            <td>{{ items.name }}</td>
-            <td>{{ Number(items.money).toLocaleString() }}</td>
-            <td>{{ items.count }}</td>
-            <td>{{ items.total.toLocaleString() }}</td>
+          <tr class="faktor-main">
+            <td>1</td>
+            <td>چیپس</td>
+            <td>20,0000</td>
+            <td>2</td>
+            <td>40,0000</td>
           </tr>
         </tbody>
         <tfoot class="faktor-footer">
           <tr>
             <td class="text-right" colspan="3">هزینه خوارکی ها</td>
-            <td class="text-left" colspan="2">
-              {{ Number(handleTotalFoods).toLocaleString() }} تومان
-            </td>
+            <td class="text-left" colspan="2">55,000 تومان</td>
           </tr>
           <tr>
             <td class="text-right" colspan="3">هزینه بازی</td>
-            <td class="text-left" colspan="2">
-              {{ Number(store.console.money).toLocaleString() }} تومان
-            </td>
+            <td class="text-left" colspan="2">63,000 تومان</td>
           </tr>
           <tr>
             <td class="text-right" colspan="3">جمع کل</td>
-            <td class="text-left" colspan="2">
-              {{
-                (
-                  Number(handleTotalFoods) + Number(store.console.money)
-                ).toLocaleString()
-              }}
-              تومان
-            </td>
+            <td class="text-left" colspan="2">57,0000 تومان</td>
           </tr>
         </tfoot>
       </table>

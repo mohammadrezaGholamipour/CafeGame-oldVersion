@@ -38,27 +38,7 @@ const onSubmit = handleSubmit(() => {
 ////////////////////////////////
 const handleAcceptFood = () => {
   const closeModal = document.getElementsByClassName("close");
-  if (store.food.money === money.value && store.food.name === name.value) {
-    closeModal[0].click();
-  } else {
-    store.handleAcceptFood({
-      id: store.food.id,
-      name: name.value,
-      money: money.value,
-      count: 0,
-      total: "",
-    });
-    closeModal[0].click();
-  }
 };
-//////////////////
-watch(
-  () => store.food,
-  (value) => {
-    name.value = value.name;
-    money.value = value.money;
-  }
-);
 // /////////////////////
 watch(
   () => money.value,
@@ -75,7 +55,6 @@ watch(
           <p class="font-bold">افزون خوراکی</p>
           <i
             class="fa-solid fa-circle-xmark text-red-600 cursor-pointer text-2xl close"
-            @click="store.handleCloseFoodModal()"
             data-bs-dismiss="modal"
           ></i>
         </div>

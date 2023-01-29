@@ -21,6 +21,12 @@ const state = reactive({
       path: "",
       icon: "fa-duotone fa-clipboard-list text-blue-500",
     },
+    {
+      id: 3,
+      name: "مدیریت کنسول ها",
+      path: "/consols",
+      icon: "fa-duotone fa-gamepad-modern",
+    },
   ],
 });
 </script>
@@ -41,7 +47,7 @@ const state = reactive({
         <router-link class="menu-setting-items" :to="items.path">
           <i class="text-xl" :class="items.icon"></i>
           <p class="text-lg mr-2">{{ items.name }}</p>
-          </router-link>
+        </router-link>
       </div>
     </div>
   </div>

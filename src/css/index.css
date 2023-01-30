@@ -150,7 +150,7 @@
   }
   /* ///////////////////////////////////// */
   .ParentFoods {
-    @apply flex items-center flex-col pt-5 px-3 justify-start w-full;
+    @apply flex items-center flex-col px-3 justify-start w-full;
     background-image: url(../assets/image/BgFood.jpg);
     background-size: cover;
     height: 100vh;
@@ -250,21 +250,14 @@
     height: 100vh;
   }
   .manage-consols {
-    @apply flex flex-col m-5  relative justify-evenly items-center shadow-md bg-white rounded-md;
-    width: 200px;
-    height: 70px;
+    @apply flex flex-col m-5 p-3 opacity-95 relative justify-evenly items-center shadow-md bg-black rounded-md;
   }
-  .number-manage-console {
-    @apply flex justify-center items-center bg-white rounded-full shadow-sm absolute;
-    top: -30px;
-    right: 10px;
-  }
+
   .console-icon {
     @apply m-2 text-2xl cursor-pointer;
   }
   .new-console {
-    @apply flex cursor-pointer justify-center p-2 shadow-lg items-center rounded-b-lg bg-green-500 ;
-   
+    @apply flex border-2 border-white border-t-0 cursor-pointer justify-center p-2 shadow-lg items-center rounded-b-lg bg-green-500;
   }
   @media only screen and (min-width: 576px) {
     .ModalDivOne {

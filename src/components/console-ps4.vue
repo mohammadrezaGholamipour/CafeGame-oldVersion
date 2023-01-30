@@ -2,7 +2,7 @@
   <div class="Console">
     <!-- //////////////////////////////// -->
     <p class="ConsoleNumber">
-      <img :src="`src/assets/image/numbers/one.png`" width="50" />
+      <img :src="`src/assets/image/numbers/1.png`" width="50" />
     </p>
     <!-- ////////////////////////////////// -->
     <div class="ConsoleTimer">

@@ -12,7 +12,7 @@ const state = reactive({
 });
 </script>
 <template>
-  <div class="ParentFoods">
+  <div class="w-full flex flex-col items-start justify-center">
     <button
       data-bs-target="#tableForm"
       data-bs-toggle="modal"

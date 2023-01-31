@@ -6,6 +6,9 @@ import { cafePinia } from "../store/pinia";
 import { reactive, watch } from "vue";
 import * as yup from "yup";
 /////////////////////////
+const emit = defineEmits(["food"]);
+const props = defineProps(["food"]);
+/////////////////////////
 const store = cafePinia();
 const toast = useToast();
 ///////////////////////
@@ -23,6 +26,15 @@ const state = reactive({
       .nullable("لطفا قیمت را وارد کنید"),
   }),
 });
+// ////////////////////////////////
+watch(
+  () => props.food,
+  (value) => {
+    name.value = value.name;
+    money.value = value.cost;
+  }
+);
+// ////////////////////////////////
 const { handleSubmit } = useForm({ validationSchema: state.schema });
 ///////////////////////////////
 const { value: name } = useField("name");
@@ -38,6 +50,8 @@ const onSubmit = handleSubmit(() => {
 ////////////////////////////////
 const handleAcceptFood = () => {
   const closeModal = document.getElementsByClassName("close");
+
+  console.log(money.value, name.value);
 };
 // /////////////////////
 watch(

@@ -156,7 +156,8 @@
     height: 100vh;
   }
   .TableFoods {
-    @apply w-full bg-white rounded-md overflow-hidden;
+    @apply w-full bg-white rounded-md  ;
+  
   }
   .btn-new-food {
     @apply my-3 mt-0 p-2 bg-red-500 border-2 border-white text-white hover:bg-red-600 transition-all rounded-full shadow-md;

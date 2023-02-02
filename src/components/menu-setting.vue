@@ -36,6 +36,12 @@ const state = reactive({
       path: "",
       icon: "fa-duotone fa-clipboard-list text-blue-500",
     },
+    {
+      id: 6,
+      name: "مدیریت قیمت زمان بازی",
+      path: "/money",
+      icon: "fa-duotone fa-sack-dollar text-green-500",
+    },
   ],
 });
 </script>

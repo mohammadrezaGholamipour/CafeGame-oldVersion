@@ -26,6 +26,7 @@
     width: 0px !important;
   }
   html {
+    background-color: black;
     direction: rtl !important;
   }
 }
@@ -156,8 +157,7 @@
     height: 100vh;
   }
   .TableFoods {
-    @apply w-full bg-white rounded-md  ;
-  
+    @apply w-full bg-white rounded-md;
   }
   .btn-new-food {
     @apply my-3 mt-0 p-2 bg-red-500 border-2 border-white text-white hover:bg-red-600 transition-all rounded-full shadow-md;
@@ -236,7 +236,7 @@
   .menu-setting {
     @apply offcanvas-top fixed bottom-0 flex flex-col  bg-white invisible  shadow-xl outline-none transition duration-300 ease-in-out text-gray-700 top-0 left-0 mx-auto right-0 border-none rounded-b-md;
     max-width: 300px;
-    height: 265px;
+    height: 320px;
   }
   .parent-main-menu-setting {
     @apply flex w-full  flex-col justify-center items-center px-2;
@@ -259,6 +259,9 @@
   }
   .new-console {
     @apply flex border-2 border-white border-t-0 cursor-pointer justify-center p-2 shadow-lg items-center rounded-b-lg bg-green-500;
+  }
+  .parent-management-money{
+    @apply w-full flex flex-col justify-start items-center p-2;
   }
   @media only screen and (min-width: 576px) {
     .ModalDivOne {

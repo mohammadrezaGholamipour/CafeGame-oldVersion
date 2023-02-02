@@ -32,7 +32,8 @@ watch(
   (value) => {
     name.value = value.name;
     money.value = value.cost;
-  }
+  },
+  { deep: true }
 );
 // ////////////////////////////////
 const { handleSubmit } = useForm({ validationSchema: state.schema });
@@ -50,8 +51,29 @@ const onSubmit = handleSubmit(() => {
 ////////////////////////////////
 const handleAcceptFood = () => {
   const closeModal = document.getElementsByClassName("close");
+  const numberMoney = money.value;
 
-  console.log(money.value, name.value);
+  let food = {};
+  ///////////////////////
+
+  if (props.food?.id) {
+    console.log("بوده");
+    food = {
+      id: 0,
+      name: name.value,
+      cost: parseInt(numberMoney.replace(",", "")),
+    };
+  } else {
+    console.log("جدیده");
+    food = {
+      id: 0,
+      name: name.value,
+      cost: parseInt(numberMoney.replace(",", "")),
+    };
+  }
+  console.log(food);
+  emit("food", food);
+  closeModal[0].click();
 };
 // /////////////////////
 watch(

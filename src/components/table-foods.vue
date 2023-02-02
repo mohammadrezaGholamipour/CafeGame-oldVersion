@@ -26,7 +26,6 @@ const requestNewFood = (newFood) => {
     .new(newFood)
     .then((response) => {
       toast.success("خوراکی با موفقیت اضافه شد");
-      state.foodSelected = {};
       requestGetfoods();
     })
     .catch(() => {
@@ -65,6 +64,7 @@ const requestUpdatefood = (foodData) => {
       requestGetfoods();
     })
     .catch((error) => {
+      console.log(error);
       toast.error("خوراکی عوض نشد");
     });
 };

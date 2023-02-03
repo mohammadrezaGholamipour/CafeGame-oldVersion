@@ -19,7 +19,7 @@ namespace CafeGameApi.Migrations
 
             modelBuilder.Entity("CafeGameApi.Entities.Bill", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -29,13 +29,13 @@ namespace CafeGameApi.Migrations
                     b.Property<int?>("FinalCost")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("HourRateId")
+                    b.Property<int>("HourRateId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("SystemId")
+                    b.Property<int>("SystemId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -49,17 +49,17 @@ namespace CafeGameApi.Migrations
 
             modelBuilder.Entity("CafeGameApi.Entities.BillFood", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("BillId")
+                    b.Property<int>("BillId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Count")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("FoodId")
+                    b.Property<int>("FoodId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -73,11 +73,11 @@ namespace CafeGameApi.Migrations
 
             modelBuilder.Entity("CafeGameApi.Entities.Food", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("Cost")
+                    b.Property<int>("Cost")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
@@ -92,7 +92,7 @@ namespace CafeGameApi.Migrations
 
             modelBuilder.Entity("CafeGameApi.Entities.HourRate", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -106,7 +106,7 @@ namespace CafeGameApi.Migrations
 
             modelBuilder.Entity("CafeGameApi.Entities.PSSystem", b =>
                 {
-                    b.Property<int?>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -124,12 +124,14 @@ namespace CafeGameApi.Migrations
                     b.HasOne("CafeGameApi.Entities.HourRate", "HourRate")
                         .WithMany()
                         .HasForeignKey("HourRateId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
 
                     b.HasOne("CafeGameApi.Entities.PSSystem", "System")
                         .WithMany("Bills")
                         .HasForeignKey("SystemId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
 
                     b.Navigation("HourRate");
 
@@ -141,12 +143,14 @@ namespace CafeGameApi.Migrations
                     b.HasOne("CafeGameApi.Entities.Bill", "Bill")
                         .WithMany("BillFoods")
                         .HasForeignKey("BillId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
 
                     b.HasOne("CafeGameApi.Entities.Food", "Food")
                         .WithMany("BillFoods")
                         .HasForeignKey("FoodId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
 
                     b.Navigation("Bill");
 

@@ -18,7 +18,7 @@ namespace CafeGameApi.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
-                    Cost = table.Column<int>(type: "INTEGER", nullable: true)
+                    Cost = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -60,8 +60,8 @@ namespace CafeGameApi.Migrations
                     StartTime = table.Column<DateTime>(type: "TEXT", nullable: false),
                     EndTime = table.Column<DateTime>(type: "TEXT", nullable: true),
                     FinalCost = table.Column<int>(type: "INTEGER", nullable: true),
-                    SystemId = table.Column<int>(type: "INTEGER", nullable: true),
-                    HourRateId = table.Column<int>(type: "INTEGER", nullable: true)
+                    SystemId = table.Column<int>(type: "INTEGER", nullable: false),
+                    HourRateId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -87,8 +87,8 @@ namespace CafeGameApi.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Count = table.Column<int>(type: "INTEGER", nullable: false),
-                    FoodId = table.Column<int>(type: "INTEGER", nullable: true),
-                    BillId = table.Column<int>(type: "INTEGER", nullable: true)
+                    FoodId = table.Column<int>(type: "INTEGER", nullable: false),
+                    BillId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

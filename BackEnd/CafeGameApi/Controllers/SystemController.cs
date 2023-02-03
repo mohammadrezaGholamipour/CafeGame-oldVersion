@@ -28,8 +28,8 @@ public class SystemController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] PSSystem pSSystem)
     {
-        if (await _context.PSSystems.AnyAsync(x => x.Name == pSSystem.Name))
-            return (Conflict());
+        // if (await _context.PSSystems.AnyAsync(x => x.Name == pSSystem.Name))
+        //     return (Conflict());
 
         var model = await _context.PSSystems.AddAsync(pSSystem);
         var result = await _context.SaveChangesAsync();

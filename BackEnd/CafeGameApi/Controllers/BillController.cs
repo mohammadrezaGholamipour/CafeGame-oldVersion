@@ -49,19 +49,20 @@ public class BillController : ControllerBase
     [HttpPut("{id:int}/[action]")]
     public async Task<IActionResult> SetFoods([FromRoute] int id, [FromBody] List<SetFoodModel> foods)
     {
+        var foodIds = foods.Select(x => x.FoodId).ToList();
         if (!(await _context.Bills.AnyAsync(x => x.Id == id)) ||
-            !(await _context.Foods.AnyAsync(x => foods.Any(y => y.FoodId == x.Id))))
+            !(await _context.Foods.AnyAsync(x => foodIds.Contains(x.Id))))
             return NotFound();
 
-        foreach (var food in foods)
+        _context.BillFoods.RemoveRange(_context.BillFoods.Where(x => x.BillId == id));
+
+        await _context.BillFoods.AddRangeAsync(foods.Select(x => new BillFood()
         {
-            await _context.BillFoods.AddAsync(new BillFood
-            {
-                Count = food.Count,
-                FoodId = food.FoodId,
-                BillId = id
-            });
-        }
+            Count = x.Count,
+            FoodId = x.FoodId,
+            BillId = id
+        }));
+
 
         var result = await _context.SaveChangesAsync();
 
@@ -82,13 +83,18 @@ public class BillController : ControllerBase
 
         model.EndTime = endTime;
 
-        var foodCost = _context.BillFoods.Where(x => x.BillId == id)
-            .Select(x => x.Food!.Cost * x.Count)
+        var foodCost = (await _context.BillFoods.Where(x => x.BillId == id)
+            .Select(x => x.Food!.Cost * x.Count).ToListAsync())
             .Aggregate((x, y) => x + y);
 
         var minuteRate = ((float)(model.HourRate!.Rate)) / 60f;
 
-        var timeCost = Convert.ToInt32((model.EndTime - model.StartTime).Value.TotalMinutes * minuteRate);
+        var totalMinutes = (model.EndTime - model.StartTime).Value.TotalMinutes;
+        if (totalMinutes < 60)
+        {
+            totalMinutes = 60;
+        }
+        var timeCost = Convert.ToInt32(totalMinutes * minuteRate);
 
         model.FinalCost = foodCost + timeCost;
 

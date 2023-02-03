@@ -43,7 +43,7 @@ public class FoodController : ControllerBase
     {
         var model = await _context.Foods.FirstOrDefaultAsync(x => x.Id == id);
 
-        if (model is null || (await _context.Foods.AnyAsync(x => x.Name == food.Name)))
+        if (model is null)
             return NotFound();
 
         model.Name = food.Name;

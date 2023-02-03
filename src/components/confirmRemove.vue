@@ -1,7 +1,8 @@
 <script setup>
 const emit = defineEmits(["accept"]);
+const props = defineProps(["modal"]);
 const handleAcceptModal = () => {
-  emit("accept");
+  emit("accept", props.modal.id);
 };
 </script>
 <template>
@@ -13,7 +14,7 @@ const handleAcceptModal = () => {
     <div class="modal-dialog modal-dialog-centered ModalDivOne w-96">
       <div class="ModalDivTwo">
         <div class="ModalMain">
-          <p class="text-xl">دستگاه حذف شود؟</p>
+          <p class="text-xl">{{ props.modal.text }}</p>
         </div>
         <div class="ModalFooter p-2">
           <button

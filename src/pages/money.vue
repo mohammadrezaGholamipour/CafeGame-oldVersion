@@ -1,4 +1,20 @@
-<script setup></script>
+<script setup>
+import MenuSetting from "../components/menu-setting.vue";
+import TableMoney from "../components/table-money.vue";
+// ////////////////////////////////////////
+</script>
 <template>
-  <div class="parent-management-money">money</div>
+  <div class="parent-management-money">
+    <!-- ///////////////////////////////// -->
+    <img
+      src="../assets/image/menu-setting.gif"
+      data-bs-target="#menuSetting"
+      data-bs-toggle="offcanvas"
+      class="cursor-pointer"
+      width="40"
+    />
+    <!-- /////////////////////////////// -->
+    <TableMoney />
+    <MenuSetting />
+  </div>
 </template>

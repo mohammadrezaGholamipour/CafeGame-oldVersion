@@ -162,6 +162,9 @@
   .btn-new-food {
     @apply my-3 mt-0 p-2 bg-red-500 border-2 border-white text-white hover:bg-red-600 transition-all rounded-full shadow-md;
   }
+  .btn-new-money {
+    @apply my-3 mt-0 p-2 bg-green-500 border-2 border-white text-white hover:bg-green-600 transition-all rounded-full shadow-md;
+  }
   .TdHeaderFoods {
     @apply flex justify-center items-center p-3;
   }
@@ -260,8 +263,18 @@
   .new-console {
     @apply flex border-2 border-white border-t-0 cursor-pointer justify-center p-2 shadow-lg items-center rounded-b-lg bg-green-500;
   }
-  .parent-management-money{
-    @apply w-full flex flex-col justify-start items-center p-2;
+  .parent-management-money {
+    @apply w-full flex flex-col overflow-y-scroll justify-start items-center p-2;
+    background-image: url(../assets//image/bg-money.jpg);
+    background-size: cover;
+    height: 100vh;
+  }
+  .table-money {
+    @apply w-full text-center rounded-md overflow-hidden shadow-md mt-1 bg-white;
+  }
+  .td-money {
+    @apply p-2;
+    border-bottom: 1px dashed black;
   }
   @media only screen and (min-width: 576px) {
     .ModalDivOne {

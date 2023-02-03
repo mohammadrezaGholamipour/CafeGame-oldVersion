@@ -71,7 +71,6 @@ const handleAcceptFood = () => {
       cost: parseInt(numberMoney.replace(",", "")),
     };
   }
-  console.log(food);
   emit("food", food);
   closeModal[0].click();
 };
@@ -85,7 +84,7 @@ watch(
 </script>
 <template>
   <div class="modal fade ParentModal" data-bs-backdrop="static" id="tableForm">
-    <div class="modal-dialog ModalDivOne">
+    <div class="modal-dialog modal-dialog-centered ModalDivOne">
       <div class="ModalDivTwo">
         <div class="ModalHeader">
           <p class="font-bold">افزون خوراکی</p>

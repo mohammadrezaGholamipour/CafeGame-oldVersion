@@ -1,5 +1,5 @@
 <script setup>
-import MenuSetting from "../components/menu-setting.vue";
+import MenuFeatures from "../components/menu-features.vue";
 import ConsolePs4 from "../components/console-ps4.vue";
 import PayModal from "../components/pay-modal.vue";
 </script>
@@ -13,7 +13,7 @@ import PayModal from "../components/pay-modal.vue";
       width="40"
     />
     <div class="ParentMain">
-      <MenuSetting />
+      <MenuFeatures />
       <ConsolePs4 />
       <PayModal />
     </div>

@@ -1,17 +1,12 @@
 <script setup>
-import MenuSetting from "../components/menu-setting.vue";
+import BtnQuickAccess from "../components/btn-quick-access.vue";
+import MenuFeatures from "../components/menu-features.vue";
 import TableFoods from "../components/table-foods.vue";
 </script>
 <template>
   <div class="ParentFoods">
-    <img
-      src="../assets/image/menu-setting.gif"
-      data-bs-target="#menuSetting"
-      data-bs-toggle="offcanvas"
-      class="cursor-pointer"
-      width="40"
-    />
+    <BtnQuickAccess />
     <TableFoods />
-    <MenuSetting />
+    <MenuFeatures />
   </div>
 </template>

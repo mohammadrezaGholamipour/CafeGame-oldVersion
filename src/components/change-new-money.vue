@@ -15,7 +15,7 @@ const state = reactive({
   schema: yup.object({
     money: yup
       .string()
-      .min(4, "قیمت  درست نمیباشد")
+      .min(4, "قیمت درست نمیباشد")
       .required("لطفا قیمت را وارد کنید")
       .nullable("لطفا قیمت را وارد کنید"),
   }),
@@ -42,6 +42,7 @@ const handleAcceptMoney = () => {
   ///////////////////////
   emit("money", newMoney);
   closeModal[0].click();
+  money.value = "";
 };
 // /////////////////////
 watch(
@@ -53,7 +54,7 @@ watch(
 </script>
 <template>
   <div class="modal fade ParentModal" data-bs-backdrop="static" id="tableForm">
-    <div class="modal-dialog ModalDivOne">
+    <div class="modal-dialog  modal-dialog-centered ModalDivOne">
       <div class="ModalDivTwo">
         <div class="ModalHeader">
           <p class="font-bold">افزون قیمت</p>
@@ -65,7 +66,7 @@ watch(
         <div class="ModalMain">
           <div class="flex w-full justify-center items-center">
             <input
-              placeholder="قیمت"
+              placeholder="قیمت مورد نظر را وارد کنید"
               class="food-input"
               v-model="money"
               type="text"

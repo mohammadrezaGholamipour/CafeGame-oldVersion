@@ -1,5 +1,5 @@
 <script setup>
-import MenuSetting from "../components/menu-setting.vue";
+import MenuFeatures from "../components/menu-features.vue";
 import TableMoney from "../components/table-money.vue";
 // ////////////////////////////////////////
 </script>
@@ -15,6 +15,6 @@ import TableMoney from "../components/table-money.vue";
     />
     <!-- /////////////////////////////// -->
     <TableMoney />
-    <MenuSetting />
+    <MenuFeatures />
   </div>
 </template>

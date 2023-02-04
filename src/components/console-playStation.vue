@@ -48,6 +48,7 @@ const handleMoneySelect = (money, playstation) => {
 };
 ////////////////////////////
 const handleChangeConsoleStatus = (playstation) => {
+ console.log(new Date().toISOString());
   playstation.status = !playstation.status;
 };
 </script>
@@ -105,10 +106,11 @@ const handleChangeConsoleStatus = (playstation) => {
       <!-- //////////////////////////////// -->
       <button
         @click="handleChangeConsoleStatus(console)"
-        class="BtnConsoleStart"
+        :class="console.status ? 'BtnConsoleFinish' : 'BtnConsoleStart'"
       >
-        <p>شروع</p>
-        <i class="fa-thin fa-circle-play mr-2"></i>
+        <p>{{ console.status ? "پایان" : "شروع" }}</p>
+        <i v-if="!console.status" class="fa-thin fa-circle-play mr-2"></i>
+        <i v-else class="fa-light fa-circle-xmark mr-2"></i>
       </button>
       <!-- ///////////////////////////////////////// -->
     </div>

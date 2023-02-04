@@ -6,7 +6,8 @@ import { cafePinia } from "../store/pinia";
 import { reactive, watch } from "vue";
 import * as yup from "yup";
 /////////////////////////
-const emit = defineEmits(["money"]);
+const emit = defineEmits(["money", "close"]);
+const props = defineProps(["formModal"]);
 /////////////////////////
 const store = cafePinia();
 const toast = useToast();
@@ -15,11 +16,12 @@ const state = reactive({
   schema: yup.object({
     money: yup
       .string()
-      .min(4, "قیمت درست نمیباشد")
+      .min(4, "قیمت محصول درست نمیباشد")
       .required("لطفا قیمت را وارد کنید")
       .nullable("لطفا قیمت را وارد کنید"),
   }),
 });
+
 // ////////////////////////////////
 const { handleSubmit } = useForm({ validationSchema: state.schema });
 ///////////////////////////////
@@ -34,52 +36,57 @@ const onSubmit = handleSubmit(() => {
 }, onInvalidSubmit);
 ////////////////////////////////
 const handleAcceptMoney = () => {
-  const closeModal = document.getElementsByClassName("close");
   const numberMoney = parseInt(money.value.replace(",", ""));
-  let newMoney = {
+  const newMoney = {
+    id: 0,
     rate: numberMoney,
   };
-  ///////////////////////
   emit("money", newMoney);
-  closeModal[0].click();
   money.value = "";
 };
-// /////////////////////
+///////////////////////
 watch(
   () => money.value,
   (value) => {
     money.value = filterNumbersWithSep(value);
   }
 );
+const handleCloseModal = () => {
+  emit("close");
+  money.value = "";
+};
 </script>
 <template>
-  <div class="modal fade ParentModal" data-bs-backdrop="static" id="tableForm">
-    <div class="modal-dialog  modal-dialog-centered ModalDivOne">
-      <div class="ModalDivTwo">
-        <div class="ModalHeader">
-          <p class="font-bold">افزون قیمت</p>
-          <i
-            class="fa-solid fa-circle-xmark text-red-600 cursor-pointer text-2xl close"
-            data-bs-dismiss="modal"
-          ></i>
-        </div>
-        <div class="ModalMain">
-          <div class="flex w-full justify-center items-center">
-            <input
-              placeholder="قیمت مورد نظر را وارد کنید"
-              class="food-input"
-              v-model="money"
-              type="text"
-            />
-          </div>
-        </div>
-        <div class="ModalFooter">
-          <button @click="onSubmit" class="BtnAccept">
-            <p>ثبت</p>
-            <i class="fa-duotone fa-badge-check mr-2"></i>
-          </button>
+  <v-dialog
+    :update:modelValue="handleCloseModal"
+    :modelValue="props.formModal"
+    persistent
+    width="500"
+  >
+    <div class="flex w-full flex-col justify-center bg-white rounded-md">
+      <div class="ModalHeader">
+        <i
+          class="fa-solid fa-circle-xmark text-red-600 cursor-pointer text-2xl close"
+          @click="handleCloseModal"
+        ></i>
+        <p class="font-bold">قیمت</p>
+      </div>
+      <div class="ModalMain">
+        <div class="flex w-full justify-evenly items-center">
+          <input
+            placeholder="قیمت مورد نظر را وارد کنید"
+            class="food-input"
+            v-model="money"
+            type="text"
+          />
         </div>
       </div>
+      <div class="ModalFooter">
+        <button @click="onSubmit" class="BtnAccept">
+          <i class="fa-duotone fa-badge-check mr-2"></i>
+          <p>ثبت</p>
+        </button>
+      </div>
     </div>
-  </div>
+  </v-dialog>
 </template>

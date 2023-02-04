@@ -1,18 +1,16 @@
 <script setup>
-import ConfirmRemove from "../components/confirm-modal.vue";
-import MenuFeatures from "../components/menu-features.vue";
+import ConfirmModal from "../components/confirm-modal.vue";
 import { useToast } from "vue-toastification";
 import { onMounted, reactive } from "vue";
 import console from "../api/console";
-import BtnQuickAccess from "../components/btn-quick-access.vue";
 ////////////////////////
 const toast = useToast();
 ////////////////////////
 const state = reactive({
   manageConsoleList: [],
-  SelectedConsole: {},
-  modalData: {
+  confirmModal: {
     text: "دستگاه انتخاب شده حذف شود؟",
+    status: false,
     id: "",
   },
 });
@@ -46,25 +44,46 @@ const requestGetConsoles = () => {
     });
 };
 ///////////////////////////////
-const requestRemoveConsole = () => {
+const requestRemoveConsole = (id) => {
   console
-    .remove(state.SelectedConsole.id)
+    .remove(id)
     .then(() => {
       toast.success("دستگاه با موفقیت حذف شد");
       requestGetConsoles();
     })
     .catch(() => {
       toast.error("دستگاه حذف نشد");
+    })
+    .finally(() => {
+      state.confirmModal.status = false;
+      state.confirmModal.id = "";
     });
 };
 ///////////////////////////////
 const handleSelectConsole = (items) => {
-  state.SelectedConsole = items;
+  state.confirmModal.id = items.id;
+  state.confirmModal.status = true;
+};
+///////////////////////////////
+const handleCloseConfirmModal = (value) => {
+  if (value) {
+    requestRemoveConsole(state.confirmModal.id);
+  } else {
+    state.confirmModal.status = false;
+    state.confirmModal.id = "";
+  }
 };
 </script>
 <template>
   <div class="parent-consols">
-    <BtnQuickAccess @new="requestNewConsole" />
+    <!-- //////////////////////////// -->
+    <div class="flex items-center">
+      <div class="new-console" @click="requestNewConsole">
+        <p class="text-white ml-2">اضافه کردن دستگاه</p>
+        <i class="fa-duotone fa-gamepad-modern text-white text-2xl"></i>
+      </div>
+    </div>
+    <!-- //////////////////////////// -->
     <transition-slide group>
       <div
         class="w-full h-full flex flex-wrap justify-center items-center mt-4"
@@ -86,15 +105,17 @@ const handleSelectConsole = (items) => {
             />
             <i
               class="fa-duotone fa-trash-can-list console-icon text-gray-200"
-              data-bs-target="#confirmRemoveConsole"
               @click="handleSelectConsole(items)"
-              data-bs-toggle="modal"
             ></i>
           </div>
         </div>
       </div>
     </transition-slide>
-    <ConfirmRemove :modal="state.modalData" @accept="requestRemoveConsole" />
-    <MenuFeatures />
+    <!-- //////////////////////////// -->
+    <ConfirmModal
+      @acceptOrCansel="handleCloseConfirmModal"
+      :confirmModal="state.confirmModal"
+    />
+    <!-- //////////////////////////// -->
   </div>
 </template>

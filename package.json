@@ -10,6 +10,7 @@
   "dependencies": {
     "@morev/vue-transitions": "^2.3.4",
     "axios": "^1.2.5",
+    "num2persian": "^3.0.0",
     "pinia": "^2.0.28",
     "tw-elements": "^1.0.0-alpha13",
     "vee-validate": "^4.7.3",

@@ -1,3 +1,14 @@
+<script setup>
+import { reactive } from "vue";
+////////////////////////
+const state = reactive({
+  consoleList: [],
+});
+/////////////////////
+onMounted(()=>{
+  
+})
+</script>
 <template>
   <div class="Console">
     <!-- //////////////////////////////// -->

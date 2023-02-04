@@ -2,10 +2,12 @@
 import ChangeNewFood from "./change-new-food.vue";
 import confirmModal from "./confirm-modal.vue";
 import { useToast } from "vue-toastification";
+import { cafePinia } from "../store/pinia";
 import { reactive, onMounted } from "vue";
 import food from "../api/food";
 /////////////////////////////
 const toast = useToast();
+const store = cafePinia();
 /////////////////////////////
 const state = reactive({
   headerFoods: [
@@ -50,6 +52,7 @@ const requestGetfoods = () => {
     .get()
     .then((response) => {
       state.listFood = response;
+      store.handleChangefoodList(response);
     })
     .catch(() => {
       toast.error("خطا در ارتباط با سرور");

@@ -116,7 +116,7 @@
   }
   /* /////////////////////////////////// */
   .Console {
-    @apply flex relative flex-col justify-between  p-3 m-4 pt-8 items-center bg-white bg-opacity-90 shadow-md rounded-xl;
+    @apply flex relative flex-col justify-between  p-3 m-4 mt-6 pt-8 items-center bg-white bg-opacity-90 shadow-md rounded-xl;
     height: 200px;
     width: 300px;
   }
@@ -129,13 +129,14 @@
     @apply flex items-center justify-center text-2xl;
   }
   .SelectedMoneyConsole {
-    @apply flex items-center justify-center text-center cursor-pointer bg-slate-300 rounded-md p-3;
+    @apply flex items-center w-full relative justify-center text-center cursor-pointer bg-slate-300 rounded-md p-3;
     width: 109px;
   }
   .UlMoney {
     @apply flex flex-col bg-white items-center justify-center mt-1 rounded-md shadow-md overflow-hidden absolute;
     z-index: 99999;
     width: 109px;
+    top: 48px;
   }
   .UlMoney li {
     @apply p-1 w-full text-lg text-center cursor-pointer hover:bg-slate-300 transition-all;

@@ -2,14 +2,12 @@
 import { filterNumbersWithSep } from "../util/filter-numbers";
 import { useForm, useField } from "vee-validate";
 import { useToast } from "vue-toastification";
-import { cafePinia } from "../store/pinia";
 import { reactive, watch } from "vue";
 import * as yup from "yup";
 /////////////////////////
 const emit = defineEmits(["money", "close"]);
 const props = defineProps(["formModal"]);
 /////////////////////////
-const store = cafePinia();
 const toast = useToast();
 ///////////////////////
 const state = reactive({
@@ -42,7 +40,9 @@ const handleAcceptMoney = () => {
     rate: numberMoney,
   };
   emit("money", newMoney);
-  money.value = "";
+  setTimeout(() => {
+    money.value = "";
+  }, 300);
 };
 ///////////////////////
 watch(
@@ -53,7 +53,9 @@ watch(
 );
 const handleCloseModal = () => {
   emit("close");
-  money.value = "";
+  setTimeout(() => {
+    money.value = "";
+  }, 300);
 };
 </script>
 <template>

@@ -2,7 +2,7 @@
 import { reactive, onMounted } from "vue";
 import money from "../api/money";
 import ChangeNewMoney from "./change-new-money.vue";
-import ConfirmRemove from "./confirmRemove.vue";
+import ConfirmRemove from "./confirm-modal.vue";
 ///////////////////////
 const state = reactive({
   tableHeader: [

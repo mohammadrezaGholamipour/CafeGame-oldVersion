@@ -6,8 +6,8 @@ import { cafePinia } from "../store/pinia";
 import { reactive, watch } from "vue";
 import * as yup from "yup";
 /////////////////////////
-const emit = defineEmits(["food"]);
-const props = defineProps(["food"]);
+const emit = defineEmits(["food", "close"]);
+const props = defineProps(["formModal"]);
 /////////////////////////
 const store = cafePinia();
 const toast = useToast();
@@ -26,14 +26,13 @@ const state = reactive({
       .nullable("لطفا قیمت را وارد کنید"),
   }),
 });
-// ////////////////////////////////
+//////////////////////////////////
 watch(
-  () => props.food,
+  () => props.formModal.data,
   (value) => {
     name.value = value.name;
     money.value = value.cost;
-  },
-  { deep: true }
+  }
 );
 // ////////////////////////////////
 const { handleSubmit } = useForm({ validationSchema: state.schema });
@@ -50,72 +49,80 @@ const onSubmit = handleSubmit(() => {
 }, onInvalidSubmit);
 ////////////////////////////////
 const handleAcceptFood = () => {
-  const closeModal = document.getElementsByClassName("close");
-  const numberMoney = money.value;
-
+  const numberMoney = parseInt(money.value.replace(",", ""));
   let food = {};
   ///////////////////////
-
-  if (props.food?.id) {
-    console.log("بوده");
-    food = {
-      id: 0,
-      name: name.value,
-      cost: parseInt(numberMoney.replace(",", "")),
-    };
+  if (props.formModal.data.id) {
+    if (
+      props.formModal.data.name !== name.value ||
+      props.formModal.data.cost !== numberMoney
+    ) {
+      food = {
+        id: 0,
+        name: name.value,
+        cost: numberMoney,
+      };
+      emit("food", food);
+    } else {
+      handleCloseModal();
+    }
   } else {
-    console.log("جدیده");
     food = {
       id: 0,
       name: name.value,
-      cost: parseInt(numberMoney.replace(",", "")),
+      cost: numberMoney,
     };
+    emit("food", food);
   }
-  emit("food", food);
-  closeModal[0].click();
 };
-// /////////////////////
+///////////////////////
 watch(
   () => money.value,
   (value) => {
     money.value = filterNumbersWithSep(value);
   }
 );
+const handleCloseModal = () => {
+  emit("close");
+};
 </script>
 <template>
-  <div class="modal fade ParentModal" data-bs-backdrop="static" id="tableForm">
-    <div class="modal-dialog modal-dialog-centered ModalDivOne">
-      <div class="ModalDivTwo">
-        <div class="ModalHeader">
-          <p class="font-bold">افزون خوراکی</p>
-          <i
-            class="fa-solid fa-circle-xmark text-red-600 cursor-pointer text-2xl close"
-            data-bs-dismiss="modal"
-          ></i>
-        </div>
-        <div class="ModalMain">
-          <div class="flex w-full justify-evenly items-center">
-            <input
-              placeholder="نام محصول"
-              class="food-input"
-              v-model="name"
-              type="text"
-            />
-            <input
-              placeholder="قیمت محصول"
-              class="food-input"
-              v-model="money"
-              type="text"
-            />
-          </div>
-        </div>
-        <div class="ModalFooter">
-          <button @click="onSubmit" class="BtnAccept">
-            <p>ثبت</p>
-            <i class="fa-duotone fa-badge-check mr-2"></i>
-          </button>
+  <v-dialog
+    :modelValue="props.formModal?.status"
+    update:modelValue="handleCloseModal"
+    persistent
+    width="500"
+  >
+    <div class="flex w-full flex-col justify-center bg-white rounded-md">
+      <div class="ModalHeader">
+        <i
+          class="fa-solid fa-circle-xmark text-red-600 cursor-pointer text-2xl close"
+          @click="handleCloseModal"
+        ></i>
+        <p class="font-bold">خوراکی</p>
+      </div>
+      <div class="ModalMain">
+        <div class="flex w-full justify-evenly items-center">
+          <input
+            placeholder="قیمت محصول"
+            class="food-input"
+            v-model="money"
+            type="text"
+          />
+          <input
+            placeholder="نام محصول"
+            class="food-input"
+            v-model="name"
+            type="text"
+          />
         </div>
       </div>
+      <div class="ModalFooter">
+        <button @click="onSubmit" class="BtnAccept">
+          <i class="fa-duotone fa-badge-check mr-2"></i>
+          <p>ثبت</p>
+        </button>
+      </div>
     </div>
-  </div>
+  </v-dialog>
 </template>

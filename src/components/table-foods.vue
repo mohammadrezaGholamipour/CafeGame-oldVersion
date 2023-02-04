@@ -1,9 +1,9 @@
 <script setup>
 import ChangeNewFood from "./change-new-food.vue";
+import confirmModal from "./confirm-modal.vue";
 import { useToast } from "vue-toastification";
 import { reactive, onMounted } from "vue";
 import food from "../api/food";
-import ConfirmRemove from "./confirmRemove.vue";
 /////////////////////////////
 const toast = useToast();
 /////////////////////////////
@@ -15,9 +15,13 @@ const state = reactive({
     { name: "تغییرات", icon: "fa-duotone fa-cash-register" },
   ],
   listFood: [],
-  foodSelected: {},
-  modalData: {
+  foodSelected: {
+    data: {},
+    status: false,
+  },
+  confirmModal: {
     text: "خوراکی انتخاب شده حذف شود؟",
+    status: false,
     id: "",
   },
 });
@@ -29,12 +33,15 @@ onMounted(() => {
 const requestNewFood = (newFood) => {
   food
     .new(newFood)
-    .then((response) => {
+    .then(() => {
       toast.success("خوراکی با موفقیت اضافه شد");
       requestGetfoods();
     })
     .catch(() => {
       toast.error("خوراکی جدید اضافه نشد");
+    })
+    .finally(() => {
+      handleCloseFormModal();
     });
 };
 ///////////////////////////////
@@ -49,34 +56,40 @@ const requestGetfoods = () => {
     });
 };
 ///////////////////////////////
-const requestRemovefood = () => {
+const requestRemovefood = (id) => {
   food
-    .remove(state.modalData.id)
+    .remove(id)
     .then(() => {
       toast.success(" خوراکی با موفقیت حذف شد");
       requestGetfoods();
     })
     .catch((error) => {
       toast.error("خوراکی حذف نشد");
+    })
+    .finally(() => {
+      state.confirmModal.status = false;
+      state.confirmModal.id = "";
     });
 };
 ///////////////////////////////
 const requestUpdatefood = (foodData) => {
   food
-    .update(state.foodSelected.id, foodData)
+    .update(state.foodSelected.data.id, foodData)
     .then(() => {
-      toast.warning(" خوراکی با موفقیت عوض شد");
+      toast.success(" خوراکی با موفقیت عوض شد");
       requestGetfoods();
     })
-    .catch((error) => {
-      console.log(error);
+    .catch(() => {
       toast.error("خوراکی عوض نشد");
+    })
+    .finally(() => {
+      handleCloseFormModal();
     });
 };
 /////////////////////////////////
 const handleFood = (food) => {
   const foodItem = state.listFood.find(
-    (items) => items.id === state.foodSelected.id
+    (items) => items.id === state.foodSelected.data.id
   );
   if (foodItem) {
     requestUpdatefood(food);
@@ -85,21 +98,38 @@ const handleFood = (food) => {
   }
 };
 /////////////////////////////////
+const handleConfirmModal = (id) => {
+  state.confirmModal.id = id;
+  state.confirmModal.status = true;
+};
+/////////////////////////////////
 const handleFoodSelected = (items) => {
-  state.foodSelected = items;
+  state.foodSelected.data = items;
+  state.foodSelected.status = true;
+};
+/////////////////////////////////
+const handleCloseFormModal = () => {
+  state.foodSelected.status = false;
+  setTimeout(() => {
+    state.foodSelected.data = {};
+  }, 300);
+};
+/////////////////////////////////
+const handleCloseConfirmModal = (value) => {
+  if (value) {
+    requestRemovefood(state.confirmModal.id);
+  } else {
+    state.confirmModal.id = "";
+    state.confirmModal.status = false;
+  }
 };
 </script>
 <template>
-  <div class="w-full flex flex-col items-start justify-center">
-    <button
-      @click="handleFoodSelected({})"
-      data-bs-target="#tableForm"
-      data-bs-toggle="modal"
-      class="btn-new-food"
-    >
-      افزودن خوارکی
-    </button>
-    <div class="overflow-y-scroll rounded-md w-full" style="height: 76vh">
+  <div class="w-full flex flex-col items-center justify-start">
+    <div class="overflow-y-scroll mt-3 rounded-md w-full">
+      <button @click="handleFoodSelected({})" class="btn-new-food">
+        افزودن خوراکی
+      </button>
       <table class="TableFoods">
         <thead class="bg-[#d1d1d180]">
           <tr>
@@ -118,21 +148,11 @@ const handleFoodSelected = (items) => {
             <td>{{ items.cost?.toLocaleString() }}</td>
             <td>
               <div class="inline-flex justify-center items-center">
-                <button
-                  @click="handleFoodSelected(items)"
-                  data-bs-target="#tableForm"
-                  data-bs-toggle="modal"
-                  class="BtnChange"
-                >
+                <button @click="handleFoodSelected(items)" class="BtnChange">
                   <p class="ml-1">تغییر</p>
                   <i class="fa-duotone fa-file-pen"></i>
                 </button>
-                <button
-                  @click="state.modalData.id = items.id"
-                  data-bs-target="#confirmRemoveConsole"
-                  data-bs-toggle="modal"
-                  class="BtnRemove"
-                >
+                <button @click="handleConfirmModal(items.id)" class="BtnRemove">
                   <p class="ml-1">حذف</p>
                   <i class="fa-duotone fa-trash"></i>
                 </button>
@@ -143,18 +163,25 @@ const handleFoodSelected = (items) => {
         <tr v-else>
           <td colspan="4">
             <div class="w-full flex items-center justify-center">
-              <p class="text-center p-4 font-bold text-red-500 text-xl">
+              <p class="text-center p-4 font-bold text-red-500 text-lg">
                 لیست خوراکی ها خالی میباشد
               </p>
-              <i class="fa-duotone fa-utensils-slash text-xl text-red-700"></i>
+              <i class="fa-duotone fa-utensils-slash text-lg text-red-700"></i>
             </div>
           </td>
         </tr>
       </table>
     </div>
-    <!-- ///////////////////////// -->
-    <ChangeNewFood :food="state.foodSelected" @food="handleFood" />
-    <!-- ///////////////////////// -->
-    <ConfirmRemove :modal="state.modalData" @accept="requestRemovefood()" />
+    <!-- ///////////////////////////////// -->
+    <ChangeNewFood
+      :formModal="state.foodSelected"
+      @close="handleCloseFormModal"
+      @food="handleFood"
+    />
+    <!-- ///////////////////////////////// -->
+    <confirmModal
+      @acceptOrCansel="handleCloseConfirmModal"
+      :confirmModal="state.confirmModal"
+    />
   </div>
 </template>

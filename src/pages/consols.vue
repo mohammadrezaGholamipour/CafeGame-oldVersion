@@ -1,9 +1,10 @@
 <script setup>
-import ConfirmRemove from "../components/confirmRemove.vue";
+import ConfirmRemove from "../components/confirm-modal.vue";
 import MenuFeatures from "../components/menu-features.vue";
 import { useToast } from "vue-toastification";
 import { onMounted, reactive } from "vue";
 import console from "../api/console";
+import BtnQuickAccess from "../components/btn-quick-access.vue";
 ////////////////////////
 const toast = useToast();
 ////////////////////////
@@ -63,13 +64,7 @@ const handleSelectConsole = (items) => {
 </script>
 <template>
   <div class="parent-consols">
-    <div class="flex items-center">
-      <div class="new-console" @click="requestNewConsole">
-        <p class="text-white ml-2">اضافه کردن دستگاه</p>
-        <i class="fa-duotone fa-gamepad-modern text-white text-2xl"></i>
-      </div>
-    </div>
-
+    <BtnQuickAccess @new="requestNewConsole" />
     <transition-slide group>
       <div
         class="w-full h-full flex flex-wrap justify-center items-center mt-4"

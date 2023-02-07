@@ -1,6 +1,7 @@
 <script setup>
 import { useToast } from "vue-toastification";
 import { reactive, watch } from "vue";
+import billApi from "../api/bill";
 ////////////////////////
 const props = defineProps(["consoleList", "moneyList", "foodList", "billList"]);
 ////////////////////////
@@ -27,8 +28,8 @@ watch(
       items.timer = "";
       items.time = {
         hours: "00",
-        minutes: "00",
-        seconds: "00",
+        minutes: "59",
+        seconds: "55",
       };
       items.userMoney = "";
     });
@@ -50,6 +51,8 @@ watch(
   () => props.billList,
   (value) => {
     state.billList = value;
+    const playstationNotFinished = value.filter((items) => !items.finishTime);
+    handlePlaystationNotFinished(playstationNotFinished);
   }
 );
 /////////////////////////
@@ -64,17 +67,17 @@ const handleMoneySelect = (money, playstation) => {
 };
 ////////////////////////////
 const handleChangeConsoleStatus = (playstation) => {
-  console.log(new Date().toISOString());
   if (playstation.moneySelected.rate) {
     playstation.status = !playstation.status;
   } else {
     toast.error("قیمت واحد را وارد نکرده اید");
   }
   if (playstation.status) {
-    playstation.time.hours = "00";
-    playstation.time.minutes = "00";
-    playstation.time.seconds = "00";
-    playstation.money = "";
+    requestStartBill(
+      playstation.id,
+      playstation.moneySelected.id,
+      new Date().toISOString()
+    );
     handleTimer(playstation, true);
   } else {
     handleTimer(playstation, false);
@@ -108,7 +111,33 @@ const handleTimer = (playstation, status) => {
     }, 1000);
   } else {
     clearInterval(playstation.timer);
+    playstation.time.hours = "00";
+    playstation.time.minutes = "00";
+    playstation.time.seconds = "00";
+    playstation.moneySelected = {};
+    playstation.userMoney = "";
   }
+};
+//////////////////////////////
+const requestStartBill = (systemId, rateId, startInfo) => {
+  billApi
+    .new(systemId, rateId, startInfo)
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+//////////////////////////////
+const handlePlaystationNotFinished = (playstationList) => {
+  playstationList.forEach((items) => {
+      console.log(
+      new Date(items.startTime).toLocaleString("fa-IR", {
+        timeZone: "Asia/Tehran",
+      })
+    );
+  });
 };
 </script>
 <template>
@@ -130,50 +159,53 @@ const handleTimer = (playstation, status) => {
           }}
         </p>
         <transition-scale group>
-          <img src="../assets/image/timer.png" width="35" />
+          <img
+            src="../assets/image/timer.png"
+            v-if="!playstation.status"
+            width="35"
+          />
+          <img v-else src="../assets/image/timer.gif" width="35" />
         </transition-scale>
       </div>
       <!-- /////////////////////////////// -->
-      <div class="flex flex-col justify-start items-center">
-        <transition-expand  class="w-full">
-          <div v-if="!playstation.status" class="relative flex justify-center">
-            <div
-              @click="handleShowAndHideMoneyList(playstation.id)"
-              class="SelectedMoneyConsole"
-            >
-              <p class="ml-2 font-bold">
-                {{
-                  playstation.moneySelected?.rate
-                    ? playstation.moneySelected.rate.toLocaleString()
-                    : "هزینه بازی"
-                }}
-              </p>
-              <i class="fa-duotone transition-all duration-500"></i>
-            </div>
-            <transition-expand>
-              <ul v-if="playstation.showAndHideListMoney" class="UlMoney">
-                <li
-                  v-for="money in state.moneyList"
-                  @click="handleMoneySelect(money, playstation)"
-                  :key="money.id"
-                >
-                  {{ money.rate.toLocaleString() }}
-                </li>
-              </ul>
-            </transition-expand>
+      <div class="flex w-full flex-col justify-start items-center">
+        <div v-if="playstation.status" class="ConsoleMoney">
+          {{
+            playstation.userMoney ? playstation.userMoney.toLocaleString() : ""
+          }}
+        </div>
+        <!-- /////////////////////////// -->
+        <div class="relative w-full flex justify-center" v-else>
+          <div
+            @click="handleShowAndHideMoneyList(playstation.id)"
+            class="SelectedMoneyConsole"
+          >
+            <p class="ml-2 font-bold">
+              {{
+                playstation.moneySelected?.rate
+                  ? playstation.moneySelected.rate.toLocaleString()
+                  : "هزینه بازی"
+              }}
+            </p>
+            <i class="fa-duotone transition-all duration-500"></i>
           </div>
-           </transition-expand>
-          <!-- /////////////////////////////////// -->
           <transition-expand>
-          <p v-if="playstation.status" class="ConsoleMoney">
-            {{ playstation.userMoney.toLocaleString() }}
-          </p>
-       </transition-expand>
+            <ul v-if="playstation.showAndHideListMoney" class="UlMoney">
+              <li
+                @click="handleMoneySelect(money, playstation)"
+                v-for="money in state.moneyList"
+                :key="money.id"
+              >
+                {{ money.rate.toLocaleString() }}
+              </li>
+            </ul>
+          </transition-expand>
+        </div>
       </div>
       <!-- //////////////////////////////// -->
       <button
-        @click="handleChangeConsoleStatus(playstation)"
         :class="playstation.status ? 'BtnConsoleFinish' : 'BtnConsoleStart'"
+        @click="handleChangeConsoleStatus(playstation)"
       >
         <p>{{ playstation.status ? "پایان" : "شروع" }}</p>
         <i v-if="!playstation.status" class="fa-thin fa-circle-play mr-2"></i>
@@ -183,3 +215,22 @@ const handleTimer = (playstation, status) => {
     </div>
   </div>
 </template>
+<style>
+.bounce-enter-active {
+  animation: bounce-in 0.5s;
+}
+.bounce-leave-active {
+  animation: bounce-in 0.5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+</style>

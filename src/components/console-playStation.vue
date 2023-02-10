@@ -1,6 +1,7 @@
 <script setup>
 import { useToast } from "vue-toastification";
 import { reactive, watch } from "vue";
+import moment from "jalali-moment";
 import billApi from "../api/bill";
 ////////////////////////
 const props = defineProps(["consoleList", "moneyList", "foodList", "billList"]);
@@ -28,8 +29,8 @@ watch(
       items.timer = "";
       items.time = {
         hours: "00",
-        minutes: "59",
-        seconds: "55",
+        minutes: "00",
+        seconds: "00",
       };
       items.userMoney = "";
     });
@@ -51,8 +52,9 @@ watch(
   () => props.billList,
   (value) => {
     state.billList = value;
-    const playstationNotFinished = value.filter((items) => !items.finishTime);
-    handlePlaystationNotFinished(playstationNotFinished);
+    const billNotFinished = value.filter((items) => !items.finishTime);
+
+    handleBillNotFinished(billNotFinished);
   }
 );
 /////////////////////////
@@ -130,14 +132,41 @@ const requestStartBill = (systemId, rateId, startInfo) => {
     });
 };
 //////////////////////////////
-const handlePlaystationNotFinished = (playstationList) => {
-  playstationList.forEach((items) => {
-      console.log(
-      new Date(items.startTime).toLocaleString("fa-IR", {
-        timeZone: "Asia/Tehran",
-      })
+const handleBillNotFinished = (billList) => {
+  for (const bill of billList) {
+    const playstation = state.consoleList.find(
+      (console) => console.id === bill.systemId
     );
-  });
+    const money = state.moneyList.find((money) => money.id === bill.hourRateId);
+    /////////////////////////////////////////////
+    const timeStart = moment(`${bill.startTime}z`)
+      .locale("fa")
+      .format("HH:mm:ss");
+    const hoursStart = timeStart.slice(0, 2);
+    const minutesStart = timeStart.slice(3, 5);
+    const secondsStart = timeStart.slice(6, 8);
+    /////////////////////////////////////////////
+    const timeNow = moment().local("fa").format("HH:mm:ss");
+    const hoursNow = timeNow.slice(0, 2);
+    const minutesNow = timeNow.slice(3, 5);
+    const secondsNow = timeNow.slice(6, 8);
+    /////////////////////////////////////////////
+    playstation.time = {
+      hours:
+        hoursNow > hoursStart ? hoursNow - hoursStart : hoursStart - hoursNow,
+      minutes:
+        minutesNow > minutesStart
+          ? minutesNow - minutesStart
+          : minutesStart - minutesNow,
+      seconds:
+        secondsNow > secondsStart
+          ? secondsNow - secondsStart
+          : secondsStart - secondsNow,
+    };
+    playstation.moneySelected = money;
+    playstation.status = true;
+    handleTimer(playstation, true);
+  }
 };
 </script>
 <template>

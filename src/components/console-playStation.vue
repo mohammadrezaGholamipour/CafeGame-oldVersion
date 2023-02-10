@@ -13,6 +13,7 @@ const state = reactive({
   moneyList: [],
   foodList: [],
   billList: [],
+  billNotFinished: [],
 });
 /////////////////////
 watch(
@@ -52,9 +53,16 @@ watch(
   () => props.billList,
   (value) => {
     state.billList = value;
-    const billNotFinished = value.filter((items) => !items.finishTime);
-
-    handleBillNotFinished(billNotFinished);
+    state.billNotFinished = value.filter((items) => !items.finishTime);
+  }
+);
+watch(
+  () => state.billNotFinished,
+  (value) => {
+    if (value.length) {
+      console.log(value);
+      handleBillNotFinished(value);
+    }
   }
 );
 /////////////////////////
@@ -124,11 +132,9 @@ const handleTimer = (playstation, status) => {
 const requestStartBill = (systemId, rateId, startInfo) => {
   billApi
     .new(systemId, rateId, startInfo)
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.log(error);
+    .then(() => {})
+    .catch(() => {
+      toast.error("شروع انجام نشد");
     });
 };
 //////////////////////////////
@@ -142,26 +148,35 @@ const handleBillNotFinished = (billList) => {
     const timeStart = moment(`${bill.startTime}z`)
       .locale("fa")
       .format("HH:mm:ss");
-    const hoursStart = timeStart.slice(0, 2);
-    const minutesStart = timeStart.slice(3, 5);
-    const secondsStart = timeStart.slice(6, 8);
+    const hoursStart = timeStart.slice(0, 2) * 3600;
+    const minuteStart = timeStart.slice(3, 5) * 60;
+    const secondStart = timeStart.slice(6, 8);
+    const timeStartSeconds = hoursStart + minuteStart + Number(secondStart);
     /////////////////////////////////////////////
-    const timeNow = moment().local("fa").format("HH:mm:ss");
-    const hoursNow = timeNow.slice(0, 2);
-    const minutesNow = timeNow.slice(3, 5);
-    const secondsNow = timeNow.slice(6, 8);
+    const timeNow = moment().locale("fa").format("HH:mm:ss");
+    const hoursNow = timeNow.slice(0, 2) * 3600;
+    const minuteNow = timeNow.slice(3, 5) * 60;
+    const secondNow = timeNow.slice(6, 8);
+    const timeNowSeconds = hoursNow + minuteNow + Number(secondNow);
     /////////////////////////////////////////////
+    const timerSeconds =
+      timeNowSeconds < timeStartSeconds
+        ? timeNowSeconds + 86400 - timeStartSeconds
+        : timeNowSeconds - timeStartSeconds;
+    /////////////////////////////////////////////
+    console.log(timerSeconds - Math.floor(timerSeconds / 3600) * 3600);
+    const hours = Math.floor(timerSeconds / 3600);
+    const minutes = Math.floor(
+      (timerSeconds - Math.floor(timerSeconds / 3600) * 3600) / 60
+    );
+    const seconds = timerSeconds - (Math.floor(
+      ((timerSeconds - Math.floor(timerSeconds / 3600) * 3600) / 60) * 60)
+    );
+    /////////////////////////////////////
     playstation.time = {
-      hours:
-        hoursNow > hoursStart ? hoursNow - hoursStart : hoursStart - hoursNow,
-      minutes:
-        minutesNow > minutesStart
-          ? minutesNow - minutesStart
-          : minutesStart - minutesNow,
-      seconds:
-        secondsNow > secondsStart
-          ? secondsNow - secondsStart
-          : secondsStart - secondsNow,
+      hours,
+      minutes,
+      seconds,
     };
     playstation.moneySelected = money;
     playstation.status = true;

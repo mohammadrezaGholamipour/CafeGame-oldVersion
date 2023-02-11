@@ -164,7 +164,7 @@ const handleBillNotFinished = (billList) => {
         ? timeNowSeconds + 86400 - timeStartSeconds
         : timeNowSeconds - timeStartSeconds;
     /////////////////////////////////////////////
-    console.log(timerSeconds - Math.floor(timerSeconds / 3600) * 3600);
+    console.log(timerSeconds );
     const hours = Math.floor(timerSeconds / 3600);
     const minutes = Math.floor(
       (timerSeconds - Math.floor(timerSeconds / 3600) * 3600) / 60

@@ -1,6 +1,6 @@
 {
   "name": "cafegame",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -10,11 +10,8 @@
   "dependencies": {
     "@morev/vue-transitions": "^2.3.4",
     "axios": "^1.2.5",
-    "dayjs": "^1.11.7",
     "jalali-moment": "^3.3.11",
-    "jalaliday": "^2.3.0",
     "num2persian": "^3.0.0",
-    "pinia": "^2.0.28",
     "tw-elements": "^1.0.0-alpha13",
     "vee-validate": "^4.7.3",
     "vue": "^3.2.45",

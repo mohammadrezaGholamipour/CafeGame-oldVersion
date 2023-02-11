@@ -1,12 +1,10 @@
 <script setup>
 import ConfirmModal from "../components/confirm-modal.vue";
 import { useToast } from "vue-toastification";
-import { cafePinia } from "../store/pinia";
 import { onMounted, reactive } from "vue";
 import console from "../api/console";
 ////////////////////////
 const toast = useToast();
-const store = cafePinia();
 ////////////////////////
 const state = reactive({
   manageConsoleList: [],
@@ -40,7 +38,6 @@ const requestGetConsoles = () => {
     .get()
     .then((response) => {
       state.manageConsoleList = response;
-      store.handleChangePlayStationList(response);
     })
     .catch(() => {
       toast.error("خطا در ارتباط با سرور");

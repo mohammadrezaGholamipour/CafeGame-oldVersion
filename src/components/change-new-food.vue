@@ -2,14 +2,12 @@
 import { filterNumbersWithSep } from "../util/filter-numbers";
 import { useForm, useField } from "vee-validate";
 import { useToast } from "vue-toastification";
-import { cafePinia } from "../store/pinia";
 import { reactive, watch } from "vue";
 import * as yup from "yup";
 /////////////////////////
 const emit = defineEmits(["food", "close"]);
 const props = defineProps(["formModal"]);
 /////////////////////////
-const store = cafePinia();
 const toast = useToast();
 ///////////////////////
 const state = reactive({
@@ -108,12 +106,14 @@ const handleCloseModal = () => {
             class="food-input"
             v-model="money"
             type="text"
+            dir="rtl"
           />
           <input
             placeholder="نام محصول"
             class="food-input"
             v-model="name"
             type="text"
+            dir="rtl"
           />
         </div>
       </div>

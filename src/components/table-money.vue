@@ -1,13 +1,11 @@
 <script setup>
 import confirmModal from "./confirm-modal.vue";
 import { useToast } from "vue-toastification";
-import { cafePinia } from "../store/pinia";
 import { reactive, onMounted } from "vue";
 import NewMoney from "./new-money.vue";
 import money from "../api/money";
 ///////////////////////
 const toast = useToast();
-const store = cafePinia();
 ///////////////////////
 const state = reactive({
   tableHeader: [
@@ -48,7 +46,6 @@ const requestGetMoneys = () => {
     .get()
     .then((response) => {
       state.listMoney = response;
-      store.handleChangemoneyList(response);
     })
     .catch((error) => {
       console.log(error);

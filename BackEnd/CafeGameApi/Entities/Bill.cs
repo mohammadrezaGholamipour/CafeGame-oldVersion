@@ -17,6 +17,6 @@ public class Bill
     [JsonIgnore]
     public virtual HourRate? HourRate { get; set; }
 
-    [JsonIgnore]
+    
     public ICollection<BillFood> BillFoods { get; set; } = new List<BillFood>();
 }

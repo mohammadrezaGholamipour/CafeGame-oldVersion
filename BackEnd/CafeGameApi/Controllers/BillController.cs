@@ -23,6 +23,8 @@ public class BillController : ControllerBase
     {
         return Ok(await _context.Bills
             .AsNoTracking()
+            .Include(x=>x.BillFoods)
+            .ThenInclude(x=>x.Food)
             .Where(x => !id.HasValue || x.Id == id.Value)
             .ToListAsync());
     }
@@ -83,9 +85,12 @@ public class BillController : ControllerBase
 
         model.EndTime = endTime;
 
-        var foodCost = (await _context.BillFoods.Where(x => x.BillId == id)
-            .Select(x => x.Food!.Cost * x.Count).ToListAsync())
-            .Aggregate((x, y) => x + y);
+        var foodCost = 0;
+        foreach (var cost in await _context.BillFoods
+            .Where(x => x.BillId == id)
+            .Select(x => x.Food!.Cost * x.Count)
+            .ToListAsync())
+            foodCost = +cost;
 
         var minuteRate = ((float)(model.HourRate!.Rate)) / 60f;
 
@@ -117,6 +122,17 @@ public class BillController : ControllerBase
         var result = await _context.SaveChangesAsync();
 
         return result > 0 ? Ok() : NoContent();
+    }
+
+    [HttpGet("/opens")]
+    public async Task<IActionResult> Index()
+    {
+        return Ok(await _context.Bills
+            .AsNoTracking()
+            .Include(x => x.BillFoods)
+            .ThenInclude(x => x.Food)
+            .Where(x => x.EndTime == null)
+            .ToListAsync());
     }
 }
 

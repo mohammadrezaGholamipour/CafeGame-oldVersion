@@ -32,8 +32,8 @@ const handleClick = (name) => {
   if (name === "menuFeatures") {
     state.drawerStatus = true;
   } else {
-    window.location.reload();
-    router.path("/");
+
+    router.push({ name: "Home" });
   }
 };
 ////////////////////////

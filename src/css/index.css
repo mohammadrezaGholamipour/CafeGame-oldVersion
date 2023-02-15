@@ -288,7 +288,7 @@
   .parent-quick-access {
     @apply bg-black absolute mx-auto  overflow-hidden border-2 px-3 rounded-b-2xl border-white border-t-0 shadow-2xl;
     z-index: 9999;
-    width: 200px;
+    width: 150px;
     right: 0;
     left: 0;
   }

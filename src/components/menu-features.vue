@@ -52,7 +52,10 @@ const state = reactive({
   <v-layout>
     <v-navigation-drawer
       @update:modelValue="emit('close')"
+      class="bg-slate-300 rounded-l-xl"
       :model-value="props.drawerStatus"
+      location="right"
+      temporary
     >
       <div
         class="flex w-full justify-between p-2.5 items-center"

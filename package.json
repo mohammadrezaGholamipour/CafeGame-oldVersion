@@ -1,0 +1,30 @@
+{
+  "name": "cafegame",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@morev/vue-transitions": "^2.3.4",
+    "axios": "^1.2.5",
+    "jalali-moment": "^3.3.11",
+    "persian-number-tostring": "^1.0.0",
+    "tw-elements": "^1.0.0-alpha13",
+    "vee-validate": "^4.7.3",
+    "vue": "^3.2.45",
+    "vue-router": "^4.1.6",
+    "vue-toastification": "^2.0.0-rc.5",
+    "vuetify": "^3.1.3",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^3.2.0",
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.19",
+    "tailwindcss": "^3.2.4",
+    "vite": "^3.2.4"
+  }
+}

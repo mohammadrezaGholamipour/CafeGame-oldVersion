@@ -23,8 +23,8 @@ public class BillController : ControllerBase
     {
         return Ok(await _context.Bills
             .AsNoTracking()
-            .Include(x=>x.BillFoods)
-            .ThenInclude(x=>x.Food)
+            .Include(x => x.BillFoods)
+            .ThenInclude(x => x.Food)
             .Where(x => !id.HasValue || x.Id == id.Value)
             .ToListAsync());
     }
@@ -86,19 +86,20 @@ public class BillController : ControllerBase
         model.EndTime = endTime;
 
         var foodCost = 0;
-        foreach (var cost in await _context.BillFoods
+        (await _context.BillFoods
             .Where(x => x.BillId == id)
             .Select(x => x.Food!.Cost * x.Count)
             .ToListAsync())
-            foodCost = +cost;
+            .ForEach(x => foodCost += x);
+
 
         var minuteRate = ((float)(model.HourRate!.Rate)) / 60f;
 
         var totalMinutes = (model.EndTime - model.StartTime).Value.TotalMinutes;
+
         if (totalMinutes < 60)
-        {
             totalMinutes = 60;
-        }
+
         var timeCost = Convert.ToInt32(totalMinutes * minuteRate);
 
         model.FinalCost = foodCost + timeCost;

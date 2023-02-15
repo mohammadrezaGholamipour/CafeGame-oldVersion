@@ -76,9 +76,9 @@ const handleCloseConfirmModal = (value) => {
 </script>
 <template>
   <div class="parent-consols ">
-    <div class="flex flex-col w-full justify-center items-start mt-11">
+    <div class="flex flex-col w-full justify-center items-center mt-11">
       <!-- //////////////////////////// -->
-      <div class="flex items-center w-full justify-center px-5">
+      <div class="flex items-center w-full justify-center mt-4 px-5">
         <div class="new-console" @click="requestNewConsole">
           <p class="text-white ml-2">اضافه کردن دستگاه</p>
           <i class="fa-duotone fa-gamepad-modern text-white text-2xl"></i>

@@ -49,40 +49,35 @@ const state = reactive({
 });
 </script>
 <template>
-  <v-layout>
-    <v-navigation-drawer
-      @update:modelValue="emit('close')"
-      class="bg-slate-300 rounded-l-xl"
-      :model-value="props.drawerStatus"
-      location="right"
-      temporary
+  <div
+    class="offcanvas offcanvas-end fixed bottom-0 flex flex-col max-w-full bg-white invisible bg-clip-padding shadow-sm outline-none transition duration-300 ease-in-out text-gray-700 top-0 right-0 border-none w-96"
+    id="offcanvasMenuFeatures"
+  >
+    <div
+      class="flex w-full justify-between p-2.5 items-center"
+      style="border-bottom: dashed 1px black"
     >
+      <div class="flex items-center">
+        <p class="text-xl ml-1 font-bold">امکانات</p>
+        <i class="fa-duotone fa-sliders text-xl"></i>
+      </div>
+      <i
+        class="fa-duotone fa-rectangle-xmark cursor-pointer text-3xl text-red-500"
+        data-bs-dismiss="offcanvas"
+      ></i>
+    </div>
+    <div class="parent-main-menu-setting">
       <div
-        class="flex w-full justify-between p-2.5 items-center"
-        style="border-bottom: dashed 1px black"
+        v-show="items.path !== route.path"
+        v-for="items in state.settingList"
+        :key="items.id"
+        class="w-full"
       >
-        <div class="flex items-center">
-          <p class="text-xl ml-1 font-bold">امکانات</p>
-          <i class="fa-duotone fa-sliders text-xl"></i>
-        </div>
-        <i
-          class="fa-duotone fa-rectangle-xmark cursor-pointer text-3xl text-red-500"
-          @click="emit('close')"
-        ></i>
+        <router-link class="menu-setting-items" :to="items.path">
+          <i class="text-xl" :class="items.icon"></i>
+          <p class="text-lg mr-2">{{ items.name }}</p>
+        </router-link>
       </div>
-      <div class="parent-main-menu-setting">
-        <div
-          v-show="items.path !== route.path"
-          v-for="items in state.settingList"
-          :key="items.id"
-          class="w-full"
-        >
-          <router-link class="menu-setting-items" :to="items.path">
-            <i class="text-xl" :class="items.icon"></i>
-            <p class="text-lg mr-2">{{ items.name }}</p>
-          </router-link>
-        </div>
-      </div>
-    </v-navigation-drawer>
-  </v-layout>
+    </div>
+  </div>
 </template>

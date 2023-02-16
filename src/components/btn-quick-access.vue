@@ -1,9 +1,13 @@
 <script setup>
-import MenuFeatures from "./menu-features.vue";
-import { useRoute, useRouter } from "vue-router";
-import { reactive, watch } from "vue";
+import { reactive, onMounted } from "vue";
+import { useRouter } from "vue-router";
 ///////////////////////
-const route = useRoute();
+onMounted(() => {
+  const menuFeatures = document.getElementById("menuFeatures");
+  menuFeatures.dataset.bsTarget = "#offcanvasMenuFeatures";
+  menuFeatures.dataset.bsToggle = "offcanvas";
+});
+///////////////////////
 const router = useRouter();
 /////////////////////
 const state = reactive({
@@ -21,24 +25,14 @@ const state = reactive({
         "fa-brands fa-playstation text-2xl text-red-600 p-1 m-1 cursor-pointer",
     },
   ],
-  drawerStatus: false,
 });
-///////////////////////
-watch(route, () => {
-  state.drawerStatus = false;
-});
-///////////////////////
+/////////////////////
 const handleClick = (name) => {
-  if (name === "menuFeatures") {
-    state.drawerStatus = true;
+  if (!name === "menuFeatures") {
+    menuFeatures.click();
   } else {
-
     router.push({ name: "Home" });
   }
-};
-////////////////////////
-const handleCloseDrawer = () => {
-  state.drawerStatus = false;
 };
 </script>
 <template>
@@ -48,12 +42,9 @@ const handleCloseDrawer = () => {
         v-for="items in state.BtnquickAccess"
         @click="handleClick(items.name)"
         :class="items.iconClass"
+        id="menuFeatures"
         :key="items.id"
       ></i>
     </div>
-    <MenuFeatures
-      :drawerStatus="state.drawerStatus"
-      @close="handleCloseDrawer"
-    />
   </div>
 </template>

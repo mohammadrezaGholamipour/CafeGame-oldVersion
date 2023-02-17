@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import consols from '../pages/consols/consols.vue'
+import foods from '../pages/foods/foods.vue'
 import Register from '../pages/Register.vue'
-import console from '../pages/consols.vue'
 import money from '../pages/money.vue'
-import Foods from '../pages/Foods.vue'
 import login from '../pages/login.vue'
 import Home from '../pages/Home.vue'
 
@@ -27,13 +27,13 @@ const router = createRouter({
     },
     {
       path: '/foods',
-      name: 'Foods',
-      component: Foods,
+      name: 'foods',
+      component: foods,
     },
     {
       path: '/consols',
       name: 'consols',
-      component: console,
+      component: consols,
     },
     {
       path: '/money',

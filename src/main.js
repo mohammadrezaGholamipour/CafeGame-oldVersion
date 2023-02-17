@@ -26,6 +26,7 @@ app.use(moment)
 app.use(vuetify)
 app.use(router)
 app.use(Toast, {
+  transition: "Vue-Toastification__slideBlurred",
   showCloseButtonOnHover: false,
   hideProgressBar: false,
   position: "top-center",

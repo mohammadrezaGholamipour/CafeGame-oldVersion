@@ -1,28 +1,28 @@
 <script setup>
 const emit = defineEmits(["acceptOrCansel"]);
-const props = defineProps(["confirmModal"]);
+const props = defineProps(["confirmDialog"]);
 //////////////////////////////////////////
-const handleCloseModal = (value) => {
+const handleCloseDialog = (value) => {
   emit("acceptOrCansel", value);
 };
 </script>
 <template>
   <v-dialog
-    :modelValue="props.confirmModal.status"
-    :update:modelValue="handleCloseModal"
+    :modelValue="props.confirmDialog.status"
+    :update:modelValue="handleCloseDialog"
     persistent
     width="500"
   >
     <div class="flex w-full flex-col justify-center bg-white rounded-md">
       <div class="ModalMain">
-        <p class="text-xl">{{ props.confirmModal.text }}</p>
+        <p class="text-xl">{{ props.confirmDialog.text }}</p>
       </div>
       <div class="ModalFooter p-2">
-        <button @click="handleCloseModal(false)" class="BtnRemove">
+        <button @click="handleCloseDialog(false)" class="BtnRemove">
           <i class="fa-duotone fa-chevrons-left mr-2"></i>
           <p>بازگشت</p>
         </button>
-        <button @click="handleCloseModal(true)" class="BtnAccept">
+        <button @click="handleCloseDialog(true)" class="BtnAccept">
           <i class="fa-duotone fa-badge-check mr-2"></i>
           <p>تایید</p>
         </button>

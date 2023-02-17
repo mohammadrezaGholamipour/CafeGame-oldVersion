@@ -1,6 +1,6 @@
 <script setup>
 import PersianNumberToString from "persian-number-tostring";
-import confirmModal from "./confirm-modal.vue";
+import confirmDialog from "./confirm-dialog.vue";
 import { useToast } from "vue-toastification";
 import { reactive, onMounted } from "vue";
 import NewMoney from "./new-money.vue";
@@ -17,7 +17,7 @@ const state = reactive({
   ],
   listMoney: [],
   formModal: false,
-  confirmModal: {
+  confirmDialog: {
     text: "قیمت انتخاب شده حذف شود؟",
     status: false,
     id: "",
@@ -65,22 +65,22 @@ const requestRemoveMoney = (id) => {
       toast.error("قیمت مورد نظر حذف نشد");
     })
     .finally(() => {
-      state.confirmModal.id = "";
-      state.confirmModal.status = false;
+      state.confirmDialog.id = "";
+      state.confirmDialog.status = false;
     });
 };
 /////////////////////////////////
 const handleSelectedMoney = (id) => {
-  state.confirmModal.id = id;
-  state.confirmModal.status = true;
+  state.confirmDialog.id = id;
+  state.confirmDialog.status = true;
 };
 /////////////////////////////////
-const handleCloseConfirmModal = (value) => {
+const handleCloseconfirmDialog = (value) => {
   if (value) {
-    requestRemoveMoney(state.confirmModal.id);
+    requestRemoveMoney(state.confirmDialog.id);
   } else {
-    state.confirmModal.id = "";
-    state.confirmModal.status = false;
+    state.confirmDialog.id = "";
+    state.confirmDialog.status = false;
   }
 };
 </script>
@@ -137,9 +137,9 @@ const handleCloseConfirmModal = (value) => {
       @money="requestNewMoney"
     />
     <!-- /////////////////////////// -->
-    <confirmModal
-      @acceptOrCansel="handleCloseConfirmModal"
-      :confirmModal="state.confirmModal"
+    <confirmDialog
+      @acceptOrCansel="handleCloseconfirmDialog"
+      :confirmDialog="state.confirmDialog"
     />
   </div>
 </template>

@@ -1,9 +1,9 @@
 <script setup>
+import confirmDialog from "../../../components/confirm-dialog.vue";
 import ChangeNewFood from "./change-new-food.vue";
-import confirmModal from "./confirm-modal.vue";
 import { useToast } from "vue-toastification";
 import { reactive, onMounted } from "vue";
-import food from "../api/food";
+import food from "../../../api/food";
 /////////////////////////////
 const toast = useToast();
 /////////////////////////////
@@ -19,7 +19,7 @@ const state = reactive({
     data: {},
     status: false,
   },
-  confirmModal: {
+  confirmDialog: {
     text: "خوراکی انتخاب شده حذف شود؟",
     status: false,
     id: "",
@@ -41,7 +41,7 @@ const requestNewFood = (newFood) => {
       toast.error("خوراکی جدید اضافه نشد");
     })
     .finally(() => {
-      handleCloseFormModal();
+      handleCloseFormDialog();
     });
 };
 ///////////////////////////////
@@ -63,12 +63,12 @@ const requestRemovefood = (id) => {
       toast.success(" خوراکی با موفقیت حذف شد");
       requestGetfoods();
     })
-    .catch((error) => {
+    .catch(() => {
       toast.error("خوراکی حذف نشد");
     })
     .finally(() => {
-      state.confirmModal.status = false;
-      state.confirmModal.id = "";
+      state.confirmDialog.status = false;
+      state.confirmDialog.id = "";
     });
 };
 ///////////////////////////////
@@ -83,7 +83,7 @@ const requestUpdatefood = (foodData) => {
       toast.error("خوراکی عوض نشد");
     })
     .finally(() => {
-      handleCloseFormModal();
+      handleCloseFormDialog();
     });
 };
 /////////////////////////////////
@@ -98,9 +98,9 @@ const handleFood = (food) => {
   }
 };
 /////////////////////////////////
-const handleConfirmModal = (id) => {
-  state.confirmModal.id = id;
-  state.confirmModal.status = true;
+const handleConfirmDialog = (id) => {
+  state.confirmDialog.id = id;
+  state.confirmDialog.status = true;
 };
 /////////////////////////////////
 const handleFoodSelected = (items) => {
@@ -108,19 +108,19 @@ const handleFoodSelected = (items) => {
   state.foodSelected.status = true;
 };
 /////////////////////////////////
-const handleCloseFormModal = () => {
+const handleCloseFormDialog = () => {
   state.foodSelected.status = false;
   setTimeout(() => {
     state.foodSelected.data = {};
   }, 300);
 };
 /////////////////////////////////
-const handleCloseConfirmModal = (value) => {
+const handleCloseConfirmDialog = (value) => {
   if (value) {
-    requestRemovefood(state.confirmModal.id);
+    requestRemovefood(state.confirmDialog.id);
   } else {
-    state.confirmModal.id = "";
-    state.confirmModal.status = false;
+    state.confirmDialog.id = "";
+    state.confirmDialog.status = false;
   }
 };
 </script>
@@ -152,7 +152,10 @@ const handleCloseConfirmModal = (value) => {
                   <p class="ml-1">تغییر</p>
                   <i class="fa-duotone fa-file-pen"></i>
                 </button>
-                <button @click="handleConfirmModal(items.id)" class="BtnRemove">
+                <button
+                  @click="handleConfirmDialog(items.id)"
+                  class="BtnRemove"
+                >
                   <p class="ml-1">حذف</p>
                   <i class="fa-duotone fa-trash"></i>
                 </button>
@@ -175,13 +178,13 @@ const handleCloseConfirmModal = (value) => {
     <!-- ///////////////////////////////// -->
     <ChangeNewFood
       :formModal="state.foodSelected"
-      @close="handleCloseFormModal"
+      @close="handleCloseFormDialog"
       @food="handleFood"
     />
     <!-- ///////////////////////////////// -->
-    <confirmModal
-      @acceptOrCansel="handleCloseConfirmModal"
-      :confirmModal="state.confirmModal"
+    <confirmDialog
+      @acceptOrCansel="handleCloseConfirmDialog"
+      :confirmDialog="state.confirmDialog"
     />
   </div>
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-import TableFoods from "../components/table-foods.vue";
+import TableFoods from "./components/table-foods.vue";
 </script>
 <template>
   <div class="ParentFoods">

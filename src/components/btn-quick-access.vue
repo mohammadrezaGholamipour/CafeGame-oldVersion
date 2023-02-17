@@ -26,11 +26,9 @@ const state = reactive({
     },
   ],
 });
-/////////////////////
+///////////////////////////////
 const handleClick = (name) => {
-  if (!name === "menuFeatures") {
-    menuFeatures.click();
-  } else {
+  if (name === "reset") {
     router.push({ name: "Home" });
   }
 };

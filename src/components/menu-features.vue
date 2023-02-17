@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute } from "vue-router";
-import { reactive } from "vue";
+import { reactive, watch } from "vue";
 /////////////////////////
 const props = defineProps(["drawerStatus"]);
 const emit = defineEmits(["close"]);
@@ -47,6 +47,13 @@ const state = reactive({
     },
   ],
 });
+/////////////////////////
+watch(
+  () => route.path,
+  () => {
+    document.getElementById("closeDrawer").click();
+  }
+);
 </script>
 <template>
   <div
@@ -64,6 +71,7 @@ const state = reactive({
       <i
         class="fa-duotone fa-rectangle-xmark cursor-pointer text-3xl text-red-500"
         data-bs-dismiss="offcanvas"
+        id="closeDrawer"
       ></i>
     </div>
     <div class="parent-main-menu-setting">

@@ -16,7 +16,7 @@ const state = reactive({
       id: 1,
       name: "menuFeatures",
       iconClass:
-        "fa-duotone fa-ellipsis-stroke text-2xl text-yellow-500 p-1 m-1 cursor-pointer",
+        "fa-duotone fa-bars text-2xl text-blue-600 p-1 m-1 cursor-pointer",
     },
     {
       id: 2,

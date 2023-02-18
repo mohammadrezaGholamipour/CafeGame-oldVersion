@@ -56,15 +56,12 @@ watch(
 );
 </script>
 <template>
-  <div
-    class="offcanvas offcanvas-end fixed bottom-0 flex flex-col max-w-full bg-white invisible bg-clip-padding shadow-sm outline-none transition duration-300 ease-in-out text-gray-700 top-0 right-0 border-none w-96"
-    id="offcanvasMenuFeatures"
-  >
+  <div class="offcanvas parent-drawer" id="offcanvasMenuFeatures">
     <div
       class="flex w-full justify-between p-2.5 items-center"
       style="border-bottom: dashed 1px black"
     >
-      <div class="flex items-center">
+      <div class="flex items-center text-white">
         <p class="text-xl ml-1 font-bold">امکانات</p>
         <i class="fa-duotone fa-sliders text-xl"></i>
       </div>

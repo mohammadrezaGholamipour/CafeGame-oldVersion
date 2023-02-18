@@ -100,7 +100,7 @@ const handleCloseModal = () => {
         <p class="font-bold">خوراکی</p>
       </div>
       <div class="ModalMain">
-        <div class="flex w-full justify-evenly items-center">
+        <div class="flex w-full flex-wrap justify-evenly items-center">
           <input
             placeholder="قیمت محصول"
             class="food-input"

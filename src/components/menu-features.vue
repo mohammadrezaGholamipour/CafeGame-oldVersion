@@ -18,7 +18,7 @@ const state = reactive({
     {
       id: 2,
       name: "مدیریت قیمت زمان بازی",
-      path: "/money",
+      path: "/moneys",
       icon: "fa-duotone fa-face-tongue-money text-red-500",
     },
     {

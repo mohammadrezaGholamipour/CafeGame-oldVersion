@@ -27,7 +27,7 @@ const handleTotalFoodMoney = computed(() => {
 <template>
   <div class="flex w-full justify-center items-center p-2">
     <div v-if="!props.foodSelected.length" class="flex items-center">
-      <img src="../assets/image/money.svg" width="50" />
+      <img src="@/assets/image/money.svg" width="50" />
       <p class="text-3xl ml-1">هزارتومان</p>
       <p class="text-3xl ml-1 mt-1">
         {{ props.payModal.playstation.userMoney?.toLocaleString() }}

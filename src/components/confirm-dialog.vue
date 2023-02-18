@@ -11,13 +11,13 @@ const handleCloseDialog = (value) => {
     :modelValue="props.confirmDialog.status"
     :update:modelValue="handleCloseDialog"
     persistent
-    width="500"
+    width="333"
   >
     <div class="flex w-full flex-col justify-center bg-white rounded-md">
       <div class="ModalMain">
-        <p class="text-xl">{{ props.confirmDialog.text }}</p>
+        <p class="text-xl text-center">{{ props.confirmDialog.text }}</p>
       </div>
-      <div class="ModalFooter p-2">
+      <div class="ModalFooter p-1">
         <button @click="handleCloseDialog(false)" class="BtnRemove">
           <i class="fa-duotone fa-chevrons-left mr-2"></i>
           <p>بازگشت</p>

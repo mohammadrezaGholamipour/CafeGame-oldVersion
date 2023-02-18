@@ -61,9 +61,11 @@ const requestRemoveConsole = (id) => {
 };
 </script>
 <template>
-  <ConsoleTable
-    @deleteConsole="requestRemoveConsole"
-    :consoleList="state.confirmDialog"
-    @newConsole="requestNewConsole"
-  />
+  <div class="parent-consols">
+    <ConsoleTable
+      @deleteConsole="requestRemoveConsole"
+      :consoleList="state.consoleList"
+      @newConsole="requestNewConsole"
+    />
+  </div>
 </template>

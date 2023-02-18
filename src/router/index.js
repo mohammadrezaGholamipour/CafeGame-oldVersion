@@ -1,19 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import consols from '../pages/consols/consols.vue'
-import foods from '../pages/foods/foods.vue'
-import Register from '../pages/Register.vue'
-import money from '../pages/money.vue'
-import login from '../pages/login.vue'
-import Home from '../pages/Home.vue'
-
+import consols from '@/pages/consols/consols.vue'
+import moneys from '@/pages/moneys/moneys.vue'
+import foods from '@/pages/foods/foods.vue'
+import Register from '@/pages/Register.vue'
+import home from '@/pages/home/home.vue'
+import login from '@/pages/login.vue'
 //////////////////////////////////
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'Home',
-      component: Home,
+      name: 'home',
+      component: home,
     },
     {
       path: '/login',
@@ -36,9 +35,9 @@ const router = createRouter({
       component: consols,
     },
     {
-      path: '/money',
-      name: 'money',
-      component: money,
+      path: '/moneys',
+      name: 'moneys',
+      component: moneys,
     },
   ]
 })

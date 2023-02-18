@@ -1,7 +1,7 @@
 <script setup>
 import { useToast } from "vue-toastification";
 import { reactive, watch } from "vue";
-import billApi from "../api/bill";
+import billApi from "../../../api/bill";
 import PayModal from "./pay-modal.vue";
 ////////////////////////
 const props = defineProps(["consoleList", "moneyList", "foodList", "billList"]);
@@ -251,11 +251,11 @@ const requestSetFood = (billId, food) => {
         </p>
         <transition-scale group>
           <img
-            src="../assets/image/timer.png"
+            src="@/assets/image/timer.png"
             v-if="!playstation.status"
             width="35"
           />
-          <img v-else src="../assets/image/timer.gif" width="35" />
+          <img v-else src="@/assets/image/timer.gif" width="35" />
         </transition-scale>
       </div>
       <!-- /////////////////////////////// -->

@@ -41,7 +41,7 @@ const handleFinishBill = () => {
           @click="emit('continue')"
         ></i>
         <div class="w-full flex justify-center items-center">
-          <img src="../assets/image/time.svg" width="40" />
+          <img src="@/assets/image/time.svg" width="40" />
           <div class="ml-1 mt-2 flex text-2xl font-bold items-baseline">
             {{ props.payModal.playstation.time?.hours }}:{{
               props.payModal.playstation.time?.minutes
@@ -52,14 +52,14 @@ const handleFinishBill = () => {
           <img
             class="shadow-md rounded-full border-2 border-yellow-700 transition-all cursor-pointer hover:scale-110"
             @click="state.faktorOrFood = !state.faktorOrFood"
-            src="../assets/image/faktor.jpg"
+            src="@/assets/image/faktor.jpg"
             v-if="state.faktorOrFood"
             width="50"
           />
           <img
             class="shadow-md border-2 border-yellow-700 transition-all bg-yellow-400 rounded-full cursor-pointer hover:scale-110 p-1"
             @click="state.faktorOrFood = !state.faktorOrFood"
-            src="../assets/image/food.png"
+            src="@/assets/image/food.png"
             width="50"
             v-else
           />

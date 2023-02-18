@@ -1,12 +1,11 @@
 <script setup>
 import PersianNumberToString from "persian-number-tostring";
-import confirmDialog from "./confirm-dialog.vue";
-import { useToast } from "vue-toastification";
-import { reactive, onMounted } from "vue";
+import confirmDialog from "@/components/confirm-dialog.vue";
 import NewMoney from "./new-money.vue";
-import money from "../api/money";
+import { reactive } from "vue";
 ///////////////////////
-const toast = useToast();
+const emit = defineEmits(["newMoney", "removeMoney"]);
+const props = defineProps(["listMoney"]);
 ///////////////////////
 const state = reactive({
   tableHeader: [
@@ -15,7 +14,6 @@ const state = reactive({
     { name: "قیمت به حروف", icon: "fa-duotone fa-money-bill-1-wave" },
     { name: "عملیات", icon: "fa-duotone fa-cash-register" },
   ],
-  listMoney: [],
   formModal: false,
   confirmDialog: {
     text: "قیمت انتخاب شده حذف شود؟",
@@ -24,70 +22,29 @@ const state = reactive({
   },
 });
 /////////////////////////////
-onMounted(() => {
-  requestGetMoneys();
-});
-///////////////////////////////
-const requestNewMoney = (newMoney) => {
-  money
-    .new(newMoney)
-    .then(() => {
-      toast.success("قیمت جدید با موفقیت اضافه شد");
-      requestGetMoneys();
-    })
-    .catch(() => {
-      toast.error("قیمت مورد نظر اضافه نشد");
-    })
-    .finally(() => {
-      state.formModal = false;
-    });
-};
-///////////////////////////////
-const requestGetMoneys = () => {
-  money
-    .get()
-    .then((response) => {
-      state.listMoney = response;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
-///////////////////////////////
-const requestRemoveMoney = (id) => {
-  money
-    .remove(id)
-    .then(() => {
-      requestGetMoneys();
-      toast.success("با موفقیت حذف شد");
-    })
-    .catch(() => {
-      toast.error("قیمت مورد نظر حذف نشد");
-    })
-    .finally(() => {
-      state.confirmDialog.id = "";
-      state.confirmDialog.status = false;
-    });
-};
-/////////////////////////////////
 const handleSelectedMoney = (id) => {
   state.confirmDialog.id = id;
   state.confirmDialog.status = true;
 };
 /////////////////////////////////
+const handleNewMoney = (newMoney) => {
+  emit("newMoney", newMoney);
+  state.formModal = false;
+};
+/////////////////////////////////
 const handleCloseconfirmDialog = (value) => {
   if (value) {
-    requestRemoveMoney(state.confirmDialog.id);
-  } else {
-    state.confirmDialog.id = "";
-    state.confirmDialog.status = false;
+    emit("removeMoney", state.confirmDialog.id);
   }
+  state.confirmDialog.id = "";
+  state.confirmDialog.status = false;
 };
 </script>
 <template>
-  <div class="flex w-full flex-col justify-center items-start mt-5">
+  <div class="flex w-full flex-col justify-center items-center mt-12">
     <button @click="state.formModal = true" class="btn-new-money">
-      قیمت جدید
+      <p class="ml-2">قیمت جدید</p>
+      <i class="fa-duotone fa-money-bill-1-wave"></i>
     </button>
     <table class="table-money">
       <thead>
@@ -104,8 +61,8 @@ const handleCloseconfirmDialog = (value) => {
           </td>
         </tr>
       </thead>
-      <tbody v-if="state.listMoney.length">
-        <tr v-for="(items, index) in state.listMoney">
+      <tbody v-if="props.listMoney.length">
+        <tr v-for="(items, index) in props.listMoney">
           <td class="td-money">{{ index + 1 }}</td>
           <td class="td-money">{{ items.rate.toLocaleString() }}</td>
           <td class="td-money">{{ PersianNumberToString(items.rate) }}</td>
@@ -134,7 +91,7 @@ const handleCloseconfirmDialog = (value) => {
     <NewMoney
       @close="state.formModal = false"
       :formModal="state.formModal"
-      @money="requestNewMoney"
+      @money="handleNewMoney"
     />
     <!-- /////////////////////////// -->
     <confirmDialog

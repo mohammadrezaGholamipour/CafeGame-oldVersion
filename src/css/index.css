@@ -162,10 +162,10 @@
     @apply w-full bg-white rounded-md overflow-hidden shadow-md;
   }
   .btn-new-food {
-    @apply my-3 mt-0 p-2 bg-red-500 border-2 border-black text-white hover:bg-red-600 transition-all rounded-lg shadow-md;
+    @apply my-3 flex items-center mt-0 p-2 bg-red-500 border-2 border-black text-white hover:bg-red-600 transition-all rounded-lg shadow-md;
   }
   .btn-new-money {
-    @apply my-3 mt-0 p-2 bg-green-500 border-2 border-white text-white hover:bg-green-600 transition-all rounded-lg shadow-md;
+    @apply my-3 flex items-center mt-0 p-2 bg-green-500 border-2 border-white text-white hover:bg-green-600 transition-all rounded-lg shadow-md;
   }
   .TdHeaderFoods {
     @apply flex justify-center items-center p-3;
@@ -177,7 +177,7 @@
     border-bottom: 1px dashed #e4e6ef;
   }
   .BtnRemove {
-    @apply flex items-center justify-between p-2 px-3 mr-1 rounded-md text-red-900 bg-red-200 hover:bg-red-400 transition-all;
+    @apply flex m-1 items-center justify-between p-2 px-3 mr-1 rounded-md text-red-900 bg-red-200 hover:bg-red-400 transition-all;
   }
   .BtnChange {
     @apply mr-2 flex items-center justify-between p-2 px-5 rounded-md text-yellow-900 bg-yellow-200 hover:bg-yellow-400 transition-all;
@@ -201,7 +201,7 @@
     @apply flex items-center justify-evenly flex-wrap p-3 border-t border-gray-200 rounded-b-md;
   }
   .BtnAccept {
-    @apply flex items-center justify-between p-2 px-5 rounded-md text-green-900 bg-green-200 hover:bg-green-400 transition-all;
+    @apply flex m-1 items-center justify-between p-2 px-5 rounded-md text-green-900 bg-green-200 hover:bg-green-400 transition-all;
   }
   .Parent-food-store {
     @apply p-3 flex w-full text-center justify-center  items-center;
@@ -236,7 +236,7 @@
     @apply p-3  text-lg font-bold;
   }
   .food-input {
-    @apply p-3 rounded-md text-right bg-slate-200 outline-none;
+    @apply p-3 m-2 rounded-md text-right bg-slate-200 outline-none;
   }
   .menu-setting {
     @apply offcanvas-top fixed bottom-0 flex flex-col bg-slate-100 invisible shadow-xl outline-none transition duration-300 ease-in-out text-gray-700 top-0 left-0 mx-auto right-0 border-none rounded-b-md;
@@ -250,20 +250,20 @@
     @apply w-full p-2 flex items-center justify-start shadow-md bg-white rounded-md cursor-pointer hover:scale-105 transition-all duration-300 my-1;
   }
   .parent-consols {
-    @apply w-full flex flex-col justify-start overflow-y-scroll items-center;
+    @apply w-full flex bg-white flex-col justify-start overflow-y-scroll items-center;
     background-image: url(../assets/image/bg-consols.jpg);
     background-size: cover;
     height: 100vh;
   }
   .manage-consols {
-    @apply flex flex-col m-5 p-3 opacity-95 relative justify-evenly items-center shadow-md bg-black rounded-md;
+    @apply flex border-2 border-white flex-col m-5 p-3 opacity-95 relative justify-evenly items-center shadow-md bg-black rounded-lg;
   }
 
   .console-icon {
     @apply m-2 text-2xl cursor-pointer;
   }
   .new-console {
-    @apply flex border-2 border-green-600 cursor-pointer justify-center p-2 shadow-lg items-center rounded-lg bg-green-500;
+    @apply flex mt-20 cursor-pointer justify-center p-2 px-4 shadow-lg items-center rounded-lg bg-green-500;
   }
   .parent-management-money {
     @apply w-full flex flex-col overflow-y-scroll justify-start items-center p-2;

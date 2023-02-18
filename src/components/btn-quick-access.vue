@@ -29,7 +29,7 @@ const state = reactive({
 ///////////////////////////////
 const handleClick = (name) => {
   if (name === "reset") {
-    router.push({ name: "Home" });
+    router.push({ name: "home" });
   }
 };
 </script>

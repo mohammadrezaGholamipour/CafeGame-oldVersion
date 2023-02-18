@@ -1,11 +1,11 @@
 <script setup>
-import ConsolePlayStation from "../components/console-playStation.vue";
+import ConsolePlayStation from "./components/console-playStation.vue";
 import { useToast } from "vue-toastification";
 import { onMounted, reactive } from "vue";
-import console from "../api/console";
-import money from "../api/money";
-import food from "../api/food";
-import bill from "../api/bill";
+import console from "../../api/console";
+import money from "../../api/money";
+import food from "../../api/food";
+import bill from "../../api/bill";
 /////////////////////////////
 const toast = useToast();
 ////////////////////////

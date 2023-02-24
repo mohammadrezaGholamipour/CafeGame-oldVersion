@@ -24,7 +24,7 @@ const state = reactive({
     {
       id: 3,
       name: "گزارش تراکنش ها",
-      path: "",
+      path: "/bills",
       icon: "fa-duotone fa-sack-dollar text-green-500",
     },
     {

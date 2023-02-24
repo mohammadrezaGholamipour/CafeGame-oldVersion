@@ -24,7 +24,7 @@ const requestGetConsoles = () => {
       requestGetMoneys();
     })
     .catch(() => {
-      toast.error("لیست دستگاه ها دریافت نشد");
+      toast.error("خطا در ارتباط با سرور");
     });
 };
 ////////////////////////

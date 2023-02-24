@@ -80,7 +80,7 @@ const handleCloseConfirmDialog = (value) => {
           </td>
         </tr>
       </thead>
-      <tbody v-if="props.listFood.length" class="test">
+      <tbody v-if="props.listFood.length">
         <tr v-for="(items, index) in props.listFood" :key="index">
           <td>{{ index + 1 }}</td>
           <td>{{ items.name }}</td>

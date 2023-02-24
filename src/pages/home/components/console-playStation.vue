@@ -271,7 +271,7 @@ const requestSetFood = (billId, food) => {
             @click="handleShowAndHideMoneyList(playstation.id)"
             class="SelectedMoneyConsole"
           >
-            <p class="ml-2 font-bold">
+            <p class="font-bold">
               {{
                 playstation.moneySelected?.rate
                   ? playstation.moneySelected.rate.toLocaleString()

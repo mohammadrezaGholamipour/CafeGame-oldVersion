@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import consols from '@/pages/consols/consols.vue'
 import moneys from '@/pages/moneys/moneys.vue'
+import bills from '@/pages/bills/bills.vue'
 import foods from '@/pages/foods/foods.vue'
 import Register from '@/pages/Register.vue'
 import home from '@/pages/home/home.vue'
@@ -23,6 +24,11 @@ const router = createRouter({
       path: '/consols',
       name: 'consols',
       component: consols,
+    },
+    {
+      path: '/bills',
+      name: 'bills',
+      component: bills,
     },
     {
       path: '/moneys',

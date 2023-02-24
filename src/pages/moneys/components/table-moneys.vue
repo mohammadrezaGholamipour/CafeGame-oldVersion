@@ -65,7 +65,9 @@ const handleCloseconfirmDialog = (value) => {
         <tr v-for="(items, index) in props.listMoney">
           <td class="td-money">{{ index + 1 }}</td>
           <td class="td-money">{{ items.rate.toLocaleString() }}</td>
-          <td class="td-money">{{ PersianNumberToString(items.rate) }}</td>
+          <td class="td-money">
+            {{ PersianNumberToString(items.rate) }} تومان
+          </td>
           <td class="td-money">
             <div class="inline-flex justify-center items-center">
               <button @click="handleSelectedMoney(items.id)" class="BtnRemove">

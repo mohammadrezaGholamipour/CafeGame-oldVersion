@@ -296,16 +296,25 @@
     z-index: 5001;
     width: 250px;
   }
-    .Parent-bills {
+  .Parent-bills {
     @apply flex items-center flex-col px-3 justify-start w-full;
     background-image: url(../assets/image/bg-bills.jpg);
     background-size: cover;
     height: 100vh;
   }
-   .Table-bills {
+  .Table-bills {
     @apply w-full bg-white rounded-md overflow-hidden shadow-md;
   }
-   .td-header-foods {
+  .Table-bills tbody tr td {
+    @apply text-center p-3;
+  }
+  .TableFoods tbody tr {
+    border-bottom: 1px dashed #e4e6ef;
+  }
+  .Table-bills tbody tr:nth-child(even) {
+    @apply bg-[#d1d1d180];
+  }
+  .td-header-foods {
     @apply flex justify-center items-center p-3;
   }
   @media only screen and (min-width: 576px) {

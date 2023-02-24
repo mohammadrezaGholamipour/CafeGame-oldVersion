@@ -177,7 +177,7 @@
     border-bottom: 1px dashed #e4e6ef;
   }
   .BtnRemove {
-    @apply flex m-1 items-center justify-between p-2 px-3 mr-1 rounded-md text-red-900 bg-red-200 hover:bg-red-400 transition-all;
+    @apply flex m-1  items-center justify-between p-2 px-3 mr-1 rounded-md text-red-900 bg-red-200 hover:bg-red-400 transition-all;
   }
   .BtnChange {
     @apply mr-2 flex items-center justify-between p-2 px-5 rounded-md text-yellow-900 bg-yellow-200 hover:bg-yellow-400 transition-all;
@@ -263,7 +263,7 @@
     @apply m-2 text-2xl cursor-pointer;
   }
   .new-console {
-    @apply flex mt-20 cursor-pointer justify-center p-2 px-4 shadow-lg items-center rounded-lg bg-green-500;
+    @apply flex mt-16 cursor-pointer justify-center p-2 px-4 shadow-lg items-center rounded-lg bg-green-500;
   }
   .parent-management-money {
     @apply w-full flex flex-col overflow-y-scroll justify-start items-center p-2;

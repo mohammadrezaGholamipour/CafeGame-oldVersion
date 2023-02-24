@@ -1,4 +1,4 @@
-import HttClient from '../config/axios-base'
+import HttClient from './axios-base'
 export default {
   get: () => HttClient.get('food'),
   new: (food) => HttClient.post('food', food),

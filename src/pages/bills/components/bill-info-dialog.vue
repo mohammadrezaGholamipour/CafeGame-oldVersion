@@ -1,7 +1,6 @@
 <script setup>
-/////////////////////////
+const props = defineProps(["dialog"]);
 const emit = defineEmits(["close"]);
-const props = defineProps(["InfoModal"]);
 /////////////////////////
 
 const handleCloseModal = () => {
@@ -10,8 +9,8 @@ const handleCloseModal = () => {
 </script>
 <template>
   <v-dialog
-    :modelValue="props.InfoModal?.status"
-    update:modelValue="handleCloseModal"
+    :update:modelValue="handleCloseModal"
+    :modelValue="props.dialog.status"
     width="500"
     persistent
   >
@@ -21,16 +20,10 @@ const handleCloseModal = () => {
           class="fa-solid fa-circle-xmark text-red-600 cursor-pointer text-2xl close"
           @click="handleCloseModal"
         ></i>
-        <p class="font-bold">{{ props.InfoModal.headerInfo }}</p>
+        <p class="font-bold">{{ props.dialog.headerInfo }}</p>
       </div>
-      <div class="ModalMain">
+      <div class="ModalMain pt-2">
         <slot />
-      </div>
-      <div class="ModalFooter">
-        <button @click="handleCloseModal" class="BtnRemove">
-          <i class="fa-duotone fa-badge-check mr-2"></i>
-          <p>بازگشت</p>
-        </button>
       </div>
     </div>
   </v-dialog>

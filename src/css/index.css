@@ -318,7 +318,7 @@
     @apply flex justify-center items-center p-3;
   }
   .bill-info-start {
-    @apply w-full flex-row-reverse flex items-center justify-evenly bg-slate-200 shadow-md rounded-md p-5;
+    @apply w-full flex-row-reverse flex-wrap flex items-center justify-between bg-slate-200 shadow-md rounded-md p-5;
   }
   @media only screen and (min-width: 576px) {
     .ModalDivOne {

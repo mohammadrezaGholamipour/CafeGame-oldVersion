@@ -1,7 +1,9 @@
 <script setup>
-import { reactive } from "vue";
 import BillInfoDialog from "./bill-info-dialog.vue";
-import BillInfoStart from "./bill-time.vue";
+import BillTime from "./bill-time.vue";
+import BillFood from "./bill-food.vue";
+import { reactive } from "vue";
+
 /////////////////////////////
 const props = defineProps(["bills", "foods", "moneys"]);
 /////////////////////////////
@@ -30,6 +32,7 @@ const state = reactive({
     headerInfo: "",
     data: {},
     status: false,
+    component: "",
   },
 });
 /////////////////////////////////
@@ -39,10 +42,16 @@ const handleFindMoney = (hourRateId) => {
     ?.rate?.toLocaleString()} تومان`;
 };
 /////////////////////////////////
-const handleShowDialog = (billStartInfo, billEndInfo) => {
-  const BillTime = { start: billStartInfo, end: billEndInfo };
-  state.dialog.headerInfo = "اطلاعات زمان شروع و پایان فاکتور";
-  state.dialog.data = BillTime;
+const handleShowDialog = (billSelected, type) => {
+  if (type === "time") {
+    state.dialog.headerInfo = "اطلاعات زمان شروع و پایان فاکتور";
+    state.dialog.data = billSelected;
+    state.dialog.component = type;
+  } else {
+    state.dialog.headerInfo = "لیست خوراکی های ثبت شده";
+    state.dialog.data = billSelected;
+    state.dialog.component = type;
+  }
   state.dialog.status = true;
 };
 /////////////////////////////////
@@ -51,7 +60,8 @@ const handleCloseDialog = () => {
   setTimeout(() => {
     state.dialog.headerInfo = "";
     state.dialog.data = {};
-  }, 500);
+    state.dialog.component = "";
+  }, 200);
 };
 </script>
 <template>
@@ -75,7 +85,15 @@ const handleCloseDialog = () => {
           <td>
             <div class="flex justify-center">
               <button
-                @click="handleShowDialog(items.startTime, items.endTime)"
+                @click="
+                  handleShowDialog(
+                    {
+                      start: items.startTime,
+                      end: items.endTime,
+                    },
+                    'time'
+                  )
+                "
                 class="BtnChange mr-0"
               >
                 نمایش
@@ -83,7 +101,18 @@ const handleCloseDialog = () => {
             </div>
           </td>
           <td>{{ handleFindMoney(items.hourRateId) }}</td>
-          <td>{{ items.billFoods[0]?.foodId }}</td>
+          <td>
+            <div class="flex justify-center">
+              <button
+                @click="handleShowDialog(items.billFoods, 'food')"
+                v-if="items.billFoods.length"
+                class="BtnChange mr-0"
+              >
+                نمایش
+              </button>
+              <p v-else>بدون خوراکی</p>
+            </div>
+          </td>
           <td>{{ items.systemId }}</td>
           <td>{{ items.finalCost.toLocaleString() }} تومان</td>
         </tr>
@@ -92,6 +121,10 @@ const handleCloseDialog = () => {
   </div>
   <!-- ///////////////////////////////// -->
   <BillInfoDialog :dialog="state.dialog" @close="handleCloseDialog">
-    <BillInfoStart :billTime="state.dialog.data" />
+    <BillTime
+      v-if="state.dialog.component === 'time'"
+      :billTime="state.dialog.data"
+    />
+    <BillFood :billFood="state.dialog.data" v-else />
   </BillInfoDialog>
 </template>

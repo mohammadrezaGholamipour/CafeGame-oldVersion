@@ -11,7 +11,7 @@ const handleCloseModal = () => {
   <v-dialog
     :update:modelValue="handleCloseModal"
     :modelValue="props.dialog.status"
-    width="500"
+    width="600"
     persistent
   >
     <div class="flex w-full flex-col justify-center bg-white rounded-md">

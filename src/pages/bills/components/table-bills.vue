@@ -15,13 +15,13 @@ const state = reactive({
       icon: "fa-duotone fa-hourglass-start text-red-500 ",
     },
     {
-      name: "قیمت واحد",
+      name: "هزینه بازی",
       icon: "fa-duotone fa-money-bill-1-wave text-green-500",
     },
     { name: "خوراکی ها", icon: "fa-duotone fa-burger-soda text-yellow-700" },
     {
       name: "شماره دستگاه",
-      icon: "fa-duotone fa-cash-register text-blue-500",
+      icon: "fa-brands fa-playstation text-blue-500",
     },
     {
       name: "مبلغ پرداخت شده",
@@ -114,7 +114,13 @@ const handleCloseDialog = () => {
             </div>
           </td>
           <td>{{ items.systemId }}</td>
-          <td>{{ items.finalCost.toLocaleString() }} تومان</td>
+          <td>
+            {{
+              items.finalCost
+                ? `${items.finalCost?.toLocaleString()} تومان`
+                : "هنوز تمام نشده است"
+            }}
+          </td>
         </tr>
       </tbody>
     </table>
@@ -125,6 +131,6 @@ const handleCloseDialog = () => {
       v-if="state.dialog.component === 'time'"
       :billTime="state.dialog.data"
     />
-    <BillFood :billFood="state.dialog.data" v-else />
+    <BillFood :foods="props.foods" :billFood="state.dialog.data" v-else />
   </BillInfoDialog>
 </template>

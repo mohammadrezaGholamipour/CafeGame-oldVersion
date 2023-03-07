@@ -50,7 +50,7 @@ const handleTotalFoodMoney = computed(() => {
 });
 </script>
 <template>
-  <table dir="rtl" class="Table-bills" style="overflow-y: scroll">
+  <table dir="rtl" class="Table-bills">
     <thead class="bg-[#d1d1d180]">
       <tr>
         <td v-for="(items, index) in state.headerBillFood" :key="index">
@@ -62,7 +62,7 @@ const handleTotalFoodMoney = computed(() => {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(items, index) in handleFood.reverse" :key="items.id">
+      <tr v-for="(items, index) in handleFood.reverse()" :key="items.id">
         <td>{{ index + 1 }}</td>
         <td>{{ items.name }}</td>
         <td>{{ items.cost.toLocaleString() }} تومان</td>

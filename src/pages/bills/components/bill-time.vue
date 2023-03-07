@@ -21,17 +21,13 @@ const state = reactive({
 <template>
   <div class="bill-info-start">
     <div class="flex flex-col items-center justify-center">
-      <div
-        class="flex w-full items-center mb-3 justify-end"
-        v-for="items in state.billTimeTitle"
-        :key="items"
-      >
+      <div class="flex w-full items-center mb-3 justify-end" v-for="items in state.billTimeTitle" :key="items">
         <p class="text-xl mr-2 font-bold">{{ items.name }}</p>
         <i :class="items.icon"></i>
       </div>
     </div>
     <div class="flex text-right flex-col items-center justify-center">
-      <div class="flex w-full items-center justify-end">
+      <div class="flex w-full items-center justify-center">
         <p class="text-2xl">
           {{
             moment(`${props.billTime.start}z`).locale("fa").format("YYYY/M/D")
@@ -47,7 +43,7 @@ const state = reactive({
       </div>
       <div class="flex w-full items-center justify-center mt-3">
         <p class="text-2xl">
-          {{ moment(`${props.billTime.end}z`).locale("fa").format("HH:mm:ss") }}
+          {{ props.billTime.end ? moment(`${props.billTime.end}z`).locale("fa").format("HH:mm:ss") : 'هنوز تمام نشده است' }}
         </p>
       </div>
     </div>

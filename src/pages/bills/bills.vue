@@ -22,7 +22,7 @@ const requestGetBills = () => {
   billApi
     .get()
     .then((response) => {
-      state.billList = response;
+      state.billList = response.reverse();
       requestGetFoods();
       requestGetMoneys();
     })
@@ -55,10 +55,6 @@ const requestGetFoods = () => {
 </script>
 <template>
   <div class="Parent-bills">
-    <TableBills
-      :moneys="state.moneyList"
-      :foods="state.foodList"
-      :bills="state.billList"
-    />
+    <TableBills :moneys="state.moneyList" :foods="state.foodList" :bills="state.billList" />
   </div>
 </template>

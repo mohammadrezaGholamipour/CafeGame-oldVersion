@@ -2,8 +2,8 @@
 import BillInfoDialog from "./bill-info-dialog.vue";
 import BillTime from "./bill-time.vue";
 import BillFood from "./bill-food.vue";
+import moment from "jalali-moment";
 import { reactive } from "vue";
-
 /////////////////////////////
 const props = defineProps(["bills", "foods", "moneys"]);
 /////////////////////////////
@@ -25,7 +25,7 @@ const state = reactive({
     },
     {
       name: "مبلغ پرداخت شده",
-      icon: "fa-duotone fa-cash-register text-blue-500",
+      icon: "fa-duotone fa-cash-register text-green-700",
     },
   ],
   dialog: {
@@ -63,63 +63,85 @@ const handleCloseDialog = () => {
     state.dialog.component = "";
   }, 200);
 };
+//////////////////////////////
+const handleShowEndTime = (endTime) => {
+  const finishFaktorDay = moment(`${endTime}z`).locale("fa").format("DD")
+  const finishFaktorMonth = moment(`${endTime}z`).locale("fa").format("MM")
+  ///////////////////////////////////////////
+  const dayNow = moment().locale("fa").format("DD")
+  const monthNow = moment().locale("fa").format("MM")
+  ///////////////////////////////////////////
+  if (monthNow === finishFaktorMonth) {
+    switch (dayNow) {
+      case finishFaktorDay:
+        return 'همین امروز';
+      case finishFaktorDay + 1:
+        return 'دیروز';
+      case finishFaktorDay + 3:
+        return 'سه روز پیش';
+      case finishFaktorDay + 4:
+        return 'چهار روز پیش';
+      default:
+        return moment(`${endTime}z`).locale("fa").format("YY/MM/DD");
+    }
+  } else {
+    return moment(`${endTime}z`).locale("fa").format("YY/MM/DD")
+  }
+
+
+} 
 </script>
 <template>
-  <div
-    class="overflow-hidden flex items-center flex-col justify-start mt-15 rounded-md w-full"
-  >
+  <div class="overflow-y-scroll h-[86vh] flex items-center flex-col justify-start mt-15 rounded-md w-[90vw]">
     <table class="Table-bills">
-      <thead class="bg-[#d1d1d180]">
+      <thead>
         <tr>
-          <td v-for="(items, index) in state.headerBills" :key="index">
+          <th class="sticky top-0 bg-slate-200" v-for="(items, index) in state.headerBills" :key="index">
             <div class="td-header-foods">
               <p class="ml-2 font-bold">{{ items.name }}</p>
               <i :class="items.icon" />
             </div>
-          </td>
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(items, index) in props.bills" :key="items.id">
           <td>{{ index + 1 }}</td>
           <td>
-            <div class="flex justify-center">
-              <button
-                @click="
-                  handleShowDialog(
-                    {
-                      start: items.startTime,
-                      end: items.endTime,
-                    },
-                    'time'
-                  )
-                "
-                class="BtnChange mr-0"
-              >
+            <div class="flex  items-center " :class="items.endTime ? 'justify-between':'justify-center'">
+              <p class="ml-2">{{ items.endTime ? handleShowEndTime(items.endTime) : '' }}</p>
+              <button @click="
+                handleShowDialog(
+                  {
+                    start: items.startTime,
+                    end: items.endTime,
+                  },
+                  'time'
+                )
+              " class="BtnChange mr-0">
                 نمایش
               </button>
+
             </div>
           </td>
           <td>{{ handleFindMoney(items.hourRateId) }}</td>
           <td>
             <div class="flex justify-center">
-              <button
-                @click="handleShowDialog(items.billFoods, 'food')"
-                v-if="items.billFoods.length"
-                class="BtnChange mr-0"
-              >
+              <button @click="handleShowDialog(items.billFoods, 'food')" v-if="items.billFoods.length"
+                class="BtnChange mr-0">
                 نمایش
               </button>
+
               <p v-else>بدون خوراکی</p>
             </div>
           </td>
           <td>{{ items.systemId }}</td>
           <td>
-            {{
+            <p class="font-bold"> {{
               items.finalCost
-                ? `${items.finalCost?.toLocaleString()} تومان`
-                : "هنوز تمام نشده است"
-            }}
+              ? `${items.finalCost?.toLocaleString()} تومان`
+              : "هنوز تمام نشده است"
+            }}</p>
           </td>
         </tr>
       </tbody>
@@ -127,10 +149,7 @@ const handleCloseDialog = () => {
   </div>
   <!-- ///////////////////////////////// -->
   <BillInfoDialog :dialog="state.dialog" @close="handleCloseDialog">
-    <BillTime
-      v-if="state.dialog.component === 'time'"
-      :billTime="state.dialog.data"
-    />
+    <BillTime v-if="state.dialog.component === 'time'" :billTime="state.dialog.data" />
     <BillFood :foods="props.foods" :billFood="state.dialog.data" v-else />
   </BillInfoDialog>
 </template>

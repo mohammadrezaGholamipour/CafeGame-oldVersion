@@ -2,7 +2,7 @@
 import ConsoleTable from "./components/console-table.vue";
 import { useToast } from "vue-toastification";
 import { onMounted, reactive } from "vue";
-import console from "../../api/console";
+import console from "@/api/console";
 ////////////////////////
 const toast = useToast();
 ////////////////////////
@@ -62,10 +62,7 @@ const requestRemoveConsole = (id) => {
 </script>
 <template>
   <div class="parent-consols">
-    <ConsoleTable
-      @deleteConsole="requestRemoveConsole"
-      :consoleList="state.consoleList"
-      @newConsole="requestNewConsole"
-    />
+    <ConsoleTable @deleteConsole="requestRemoveConsole" :consoleList="state.consoleList"
+      @newConsole="requestNewConsole" />
   </div>
 </template>

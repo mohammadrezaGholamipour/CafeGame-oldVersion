@@ -20,6 +20,21 @@ export const useStore = defineStore('pinia', {
         .get()
         .then((response) => {
           this.consoleList = response;
+          this.consoleList.forEach((items) => {
+            items.showAndHideListMoney = false;
+            items.moneySelected = {
+              id: 0,
+              rate: "",
+            };
+            items.status = false;
+            items.timer = "";
+            items.time = {
+              hours: "00",
+              minutes: "00",
+              seconds: "00",
+            };
+            items.userMoney = "";
+          });
         })
         .catch(() => {
           toast.error("خطا در ارتباط با سرور");
@@ -49,7 +64,7 @@ export const useStore = defineStore('pinia', {
       bill
         .get()
         .then((response) => {
-          this.billList = response;
+          this.billList = response.reverse();
         })
         .catch(() => {
           toast.error("لیست فاکتور ها دریافت نشد");

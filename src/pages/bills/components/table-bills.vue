@@ -65,11 +65,11 @@ const handleCloseDialog = () => {
 };
 //////////////////////////////
 const handleShowEndTime = (endTime) => {
-  const finishFaktorDay = moment(`${endTime}z`).locale("fa").format("DD")
-  const finishFaktorMonth = moment(`${endTime}z`).locale("fa").format("MM")
+  const finishFaktorDay = Number(moment(`${endTime}z`).locale("fa").format("DD"))
+  const finishFaktorMonth = Number(moment(`${endTime}z`).locale("fa").format("MM"))
   ///////////////////////////////////////////
-  const dayNow = moment().locale("fa").format("DD")
-  const monthNow = moment().locale("fa").format("MM")
+  const dayNow = Number(moment().locale("fa").format("DD"))
+  const monthNow = Number(moment().locale("fa").format("MM"))
   ///////////////////////////////////////////
   if (monthNow === finishFaktorMonth) {
     switch (dayNow) {
@@ -77,10 +77,10 @@ const handleShowEndTime = (endTime) => {
         return 'همین امروز';
       case finishFaktorDay + 1:
         return 'دیروز';
+      case finishFaktorDay + 2:
+        return 'دو روز پیش';
       case finishFaktorDay + 3:
         return 'سه روز پیش';
-      case finishFaktorDay + 4:
-        return 'چهار روز پیش';
       default:
         return moment(`${endTime}z`).locale("fa").format("YY/MM/DD");
     }
@@ -108,7 +108,7 @@ const handleShowEndTime = (endTime) => {
         <tr v-for="(items, index) in props.bills" :key="items.id">
           <td>{{ index + 1 }}</td>
           <td>
-            <div class="flex  items-center " :class="items.endTime ? 'justify-between':'justify-center'">
+            <div class="flex  items-center " :class="items.endTime ? 'justify-between' : 'justify-center'">
               <p class="ml-2">{{ items.endTime ? handleShowEndTime(items.endTime) : '' }}</p>
               <button @click="
                 handleShowDialog(

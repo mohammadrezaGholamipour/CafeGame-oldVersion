@@ -1,7 +1,7 @@
 <script setup>
+import { reactive, watch, onMounted } from "vue";
 import { useToast } from "vue-toastification";
 import PayModal from "./pay-modal.vue";
-import { reactive, watch } from "vue";
 import billApi from "@/api/bill";
 ////////////////////////
 const props = defineProps(["consoleList", "moneyList", "foodList", "billList"]);
@@ -10,10 +10,6 @@ const emit = defineEmits(["requestGetBills"]);
 const toast = useToast();
 ////////////////////////
 const state = reactive({
-  consoleList: [],
-  moneyList: [],
-  foodList: [],
-  billList: [],
   payModal: {
     playstation: {},
     billPlaystation: {},
@@ -22,52 +18,29 @@ const state = reactive({
   },
 });
 /////////////////////
-watch(
-  () => props.consoleList,
-  (value) => {
-    state.consoleList = value;
-    state.consoleList.forEach((items) => {
-      items.showAndHideListMoney = false;
-      items.moneySelected = {
-        id: 0,
-        rate: "",
-      };
-      items.status = false;
-      items.timer = "";
-      items.time = {
-        hours: "00",
-        minutes: "00",
-        seconds: "00",
-      };
-      items.userMoney = "";
-    });
-  }
-);
-watch(
-  () => props.foodList,
-  (value) => {
-    state.foodList = value;
-  }
-);
-watch(
-  () => props.moneyList,
-  (value) => {
-    state.moneyList = value;
-  }
-);
-watch(
-  () => props.billList,
-  (value) => {
-    state.billList = value;
-    const billsNotFinished = value.filter((items) => !items.endTime);
+onMounted(() => {
+  if (props.billList.length) {
+    const billsNotFinished = props.billList.filter((items) => !items.endTime);
     if (billsNotFinished.length) {
       handleBillNotFinished(billsNotFinished);
+    }
+  }
+})
+/////////////////////
+watch(
+  () => props.billList,
+  () => {
+    if (props.billList.length) {
+      const billsNotFinished = props.billList.filter((items) => !items.endTime);
+      if (billsNotFinished.length) {
+        handleBillNotFinished(billsNotFinished);
+      }
     }
   }
 );
 /////////////////////////
 const handleShowAndHideMoneyList = (id) => {
-  const playstation = state.consoleList.find((items) => items.id === id);
+  const playstation = props.consoleList.find((items) => items.id === id);
   playstation.showAndHideListMoney = !playstation.showAndHideListMoney;
 };
 ////////////////////////
@@ -78,11 +51,11 @@ const handleMoneySelect = (money, playstation) => {
 ////////////////////////////
 const handleChangeConsoleStatus = (playstation) => {
   if (playstation.status) {
-    const bill = state.billList.find(
+    const bill = props.billList.find(
       (items) => items.systemId === playstation.id && !items.endTime
     );
     state.payModal.playstation = playstation;
-    state.payModal.foodList = state.foodList;
+    state.payModal.foodList = props.foodList;
     state.payModal.billPlaystation = bill;
     state.payModal.status = true;
   } else if (playstation.moneySelected.rate) {
@@ -145,7 +118,7 @@ const requestStartBill = (systemId, rateId, startInfo) => {
 };
 //////////////////////////////
 const requestFinishBill = (playstation, finishInfo) => {
-  const bill = state.billList.find(
+  const bill = props.billList.find(
     (items) => items.systemId === playstation.id && !items.endTime
   );
   billApi
@@ -167,11 +140,11 @@ const requestFinishBill = (playstation, finishInfo) => {
 const handleBillNotFinished = (billList) => {
   /////////////////////////////////////////////
   for (const bill of billList) {
-    const playstation = state.consoleList.find(
+    const playstation = props.consoleList.find(
       (console) => console.id === bill.systemId
     );
     if (!playstation.timer) {
-      const money = state.moneyList.find(
+      const money = props.moneyList.find(
         (items) => items.id === bill.hourRateId
       );
       /////////////////////////////////////////////
@@ -233,7 +206,7 @@ const requestSetFood = (billId, food) => {
 </script>
 <template>
   <div class="w-full h-full p-3 flex flex-wrap items-center justify-center">
-    <div v-for="(playstation, index) in state.consoleList" :key="playstation.id" class="Console">
+    <div v-for="(playstation, index) in props.consoleList" :key="playstation.id" class="Console">
       <!-- //////////////////////////////// -->
       <p class="ConsoleNumber">
         <img :src="`src/assets/image/numbers/${index + 1}.png`" width="50" />
@@ -271,7 +244,7 @@ const requestSetFood = (billId, food) => {
           </div>
           <transition-expand>
             <ul v-if="playstation.showAndHideListMoney" class="UlMoney">
-              <li @click="handleMoneySelect(money, playstation)" v-for="money in state.moneyList" :key="money.id">
+              <li @click="handleMoneySelect(money, playstation)" v-for="money in props.moneyList" :key="money.id">
                 {{ money.rate.toLocaleString() }}
               </li>
             </ul>

@@ -1,60 +1,11 @@
 <script setup>
 import TableBills from "./components/table-bills.vue";
-import { useToast } from "vue-toastification";
-import { reactive, onMounted } from "vue";
-import moneyApi from "@/api/money";
-import billApi from "@/api/bill";
-import foodApi from "@/api/food";
-////////////////////////////////
-const toast = useToast();
-//////////////////////////////
-const state = reactive({
-  moneyList: [],
-  billList: [],
-  foodList: [],
-});
+import { useStore } from '@/store/index'
 //////////////////////////////////
-onMounted(() => {
-  requestGetBills();
-});
-//////////////////////////////////
-const requestGetBills = () => {
-  billApi
-    .get()
-    .then((response) => {
-      state.billList = response.reverse();
-      requestGetFoods();
-      requestGetMoneys();
-    })
-    .catch(() => {
-      toast.error("خطا در ارتباط با سرور");
-    });
-};
-//////////////////////////////////
-const requestGetMoneys = () => {
-  moneyApi
-    .get()
-    .then((response) => {
-      state.moneyList = response;
-    })
-    .catch(() => {
-      toast.error("لیست قیمت ها دریافت نشد");
-    });
-};
-//////////////////////////////////
-const requestGetFoods = () => {
-  foodApi
-    .get()
-    .then((response) => {
-      state.foodList = response;
-    })
-    .catch(() => {
-      toast.error("لیست خوارکی ها دریافت نشد");
-    });
-};
+const store = useStore()
 </script>
 <template>
   <div class="Parent-bills">
-    <TableBills :moneys="state.moneyList" :foods="state.foodList" :bills="state.billList" />
+    <TableBills :moneys="store.getMoneyList" :foods="store.getFoodList" :bills="store.getBillList" />
   </div>
 </template>

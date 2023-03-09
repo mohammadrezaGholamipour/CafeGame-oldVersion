@@ -63,7 +63,7 @@ const handleCloseConfirmDialog = (value) => {
 </script>
 <template>
   <div
-    class="overflow-hidden flex items-center flex-col justify-start mt-15 rounded-md w-full"
+    class="overflow-hidden flex items-start flex-col justify-start mt-15 rounded-md w-full"
   >
     <button @click="handleFoodSelected({})" class="btn-new-food">
       <p class="ml-2">افزودن خوراکی</p>

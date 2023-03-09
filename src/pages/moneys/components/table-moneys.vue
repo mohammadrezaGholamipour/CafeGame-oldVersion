@@ -41,7 +41,7 @@ const handleCloseconfirmDialog = (value) => {
 };
 </script>
 <template>
-  <div class="flex w-full flex-col justify-center items-center mt-12">
+  <div class="flex w-full flex-col justify-start items-start mt-12">
     <button @click="state.formModal = true" class="btn-new-money">
       <p class="ml-2">قیمت جدید</p>
       <i class="fa-duotone fa-money-bill-1-wave"></i>

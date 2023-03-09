@@ -5,6 +5,7 @@ import "vue-toastification/dist/index.css";
 import { createVuetify } from 'vuetify'
 import '@morev/vue-transitions/styles';
 import Toast from "vue-toastification";
+import { createPinia } from 'pinia'
 import moment from 'jalali-moment'
 import './util/convert-numbers';
 import { createApp } from 'vue';
@@ -22,6 +23,7 @@ const vuetify = createVuetify({
 const app = createApp(App)
 /////////////////////////
 app.use(VueTransitions)
+app.use(createPinia())
 app.use(moment)
 app.use(vuetify)
 app.use(router)

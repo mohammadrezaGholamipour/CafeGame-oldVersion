@@ -14,7 +14,7 @@ const state = reactive({
   schema: yup.object({
     money: yup
       .string()
-      .min(4, "قیمت محصول درست نمیباشد")
+      .min(4, "قیمت وارد شده معتبر نمیباشد")
       .required("لطفا قیمت را وارد کنید")
       .nullable("لطفا قیمت را وارد کنید"),
   }),

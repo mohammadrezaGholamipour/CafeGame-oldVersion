@@ -1,8 +1,8 @@
 <script setup>
 import { useToast } from "vue-toastification";
-import { reactive, watch } from "vue";
-import billApi from "../../../api/bill";
 import PayModal from "./pay-modal.vue";
+import { reactive, watch } from "vue";
+import billApi from "@/api/bill";
 ////////////////////////
 const props = defineProps(["consoleList", "moneyList", "foodList", "billList"]);
 const emit = defineEmits(["requestGetBills"]);
@@ -233,11 +233,7 @@ const requestSetFood = (billId, food) => {
 </script>
 <template>
   <div class="w-full h-full p-3 flex flex-wrap items-center justify-center">
-    <div
-      v-for="(playstation, index) in state.consoleList"
-      :key="playstation.id"
-      class="Console"
-    >
+    <div v-for="(playstation, index) in state.consoleList" :key="playstation.id" class="Console">
       <!-- //////////////////////////////// -->
       <p class="ConsoleNumber">
         <img :src="`src/assets/image/numbers/${index + 1}.png`" width="50" />
@@ -250,11 +246,7 @@ const requestSetFood = (billId, food) => {
           }}
         </p>
         <transition-scale group>
-          <img
-            src="@/assets/image/timer.png"
-            v-if="!playstation.status"
-            width="35"
-          />
+          <img src="@/assets/image/timer.png" v-if="!playstation.status" width="35" />
           <img v-else src="@/assets/image/timer.gif" width="35" />
         </transition-scale>
       </div>
@@ -267,26 +259,19 @@ const requestSetFood = (billId, food) => {
         </div>
         <!-- /////////////////////////// -->
         <div class="relative w-full flex justify-center" v-else>
-          <div
-            @click="handleShowAndHideMoneyList(playstation.id)"
-            class="SelectedMoneyConsole"
-          >
+          <div @click="handleShowAndHideMoneyList(playstation.id)" class="SelectedMoneyConsole">
             <p class="font-bold">
               {{
                 playstation.moneySelected?.rate
-                  ? playstation.moneySelected.rate.toLocaleString()
-                  : "هزینه بازی"
+                ? playstation.moneySelected.rate.toLocaleString()
+                : "هزینه بازی"
               }}
             </p>
             <i class="fa-duotone transition-all duration-500"></i>
           </div>
           <transition-expand>
             <ul v-if="playstation.showAndHideListMoney" class="UlMoney">
-              <li
-                @click="handleMoneySelect(money, playstation)"
-                v-for="money in state.moneyList"
-                :key="money.id"
-              >
+              <li @click="handleMoneySelect(money, playstation)" v-for="money in state.moneyList" :key="money.id">
                 {{ money.rate.toLocaleString() }}
               </li>
             </ul>
@@ -294,10 +279,8 @@ const requestSetFood = (billId, food) => {
         </div>
       </div>
       <!-- //////////////////////////////// -->
-      <button
-        :class="playstation.status ? 'BtnConsoleFinish' : 'BtnConsoleStart'"
-        @click="handleChangeConsoleStatus(playstation)"
-      >
+      <button :class="playstation.status ? 'BtnConsoleFinish' : 'BtnConsoleStart'"
+        @click="handleChangeConsoleStatus(playstation)">
         <p>{{ playstation.status ? "پایان" : "شروع" }}</p>
         <i v-if="!playstation.status" class="fa-thin fa-circle-play mr-2"></i>
         <i v-else class="fa-light fa-circle-xmark mr-2"></i>
@@ -305,11 +288,7 @@ const requestSetFood = (billId, food) => {
       <!-- ///////////////////////////////////////// -->
     </div>
     <!-- ////////////////////////////////////// -->
-    <PayModal
-      @continue="handleContinuePlaystation"
-      @finish="handleFinishPlaystation"
-      :payModal="state.payModal"
-    />
+    <PayModal @continue="handleContinuePlaystation" @finish="handleFinishPlaystation" :payModal="state.payModal" />
     <!-- ////////////////////////////////////// -->
   </div>
 </template>
@@ -317,16 +296,20 @@ const requestSetFood = (billId, food) => {
 .bounce-enter-active {
   animation: bounce-in 0.5s;
 }
+
 .bounce-leave-active {
   animation: bounce-in 0.5s reverse;
 }
+
 @keyframes bounce-in {
   0% {
     transform: scale(0);
   }
+
   50% {
     transform: scale(1.25);
   }
+
   100% {
     transform: scale(1);
   }

@@ -1,13 +1,14 @@
 <script setup>
 import ConsoleTable from "./components/console-table.vue";
 import { useToast } from "vue-toastification";
-import { onMounted, reactive } from "vue";
+import { useStore } from '@/store/index'
 import console from "@/api/console";
+import { reactive } from "vue";
 ////////////////////////
 const toast = useToast();
+const store = useStore()
 ////////////////////////
 const state = reactive({
-  consoleList: [],
   confirmDialog: {
     text: "دستگاه انتخاب شده حذف شود؟",
     status: false,
@@ -15,17 +16,13 @@ const state = reactive({
   },
 });
 ///////////////////////////////
-onMounted(() => {
-  requestGetConsoles();
-});
-///////////////////////////////
 const requestNewConsole = () => {
-  if (state.consoleList.length < 8) {
+  if (store.getConsoleList.length < 8) {
     console
       .new({ name: String(Math.random() * 100) })
       .then(() => {
         toast.success("دستگاه با موفقیت اضافه شد");
-        requestGetConsoles();
+        store.requestGetConsoles()
       })
       .catch(() => {
         toast.error("دستگاه جدید اضافه نشد");
@@ -33,23 +30,12 @@ const requestNewConsole = () => {
   }
 };
 ///////////////////////////////
-const requestGetConsoles = () => {
-  console
-    .get()
-    .then((response) => {
-      state.consoleList = response;
-    })
-    .catch(() => {
-      toast.error("خطا در ارتباط با سرور");
-    });
-};
-///////////////////////////////
 const requestRemoveConsole = (id) => {
   console
     .remove(id)
     .then(() => {
       toast.success("دستگاه با موفقیت حذف شد");
-      requestGetConsoles();
+      store.requestGetConsoles()
     })
     .catch(() => {
       toast.error("دستگاه حذف نشد");
@@ -62,7 +48,7 @@ const requestRemoveConsole = (id) => {
 </script>
 <template>
   <div class="parent-consols">
-    <ConsoleTable @deleteConsole="requestRemoveConsole" :consoleList="state.consoleList"
+    <ConsoleTable @deleteConsole="requestRemoveConsole" :consoleList="store.getConsoleList"
       @newConsole="requestNewConsole" />
   </div>
 </template>

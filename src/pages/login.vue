@@ -69,7 +69,7 @@ const handleLogin = () => {
 };
 </script>
 <template>
-  <div class="ParentLogin">
+  <div class="parent-login">
     <div class="login">
       <img class="Logo" src="../assets/image/logo.png" alt="لوگو" />
       <template v-for="items in state.loginInput">

@@ -1,39 +1,21 @@
 <script setup>
 import TableMoney from "./components/table-moneys.vue";
 import { useToast } from "vue-toastification";
-import { reactive, onMounted } from "vue";
+import { useStore } from '../../store/index'
 import money from "@/api/money";
 //////////////////////////////////////////
 const toast = useToast();
-///////////////////////
-const state = reactive({
-  listMoney: [],
-});
-///////////////////////
-onMounted(() => {
-  requestGetMoneys();
-});
+const store = useStore()
 ///////////////////////////////
 const requestNewMoney = (newMoney) => {
   money
     .new(newMoney)
     .then(() => {
       toast.success("قیمت جدید با موفقیت اضافه شد");
-      requestGetMoneys();
+      store.requestGetMoneys()
     })
     .catch(() => {
       toast.error("قیمت مورد نظر اضافه نشد");
-    });
-};
-///////////////////////////////
-const requestGetMoneys = () => {
-  money
-    .get()
-    .then((response) => {
-      state.listMoney = response;
-    })
-    .catch(() => {
-      toast.error("لیست قیمت های ثبت شده دریافت نشد");
     });
 };
 ///////////////////////////////
@@ -41,7 +23,7 @@ const requestRemoveMoney = (id) => {
   money
     .remove(id)
     .then(() => {
-      requestGetMoneys();
+      store.requestGetMoneys()
       toast.success("با موفقیت حذف شد");
     })
     .catch(() => {
@@ -52,10 +34,6 @@ const requestRemoveMoney = (id) => {
 </script>
 <template>
   <div class="parent-management-money">
-    <TableMoney
-      @removeMoney="requestRemoveMoney"
-      :listMoney="state.listMoney"
-      @newMoney="requestNewMoney"
-    />
+    <TableMoney @removeMoney="requestRemoveMoney" :listMoney="store.getMoneyList" @newMoney="requestNewMoney" />
   </div>
 </template>

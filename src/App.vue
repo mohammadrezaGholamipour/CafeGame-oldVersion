@@ -2,6 +2,7 @@
 import BtnQuickAccess from "@/components/btn-quick-access.vue";
 import MenuFeatures from "@/components/menu-features.vue";
 import { onMounted, watch, reactive } from "vue";
+import Loading from "./components/loading.vue";
 import { useStore } from '@/store/index'
 ///////////////////////////////////////
 const store = useStore()
@@ -13,23 +14,26 @@ const state = reactive({
 onMounted(() => {
   store.requestGetConsoles()
 })
-watch(() => store.getConsoleList, () => {
-  store.requestGetMoneys()
-})
-watch(() => store.getMoneyList, () => {
-  store.requestGetfoods()
-})
-watch(() => store.getFoodList, () => {
-  store.requestGetBills()
-  state.loading = false
+////////////////////////
+watch(() => store.getBillList, (value) => {
+  if (value) {
+    setTimeout(() => {
+      state.loading = false
+    }, 3000);
+  }
 })
 </script>
-<template>
-  <router-view v-slot="{ Component }">
-    <transition-scale group :duration="1000">
-      <BtnQuickAccess />
-      <component v-show="!state.loading" :is="Component" />
-      <MenuFeatures />
-    </transition-scale>
-  </router-view>
+<template >
+  <div v-show="!state.loading">
+    <router-view v-slot="{ Component }">
+      <transition-fade appear group :duration="1000">
+        <BtnQuickAccess />
+        <component :is="Component" />
+        <MenuFeatures />
+      </transition-fade>
+    </router-view>
+  </div>
+  <transition-scale appear v-if="state.loading">
+    <Loading />
+  </transition-scale>
 </template>

@@ -9,10 +9,10 @@ const toast = useToast();
 // //////////////////////////////////
 export const useStore = defineStore('pinia', {
   state: () => ({
-    consoleList: [],
-    moneyList: [],
-    foodList: [],
-    billList: [],
+    consoleList: false,
+    moneyList: false,
+    foodList: false,
+    billList: false,
   }),
   actions: {
     requestGetConsoles() {
@@ -35,6 +35,9 @@ export const useStore = defineStore('pinia', {
             };
             items.userMoney = "";
           });
+          if (!this.moneyList) {
+            this.requestGetMoneys()
+          }
         })
         .catch(() => {
           toast.error("خطا در ارتباط با سرور");
@@ -45,6 +48,9 @@ export const useStore = defineStore('pinia', {
         .get()
         .then((response) => {
           this.moneyList = response;
+          if (!this.foodList) {
+            this.requestGetfoods()
+          }
         })
         .catch(() => {
           toast.error("لیست قیمت ها دریافت نشد");
@@ -55,6 +61,9 @@ export const useStore = defineStore('pinia', {
         .get()
         .then((response) => {
           this.foodList = response;
+          if (!this.billList) {
+            this.requestGetBills()
+          }
         })
         .catch(() => {
           toast.error("لیست خوراکی ها دریافت نشد");

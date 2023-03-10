@@ -29,6 +29,9 @@
     background-color: black;
     direction: rtl !important;
   }
+  body {
+    background-color: black;
+  }
 }
 /* /////////////// */
 @layer components {
@@ -287,7 +290,7 @@
     @apply p-2;
   }
   .parent-quick-access {
-    @apply bg-black fixed-top mx-auto overflow-hidden border-2 px-3 rounded-b-2xl border-yellow-500 border-t-0 shadow-2xl;
+    @apply bg-black absolute left-0 right-0 mx-auto overflow-hidden border-2 px-3 rounded-b-2xl border-yellow-500 border-t-0 shadow-2xl;
     z-index: 5000;
     width: 150px;
   }

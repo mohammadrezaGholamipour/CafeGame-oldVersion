@@ -18,5 +18,10 @@ public class PSSystemConfig : IEntityTypeConfiguration<PSSystem>
             .WithOne(x => x.System)
             .HasForeignKey(x => x.SystemId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        builder.HasOne(x => x.User)
+            .WithMany()
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

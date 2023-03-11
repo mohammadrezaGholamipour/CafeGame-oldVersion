@@ -27,5 +27,10 @@ public class BillConfig : IEntityTypeConfiguration<Bill>
             .WithOne(x => x.Bill)
             .HasForeignKey(x => x.BillId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        builder.HasOne(x => x.User)
+            .WithMany()
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
 
 namespace CafeGameApi.Entities;
 
@@ -19,4 +20,7 @@ public class Bill
 
     
     public ICollection<BillFood> BillFoods { get; set; } = new List<BillFood>();
+
+    public int UserId { get; set; }
+    public virtual IdentityUser<int>? User { get; set; }
 }

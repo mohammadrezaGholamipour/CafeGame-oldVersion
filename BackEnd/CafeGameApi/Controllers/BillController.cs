@@ -1,7 +1,9 @@
-﻿using CafeGameApi.Context;
+﻿using CafeGameApi.ConfigModels;
+using CafeGameApi.Context;
 using CafeGameApi.Entities;
 using CafeGameApi.Models;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,11 +11,16 @@ namespace CafeGameApi.Controllers;
 
 [Route("api/bill")]
 [ApiController]
-public class BillController : ControllerBase
+[Authorize(Roles = AppConstants.UserRoles.RegisteredUser)]
+public class BillController : AppBaseUserController
 {
     private readonly AppDbContext _context;
 
-    public BillController(AppDbContext context)
+
+    public BillController(UserManager<IdentityUser<int>> userManager,
+        IHttpContextAccessor contextAccessor,
+        AppDbContext context)
+        : base(userManager, contextAccessor)
     {
         _context = context;
     }
@@ -23,6 +30,7 @@ public class BillController : ControllerBase
     {
         return Ok(await _context.Bills
             .AsNoTracking()
+            .Where(x => x.UserId == this.AppUserId)
             .Include(x => x.BillFoods)
             .ThenInclude(x => x.Food)
             .Where(x => !id.HasValue || x.Id == id.Value)
@@ -33,11 +41,19 @@ public class BillController : ControllerBase
     [HttpPost("{systemId:int}/{rateId:int}")]
     public async Task<IActionResult> Create([FromRoute] int systemId, [FromRoute] int rateId, [FromBody] DateTime starTime)
     {
-        if (!(await _context.PSSystems.AnyAsync(x => x.Id == systemId)))
+        if (!(await _context.PSSystems
+                .Where(x => x.UserId == this.AppUserId)
+                .AnyAsync(x => x.Id == systemId)) ||
+            !(await _context.HourRates
+                .Where(x => x.UserId == this.AppUserId)
+                .AnyAsync(x => x.Id == rateId)))
+        {
             return NotFound();
+        }
 
         var model = await _context.Bills.AddAsync(new Bill()
         {
+            UserId = this.AppUserId,
             StartTime = starTime,
             SystemId = systemId,
             HourRateId = rateId
@@ -52,9 +68,20 @@ public class BillController : ControllerBase
     public async Task<IActionResult> SetFoods([FromRoute] int id, [FromBody] List<SetFoodModel> foods)
     {
         var foodIds = foods.Select(x => x.FoodId).ToList();
-        if (!(await _context.Bills.AnyAsync(x => x.Id == id)) ||
-            !(await _context.Foods.AnyAsync(x => foodIds.Contains(x.Id))))
+
+        var userFoods = await _context.Foods
+            .Where(x => x.UserId == this.AppUserId)
+            .AsNoTracking()
+            .Select(x => x.Id)
+            .ToListAsync();
+
+        if (!(await _context.Bills
+                .Where(x => x.UserId == this.AppUserId)
+                .AnyAsync(x => x.Id == id)) ||
+            foodIds.Any(x => !userFoods.Contains(x)))
+        {
             return NotFound();
+        }
 
         _context.BillFoods.RemoveRange(_context.BillFoods.Where(x => x.BillId == id));
 
@@ -75,6 +102,7 @@ public class BillController : ControllerBase
     public async Task<IActionResult> Close([FromRoute] int id, [FromBody] DateTime endTime)
     {
         var model = await _context.Bills
+            .Where(x => x.UserId == this.AppUserId)
             .Include(x => x.HourRate)
             .FirstOrDefaultAsync(x => x.Id == id);
 
@@ -114,7 +142,9 @@ public class BillController : ControllerBase
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        var model = await _context.Bills.FirstOrDefaultAsync(x => x.Id == id);
+        var model = await _context.Bills
+            .Where(x => x.UserId == this.AppUserId)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         if (model is null)
             return NotFound();
@@ -129,6 +159,7 @@ public class BillController : ControllerBase
     public async Task<IActionResult> Index()
     {
         return Ok(await _context.Bills
+            .Where(x => x.UserId == this.AppUserId)
             .AsNoTracking()
             .Include(x => x.BillFoods)
             .ThenInclude(x => x.Food)

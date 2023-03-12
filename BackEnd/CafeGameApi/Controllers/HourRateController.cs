@@ -1,18 +1,24 @@
-﻿using CafeGameApi.Context;
+﻿using CafeGameApi.ConfigModels;
+using CafeGameApi.Context;
 using CafeGameApi.Entities;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using System.Data;
 namespace CafeGameApi.Controllers;
 
 [Route("api/hourRate")]
 [ApiController]
-public class HourRateController : ControllerBase
+[Authorize(Roles = AppConstants.UserRoles.RegisteredUser)]
+public class HourRateController : AppBaseUserController
 {
     private readonly AppDbContext _context;
 
-    public HourRateController(AppDbContext context)
+    public HourRateController(UserManager<IdentityUser<int>> userManager,
+        IHttpContextAccessor contextAccessor,
+        AppDbContext context)
+        : base(userManager, contextAccessor)
     {
         _context = context;
     }
@@ -22,6 +28,7 @@ public class HourRateController : ControllerBase
     {
         return Ok(await _context.HourRates
             .AsNoTracking()
+            .Where(x => x.UserId == this.AppUserId)
             .Where(x => !id.HasValue || x.Id == id.Value)
             .ToListAsync());
     }
@@ -30,9 +37,13 @@ public class HourRateController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] HourRate hourRate)
     {
-        if (await _context.HourRates.AnyAsync(x => x.Rate == hourRate.Rate))
-            return (Conflict());
-
+        if (await _context.HourRates
+                .Where(x => x.UserId == this.AppUserId)
+                .AnyAsync(x => x.Rate == hourRate.Rate))
+        {
+            return Conflict();
+        }
+        hourRate.UserId = this.AppUserId;
         var model = await _context.HourRates.AddAsync(hourRate);
         var result = await _context.SaveChangesAsync();
 
@@ -43,7 +54,9 @@ public class HourRateController : ControllerBase
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        var model = await _context.HourRates.FirstOrDefaultAsync(x => x.Id == id);
+        var model = await _context.HourRates
+            .Where(x => x.UserId == this.AppUserId)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         if (model is null)
             return NotFound();

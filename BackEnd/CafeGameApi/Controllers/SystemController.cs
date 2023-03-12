@@ -1,17 +1,24 @@
-﻿using CafeGameApi.Context;
+﻿using CafeGameApi.ConfigModels;
+using CafeGameApi.Context;
 using CafeGameApi.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using System.Data;
 namespace CafeGameApi.Controllers;
 
 [Route("api/system")]
 [ApiController]
-public class SystemController : ControllerBase
+[Authorize(Roles = AppConstants.UserRoles.RegisteredUser)]
+public class SystemController : AppBaseUserController
 {
     private readonly AppDbContext _context;
 
-    public SystemController(AppDbContext context)
+    public SystemController(UserManager<IdentityUser<int>> userManager,
+        IHttpContextAccessor contextAccessor,
+        AppDbContext context)
+        : base(userManager, contextAccessor)
     {
         _context = context;
     }
@@ -21,6 +28,7 @@ public class SystemController : ControllerBase
     {
         return Ok(await _context.PSSystems
             .AsNoTracking()
+            .Where(x => x.UserId == this.AppUserId)
             .Where(x => !id.HasValue || x.Id == id.Value)
             .ToListAsync());
     }
@@ -30,7 +38,7 @@ public class SystemController : ControllerBase
     {
         // if (await _context.PSSystems.AnyAsync(x => x.Name == pSSystem.Name))
         //     return (Conflict());
-
+        pSSystem.UserId = this.AppUserId;
         var model = await _context.PSSystems.AddAsync(pSSystem);
         var result = await _context.SaveChangesAsync();
 
@@ -40,9 +48,13 @@ public class SystemController : ControllerBase
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] string name)
     {
-        var model = await _context.PSSystems.FirstOrDefaultAsync(x => x.Id == id);
+        var model = await _context.PSSystems
+            .Where(x => x.UserId == this.AppUserId)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
-        if (model is null || (await _context.PSSystems.AnyAsync(x => x.Name == name)))
+        if (model is null /*|| (await _context.PSSystems
+                .Where(x => x.UserId == this.AppUserId)
+                .AnyAsync(x => x.Name == name))*/)
             return NotFound();
 
         model.Name = name;
@@ -54,7 +66,9 @@ public class SystemController : ControllerBase
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        var model = await _context.PSSystems.FirstOrDefaultAsync(x => x.Id == id);
+        var model = await _context.PSSystems
+            .Where(x => x.UserId == this.AppUserId)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         if (model is null)
             return NotFound();

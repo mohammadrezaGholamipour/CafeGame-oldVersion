@@ -1,17 +1,24 @@
-﻿using CafeGameApi.Context;
+﻿using CafeGameApi.ConfigModels;
+using CafeGameApi.Context;
 using CafeGameApi.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using System.Data;
 namespace CafeGameApi.Controllers;
 
 [Route("api/food")]
 [ApiController]
-public class FoodController : ControllerBase
+[Authorize(Roles = AppConstants.UserRoles.RegisteredUser)]
+public class FoodController : AppBaseUserController
 {
     private readonly AppDbContext _context;
 
-    public FoodController(AppDbContext context)
+    public FoodController(UserManager<IdentityUser<int>> userManager,
+        IHttpContextAccessor contextAccessor,
+        AppDbContext context)
+        : base(userManager, contextAccessor)
     {
         _context = context;
     }
@@ -20,6 +27,7 @@ public class FoodController : ControllerBase
     public async Task<IActionResult> Index([FromQuery] int? id)
     {
         return Ok(await _context.Foods
+            .Where(x => x.UserId == this.AppUserId)
             .AsNoTracking()
             .Where(x => !id.HasValue || x.Id == id.Value)
             .ToListAsync());
@@ -29,9 +37,12 @@ public class FoodController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] Food food)
     {
-        if (await _context.Foods.AnyAsync(x => x.Name == food.Name))
+        if (await _context.Foods
+                .Where(x => x.UserId == this.AppUserId)
+                .AnyAsync(x => x.Name == food.Name))
             return (Conflict());
 
+        food.UserId = this.AppUserId;
         var model = await _context.Foods.AddAsync(food);
         var result = await _context.SaveChangesAsync();
 
@@ -41,7 +52,9 @@ public class FoodController : ControllerBase
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] Food food)
     {
-        var model = await _context.Foods.FirstOrDefaultAsync(x => x.Id == id);
+        var model = await _context.Foods
+            .Where(x => x.UserId == this.AppUserId)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         if (model is null)
             return NotFound();
@@ -56,7 +69,9 @@ public class FoodController : ControllerBase
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        var model = await _context.Foods.FirstOrDefaultAsync(x => x.Id == id);
+        var model = await _context.Foods
+            .Where(x => x.UserId == this.AppUserId)
+            .FirstOrDefaultAsync(x => x.Id == id);
 
         if (model is null)
             return NotFound();

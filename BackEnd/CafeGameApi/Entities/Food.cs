@@ -11,6 +11,8 @@ public class Food
     [JsonIgnore]
     public ICollection<BillFood> BillFoods { get; set; } = new List<BillFood>();
 
+    [JsonIgnore]
     public int UserId { get; set; }
+    [JsonIgnore]
     public virtual IdentityUser<int>? User { get; set; }
 }

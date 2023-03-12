@@ -10,6 +10,8 @@ public class PSSystem
     [JsonIgnore]
     public ICollection<Bill> Bills { get; set; } = new List<Bill>();
 
+    [JsonIgnore]
     public int UserId { get; set; }
+    [JsonIgnore]
     public virtual IdentityUser<int>? User { get; set; }
 }

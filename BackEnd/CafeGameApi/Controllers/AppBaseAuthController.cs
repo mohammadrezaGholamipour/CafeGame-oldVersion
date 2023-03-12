@@ -1,16 +1,13 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Runtime.InteropServices.ComTypes;
-using System.Security.Claims;
-using System.Text;
-using CafeGameApi.Config;
+﻿using CafeGameApi.Config;
 using CafeGameApi.ConfigModels;
-using CafeGameApi.Exceptions;
 using CafeGameApi.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace CafeGameApi.Controllers;
 

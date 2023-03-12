@@ -1,22 +1,21 @@
-﻿using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using CafeGameApi.ConfigModels;
+﻿using CafeGameApi.ConfigModels;
 using CafeGameApi.Context;
 using CafeGameApi.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddHttpContextAccessor();
 var config = builder.Configuration;
+builder.Services.Configure<JwtOptions>(config.GetSection("JwtOptions"));
 
 //DataBase
 var folder = Environment.SpecialFolder.LocalApplicationData;
@@ -109,9 +108,40 @@ builder.Services.AddControllers(options =>
         opts.JsonSerializerOptions.AllowTrailingCommas = true;
     });
 ;
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Configure Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "JWTToken_Auth_API",
+        Version = "v1"
+    });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description =
+            "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 1safsfsdfdfd\""
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
+    });
+});
 
 //Cors
 builder.Services.AddCors(setup =>
@@ -131,11 +161,16 @@ if (config.GetSection("swagger")?.Get<bool>() ?? false)
     app.UseSwaggerUI();
 }
 
+//Seed Data
 using (var serviceScope = app.Services.CreateScope())
 {
     var serviceProvider = serviceScope.ServiceProvider;
     var context = serviceProvider.GetRequiredService<AppDbContext>();
-    context.Database.EnsureCreated();
+    if (!await context.Database.CanConnectAsync() || (await context.Database.GetPendingMigrationsAsync()).Any())
+    {
+        await context.Database.EnsureCreatedAsync();
+        await context.Database.MigrateAsync();
+    }
     var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
     var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser<int>>>();
 
@@ -144,6 +179,12 @@ using (var serviceScope = app.Services.CreateScope())
     {
         var role = new IdentityRole<int>(AppConstants.UserRoles.NotRegisteredUser);
         var roleResult = await roleManager.CreateAsync(role);
+        if (!roleResult.Succeeded)
+        {
+            throw new Exception(roleResult.Errors
+                .Select(x => x.Description)
+                .Aggregate((x, y) => x + "\n" + y));
+        }
     }
 
     if (!await roleManager.RoleExistsAsync
@@ -151,6 +192,12 @@ using (var serviceScope = app.Services.CreateScope())
     {
         var role = new IdentityRole<int>(AppConstants.UserRoles.RegisteredUser);
         var roleResult = await roleManager.CreateAsync(role);
+        if (!roleResult.Succeeded)
+        {
+            throw new Exception(roleResult.Errors
+                .Select(x => x.Description)
+                .Aggregate((x, y) => x + "\n" + y));
+        }
     }
 
     if (!await roleManager.RoleExistsAsync
@@ -158,11 +205,39 @@ using (var serviceScope = app.Services.CreateScope())
     {
         var role = new IdentityRole<int>(AppConstants.UserRoles.Admin);
         var roleResult = await roleManager.CreateAsync(role);
+        if (!roleResult.Succeeded)
+        {
+            throw new Exception(roleResult.Errors
+                .Select(x => x.Description)
+                .Aggregate((x, y) => x + "\n" + y));
+        }
+    }
+
+    if (!await roleManager.RoleExistsAsync
+            (AppConstants.UserRoles.Banned))
+    {
+        var role = new IdentityRole<int>(AppConstants.UserRoles.Banned);
+        var roleResult = await roleManager.CreateAsync(role);
+        if (!roleResult.Succeeded)
+        {
+            throw new Exception(roleResult.Errors
+                .Select(x => x.Description)
+                .Aggregate((x, y) => x + "\n" + y));
+        }
     }
 
     if ((await userManager.FindByNameAsync("admin")) == null)
     {
-        var user = await userManager.CreateAsync(new IdentityUser<int>("admin"), "admin123");
+        var user = await userManager.CreateAsync(new IdentityUser<int>("admin")
+        {
+            Email = "admin@admin.admin"
+        }, "admin123");
+        if (!user.Succeeded)
+        {
+            throw new Exception(user.Errors
+                .Select(x => x.Description)
+                .Aggregate((x, y) => x + "\n" + y));
+        }
         var admin = await userManager.FindByNameAsync("admin");
         await userManager.AddToRoleAsync(admin!, AppConstants.UserRoles.Admin);
     }

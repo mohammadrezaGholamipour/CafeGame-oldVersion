@@ -1,12 +1,11 @@
-﻿using CafeGameApi.Context;
+﻿using CafeGameApi.ConfigModels;
+using CafeGameApi.Context;
 using CafeGameApi.Entities;
 using CafeGameApi.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CafeGameApi.ConfigModels;
 
 namespace CafeGameApi.Controllers;
 
@@ -44,8 +43,13 @@ public class BillController : AppBaseUserController
     {
         if (!(await _context.PSSystems
                 .Where(x => x.UserId == this.AppUserId)
-                .AnyAsync(x => x.Id == systemId)))
+                .AnyAsync(x => x.Id == systemId)) ||
+            !(await _context.HourRates
+                .Where(x => x.UserId == this.AppUserId)
+                .AnyAsync(x => x.Id == rateId)))
+        {
             return NotFound();
+        }
 
         var model = await _context.Bills.AddAsync(new Bill()
         {
@@ -64,13 +68,20 @@ public class BillController : AppBaseUserController
     public async Task<IActionResult> SetFoods([FromRoute] int id, [FromBody] List<SetFoodModel> foods)
     {
         var foodIds = foods.Select(x => x.FoodId).ToList();
+
+        var userFoods = await _context.Foods
+            .Where(x => x.UserId == this.AppUserId)
+            .AsNoTracking()
+            .Select(x => x.Id)
+            .ToListAsync();
+
         if (!(await _context.Bills
                 .Where(x => x.UserId == this.AppUserId)
                 .AnyAsync(x => x.Id == id)) ||
-            !(await _context.Foods
-                .Where(x => x.UserId == this.AppUserId)
-                .AnyAsync(x => foodIds.Contains(x.Id))))
+            foodIds.Any(x => !userFoods.Contains(x)))
+        {
             return NotFound();
+        }
 
         _context.BillFoods.RemoveRange(_context.BillFoods.Where(x => x.BillId == id));
 

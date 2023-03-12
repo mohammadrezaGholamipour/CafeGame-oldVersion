@@ -8,7 +8,7 @@ public class ValidationException : Exception
     {
         for (var i = 0; i < errors.Count; i++)
         {
-            Data.Add((i+1)+@"_"+errors[i].Key, errors[i].Value);
+            Data.Add((i + 1) + @"_" + errors[i].Key, errors[i].Value);
         }
     }
 
@@ -17,7 +17,7 @@ public class ValidationException : Exception
     {
         for (var i = 0; i < errors.Count; i++)
         {
-            Data.Add((i+1)+@"_"+errors[i].Key, errors[i].Value);
+            Data.Add((i + 1) + @"_" + errors[i].Key, errors[i].Value);
         }
     }
 

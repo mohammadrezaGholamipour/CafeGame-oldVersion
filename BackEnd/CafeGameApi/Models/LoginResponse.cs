@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-using CafeGameApi.Config;
+﻿using CafeGameApi.Config;
+using System.ComponentModel;
 
 namespace CafeGameApi.Models;
 

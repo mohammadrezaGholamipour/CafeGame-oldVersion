@@ -167,10 +167,7 @@ using (var serviceScope = app.Services.CreateScope())
     var serviceProvider = serviceScope.ServiceProvider;
     var context = serviceProvider.GetRequiredService<AppDbContext>();
     context.Database.EnsureCreated();
-    if (context.Database.GetPendingMigrations().Any())
-    {
-        await context.Database.MigrateAsync();
-    }
+
     var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
     var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser<int>>>();
 

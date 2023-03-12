@@ -14,36 +14,57 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: home,
+      meta: {
+        menu: true
+      }
     },
     {
       path: '/foods',
       name: 'foods',
       component: foods,
+      meta: {
+        menu: true
+      }
     },
     {
       path: '/consols',
       name: 'consols',
       component: consols,
+      meta: {
+        menu: true
+      }
     },
     {
       path: '/bills',
       name: 'bills',
       component: bills,
+      meta: {
+        menu: true
+      }
     },
     {
       path: '/moneys',
       name: 'moneys',
       component: moneys,
+      meta: {
+        menu: true
+      }
     },
     {
       path: '/login',
       name: 'login',
       component: login,
+      meta: {
+        menu: false
+      }
     },
     {
       path: '/register',
       name: 'register',
       component: Register,
+      meta: {
+        menu: false
+      }
     },
   ]
 })

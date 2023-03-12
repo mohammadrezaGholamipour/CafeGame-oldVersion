@@ -75,7 +75,7 @@
     @apply flex w-full flex-wrap justify-evenly items-center;
   }
   .RegisterBtn {
-    @apply flex justify-center  hover:opacity-70 items-center p-3 mt-4 bg-blue-700  opacity-100 duration-500 transition-all rounded-md text-white;
+    @apply flex justify-center hover:opacity-70 items-center p-3 mt-4 bg-blue-700  opacity-100 duration-500 transition-all rounded-md text-white;
     width: 100px;
   }
   .RegisterInput {
@@ -84,7 +84,7 @@
     height: 50px;
   }
   .ErrorMessage {
-    @apply mt-2 flex items-center justify-center bg-red-700 opacity-80 px-7 p-2 rounded-md text-white;
+    @apply mt-2 flex items-center justify-center bg-red-700 opacity-80 px-5 p-2 rounded-md text-white;
     width: 250px;
   }
   @media only screen and (max-width: 750px) {

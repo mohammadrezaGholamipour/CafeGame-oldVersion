@@ -1,5 +1,5 @@
 <script setup>
-import { filterNumbersWithSep } from "../../../util/filter-numbers";
+import { filterNumbersWithSep } from "@/util/filter-numbers";
 import { useForm, useField } from "vee-validate";
 import { useToast } from "vue-toastification";
 import { reactive, watch } from "vue";

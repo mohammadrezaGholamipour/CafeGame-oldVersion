@@ -8,26 +8,26 @@ import { useStore } from '@/store/index'
 const store = useStore()
 ////////////////////////
 const state = reactive({
-  loading: true
+  loading: false
 })
 ////////////////////////
 onMounted(() => {
   store.requestGetConsoles()
 })
 ////////////////////////
-watch(() => store.getBillList, (value) => {
-  if (value) {
-    setTimeout(() => {
-      state.loading = false
-    }, 3000);
-  }
-})
+// watch(() => store.getBillList, (value) => {
+//   if (value) {
+//     setTimeout(() => {
+//       state.loading = false
+//     }, 3000);
+//   }
+// })
 </script>
 <template >
   <div v-show="!state.loading">
-    <router-view v-slot="{ Component }">
+    <router-view v-slot="{ Component, route }">
       <transition-fade appear group :duration="1000">
-        <BtnQuickAccess />
+        <BtnQuickAccess v-show="route.meta.menu" />
         <component :is="Component" />
         <MenuFeatures />
       </transition-fade>

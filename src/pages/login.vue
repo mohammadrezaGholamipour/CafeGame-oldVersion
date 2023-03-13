@@ -80,8 +80,8 @@ const handleAcceptLogin = (values) => {
         </transition-expand>
       </div>
       <!-- //////////////////////// -->
-      <p class="mt-3 text-white cursor-pointer" @click="router.push('/register')">ثبت نام نکرده اید؟</p>
       <button @click="onSubmit" class="loginBtn">وارد شدن</button>
+        <p class="mt-3 text-white cursor-pointer" @click="router.push('/register')">ثبت نام نکرده اید؟</p>
     </div>
   </div>
 </template>

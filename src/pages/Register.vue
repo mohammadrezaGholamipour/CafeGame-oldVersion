@@ -2,17 +2,20 @@
 import { useForm, ErrorMessage, useField } from "vee-validate";
 import accountApi from '@/api/account/register'
 import { useToast } from "vue-toastification";
+import { useRouter } from "vue-router";
 import { reactive } from "vue";
 import * as yup from "yup";
 ////////////////////////////
+const router = useRouter()
 const toast = useToast();
 ////////////////////////////
 const state = reactive({
+  timer: false,
   schema: yup.object({
     userName: yup
       .string()
       .required("نام و نام خانوادگی را وارد کنید")
-      .min(3, "کوتاه میباشد"),
+      .min(4, "حداقل چهار کاراکتر باید باشد"),
     email: yup
       .string()
       .required("ایمیل خود را وارد کنید")
@@ -49,9 +52,13 @@ function onInvalidSubmit({ errors }) {
   toast.error(error[0])
 }
 //////////////////////////////
-const onSubmit = handleSubmit((values) => {
-  handleAcceptRegister(values);
-}, onInvalidSubmit);
+const onSubmit = () => {
+  clearTimeout(state.timer)
+  state.timer = setTimeout(
+    handleSubmit((values) => {
+      handleAcceptRegister(values);
+    }, onInvalidSubmit), 200);
+}
 ///////////////////////////////
 const handleAcceptRegister = (values) => {
   const userInfo = {
@@ -61,8 +68,8 @@ const handleAcceptRegister = (values) => {
     phoneNumber: values.mobile
   }
   accountApi.new(userInfo)
-    .then((response) => { console.log(response) })
-    .catch((error) => { console.log(error) })
+    .then(() => { router.push('/login') })
+    .catch(() => { toast.error('ثبت نام انجام نشد') })
 }
 </script>
 <template>

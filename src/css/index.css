@@ -88,7 +88,7 @@
     width: 250px;
   }
   @media only screen and (max-width: 750px) {
-    .ParentLogin {
+    .parent-login {
       @apply w-full flex justify-center items-start pt-4;
       background-image: url(../assets/image/BgLoginMobile.jpg);
       background-size: cover;
@@ -270,7 +270,7 @@
   }
   .parent-management-money {
     @apply w-full flex flex-col overflow-y-scroll justify-start items-center p-2;
-    background-image: url(../assets//image/bg-money.jpg);
+    background-image: url(../assets/image/bg-money.jpg);
     background-size: cover;
     height: 100vh;
   }

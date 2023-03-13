@@ -83,6 +83,13 @@ export const useStore = defineStore('pinia', {
           toast.error("لیست فاکتور ها دریافت نشد");
         });
     },
+    logOut() {
+      this.consoleList = false
+      this.moneyList = false
+      this.foodList = false
+      this.billList = false
+      this.userInfo = []
+    }
   },
   getters: {
     getConsoleList: (state) => state.consoleList,

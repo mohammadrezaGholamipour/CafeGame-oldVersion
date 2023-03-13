@@ -1,8 +1,11 @@
 <script setup>
 import { reactive, computed, watch } from "vue";
+import { useRouter } from "vue-router";
 //////////////////////////
 const emit = defineEmits(["foodSelected"]);
 const props = defineProps(["payModal"]);
+//////////////////////////
+const router = useRouter()
 //////////////////////////
 const state = reactive({
   headerFoods: [
@@ -62,24 +65,20 @@ watch(
           <td>{{ items.cost?.toLocaleString() }}</td>
           <td>
             <div class="inline-flex justify-center items-center">
-              <i
-                class="fa-duotone fa-circle-minus text-red-500 cursor-pointer"
-                @click="handleCount(items.id, 'Decrease')"
-              ></i>
+              <i class="fa-duotone fa-circle-minus text-red-500 cursor-pointer"
+                @click="handleCount(items.id, 'Decrease')"></i>
               <p class="mx-3 font-bold">{{ items.count }}</p>
-              <i
-                class="fa-duotone fa-circle-plus text-green-600 cursor-pointer"
-                @click="handleCount(items.id, 'Increase')"
-              ></i>
+              <i class="fa-duotone fa-circle-plus text-green-600 cursor-pointer"
+                @click="handleCount(items.id, 'Increase')"></i>
             </div>
           </td>
         </tr>
       </tbody>
       <tr v-else>
         <td colspan="4">
-          <div class="w-full flex items-center justify-center">
-            <p class="text-center p-4 font-bold text-red-500 text-lg">
-              لیست خوراکی ها خالی میباشد
+          <div class="w-full flex items-center justify-center cursor-pointer">
+            <p @click="router.push('/foods')" class="text-center  p-4 font-bold text-red-500 text-lg">
+              لیست خوراکی ها خالی میباشد (برای افزودن کلیک کنید)
             </p>
             <i class="fa-duotone fa-utensils-slash text-lg text-red-700"></i>
           </div>

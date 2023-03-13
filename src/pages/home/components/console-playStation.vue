@@ -1,12 +1,14 @@
 <script setup>
 import { reactive, watch, onMounted } from "vue";
 import { useToast } from "vue-toastification";
+import { useRouter } from "vue-router";
 import PayModal from "./pay-modal.vue";
 import billApi from "@/api/bill";
 ////////////////////////
 const props = defineProps(["consoleList", "moneyList", "foodList", "billList"]);
 const emit = defineEmits(["requestGetBills"]);
 ////////////////////////
+const router = useRouter()
 const toast = useToast();
 ////////////////////////
 const state = reactive({
@@ -40,8 +42,12 @@ watch(
 );
 /////////////////////////
 const handleShowAndHideMoneyList = (id) => {
-  const playstation = props.consoleList.find((items) => items.id === id);
-  playstation.showAndHideListMoney = !playstation.showAndHideListMoney;
+  if (props.moneyList.length) {
+    const playstation = props.consoleList.find((items) => items.id === id);
+    playstation.showAndHideListMoney = !playstation.showAndHideListMoney;
+  } else {
+    router.push('/moneys')
+  }
 };
 ////////////////////////
 const handleMoneySelect = (money, playstation) => {
@@ -237,7 +243,7 @@ const requestSetFood = (billId, food) => {
               {{
                 playstation.moneySelected?.rate
                 ? playstation.moneySelected.rate.toLocaleString()
-                : "هزینه بازی"
+                : props.moneyList.length ? "هزینه بازی" : 'افزودن قیمت'
               }}
             </p>
             <i class="fa-duotone transition-all duration-500"></i>

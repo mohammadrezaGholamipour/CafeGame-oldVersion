@@ -1,30 +1,41 @@
 <script setup>
 import BtnQuickAccess from "@/components/btn-quick-access.vue";
 import MenuFeatures from "@/components/menu-features.vue";
-import { onMounted, watch, reactive } from "vue";
+import { onMounted, watch, computed } from "vue";
 import Loading from "./components/loading.vue";
+import AuthService from "./util/AuthService";
 import { useStore } from '@/store/index'
+import { useRoute } from "vue-router";
 ///////////////////////////////////////
 const store = useStore()
-////////////////////////
-const state = reactive({
-  loading: false
-})
+const route = useRoute()
 ////////////////////////
 onMounted(() => {
-  store.requestGetConsoles()
+  if (AuthService.getTokenUser()) {
+    store.requestGetConsoles()
+  }
 })
 ////////////////////////
-// watch(() => store.getBillList, (value) => {
-//   if (value) {
-//     setTimeout(() => {
-//       state.loading = false
-//     }, 3000);
-//   }
-// })
+watch(() => store.getUserInfo, (value) => {
+  if (value.token) {
+    store.requestGetConsoles()
+  }
+})
+////////////////////////
+const handleLoading = computed(() => {
+  if (route.path !== '/login' && route.path !== '/register') {
+    if (store.getConsoleList && store.getMoneyList && store.getFoodList && store.getBillList) {
+      return false
+    } else {
+      return true
+    }
+  } else {
+    return false
+  }
+})
 </script>
-<template >
-  <div v-show="!state.loading">
+<template>
+  <div v-if="!handleLoading">
     <router-view v-slot="{ Component, route }">
       <transition-fade appear group :duration="1000">
         <BtnQuickAccess v-show="route.meta.menu" />
@@ -33,7 +44,7 @@ onMounted(() => {
       </transition-fade>
     </router-view>
   </div>
-  <transition-scale appear v-if="state.loading">
+  <transition-scale appear v-if="handleLoading">
     <Loading />
   </transition-scale>
 </template>

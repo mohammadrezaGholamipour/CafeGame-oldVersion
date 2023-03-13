@@ -13,8 +13,12 @@ export const useStore = defineStore('pinia', {
     moneyList: false,
     foodList: false,
     billList: false,
+    userInfo: []
   }),
   actions: {
+    setUserInfo(userInfo) {
+      this.userInfo = userInfo
+    },
     requestGetConsoles() {
       console
         .get()
@@ -85,5 +89,6 @@ export const useStore = defineStore('pinia', {
     getMoneyList: (state) => state.moneyList,
     getFoodList: (state) => state.foodList,
     getBillList: (state) => state.billList,
+    getUserInfo: (state) => state.userInfo,
   },
 })

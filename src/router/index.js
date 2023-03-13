@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import consols from '@/pages/consols/consols.vue'
 import moneys from '@/pages/moneys/moneys.vue'
+import AuthService from '../util/AuthService'
 import bills from '@/pages/bills/bills.vue'
 import foods from '@/pages/foods/foods.vue'
 import Register from '@/pages/Register.vue'
@@ -68,5 +69,23 @@ const router = createRouter({
     },
   ]
 })
-
+//////////////////////////
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = AuthService.getTokenUser()
+  ///////////////////////
+  if (isAuthenticated) {
+    if (to.name === 'login' || to.name === 'register') {
+      next({ path: '/' })
+    } else {
+      next()
+    }
+  } else {
+    if (to.name === 'login' || to.name === 'register') {
+      next()
+    } else {
+      next({ path: 'login' })
+    }
+  }
+});
+//////////////////////////
 export default router

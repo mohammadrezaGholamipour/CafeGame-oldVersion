@@ -45,7 +45,6 @@ const { value: mobile } = useField("mobile");
 const { value: email } = useField("email");
 ///////////////////////////////
 function onInvalidSubmit({ errors }) {
-  console.log(errors);
   const error = Object.values(errors)
   toast.error(error[0])
 }
@@ -55,7 +54,6 @@ const onSubmit = handleSubmit((values) => {
 }, onInvalidSubmit);
 ///////////////////////////////
 const handleAcceptRegister = (values) => {
-  console.log(values);
   const userInfo = {
     userName: values.userName.replace(" ", '_'),
     password: values.password,

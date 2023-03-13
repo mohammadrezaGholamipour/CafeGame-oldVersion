@@ -105,7 +105,7 @@ const handleShowEndTime = (endTime) => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(items, index) in props.bills" :key="items.id">
+        <tr v-if="props.bills.length" v-for="(items, index) in props.bills" :key="items.id">
           <td>{{ index + 1 }}</td>
           <td>
             <div class="flex  items-center " :class="items.endTime ? 'justify-between' : 'justify-center'">
@@ -142,6 +142,16 @@ const handleShowEndTime = (endTime) => {
               ? `${items.finalCost?.toLocaleString()} تومان`
               : "هنوز تمام نشده است"
             }}</p>
+          </td>
+        </tr>
+           <tr v-else>
+          <td colspan="6">
+            <div class="w-full flex items-center justify-center">
+              <p class="text-center p-2 font-bold text-red-500 text-lg">
+                لیست تراکنش ها خالی میباشد
+              </p>
+              <i class="fa-duotone fa-sack-dollar text-lg text-red-700"></i>
+            </div>
           </td>
         </tr>
       </tbody>

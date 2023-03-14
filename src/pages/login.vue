@@ -57,7 +57,11 @@ const handleAcceptLogin = (values) => {
       store.setUserInfo(response)
       router.push('/')
     })
-    .catch((error) => { console.log(error) })
+    .catch((error) => {
+      if (error.response.data.status === 404) {
+        toast.error('همچین کابری وجود ندارد لطفا ثبت نام کنید')
+      }
+    })
 
 }
 </script>
@@ -81,7 +85,7 @@ const handleAcceptLogin = (values) => {
       </div>
       <!-- //////////////////////// -->
       <button @click="onSubmit" class="loginBtn">وارد شدن</button>
-        <p class="mt-3 text-white cursor-pointer" @click="router.push('/register')">ثبت نام نکرده اید؟</p>
+      <p class="mt-3 text-white cursor-pointer" @click="router.push('/register')">ثبت نام نکرده اید؟</p>
     </div>
   </div>
 </template>

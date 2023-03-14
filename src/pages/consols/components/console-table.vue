@@ -1,10 +1,10 @@
 <script setup>
 import confirmDialog from "@/components/confirm-dialog.vue";
-import { reactive } from "vue";
 import ConsoleBills from "./console-bills.vue";
+import { reactive } from "vue";
 ////////////////////////
+const props = defineProps(["consoleList", "billList", "foodList"]);
 const emit = defineEmits(["newConsole", "deleteConsole"]);
-const props = defineProps(["consoleList"]);
 ////////////////////////
 const state = reactive({
   confirmDialog: {
@@ -34,8 +34,23 @@ const handleShowConfirmDialog = (items) => {
 };
 ///////////////////////////////////
 const handleShowDialog = (consoleSelected) => {
+  const consoleBills = props.billList.filter((items) => items.systemId === consoleSelected.id && items.endTime)
+  for (const bill of consoleBills) {
+    if (bill.billFoods.length) {
+      bill.moneyPlayGame = bill.finalCost
+      for (const foodBill of bill.billFoods) {
+        for (const food of props.foodList) {
+          if (foodBill.foodId === food.id) {
+            bill.moneyPlayGame -= food.cost * foodBill.count
+          }
+        }
+      }
+    } else {
+      console.log("نداشته");
+    }
+  }
   state.dialog.headerInfo = "فاکتور های ثبت شده در این دستگاه";
-  state.dialog.data = consoleSelected;
+  state.dialog.data = consoleBills;
   state.dialog.status = true;
 }
 ///////////////////////////////////

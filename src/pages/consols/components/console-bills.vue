@@ -2,7 +2,6 @@
 const props = defineProps(["dialog"]);
 const emit = defineEmits(["close"]);
 /////////////////////////
-
 const handleCloseModal = () => {
   emit("close");
 };

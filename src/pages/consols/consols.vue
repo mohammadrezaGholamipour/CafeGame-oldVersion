@@ -48,7 +48,7 @@ const requestRemoveConsole = (id) => {
 </script>
 <template>
   <div class="parent-consols">
-    <ConsoleTable @deleteConsole="requestRemoveConsole" :consoleList="store.getConsoleList"
+    <ConsoleTable @deleteConsole="requestRemoveConsole" :foodList="store.getFoodList" :billList="store.getBillList" :consoleList="store.getConsoleList"
       @newConsole="requestNewConsole" />
   </div>
 </template>

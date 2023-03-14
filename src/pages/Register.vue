@@ -14,27 +14,27 @@ const state = reactive({
   schema: yup.object({
     userName: yup
       .string()
-      .required("نام و نام خانوادگی را وارد کنید")
-      .min(4, "حداقل چهار کاراکتر باید باشد"),
+      .min(4, "حداقل چهار کاراکتر باید باشد")
+      .required("نام و نام خانوادگی را وارد کنید"),
     email: yup
       .string()
       .required("ایمیل خود را وارد کنید")
       .email("ایمیل معتبر نمیباشد"),
     password: yup
       .string()
-      .required("رمز خود را وارد کنید")
-      .min(4, "حداقل چهار کاراکتر باید باشد"),
+      .min(4, "حداقل چهار کاراکتر باید باشد")
+      .required("رمز خود را وارد کنید"),
     repeatPassword: yup
       .string()
-      .required("رمز خود را تکرار کنید")
-      .oneOf([yup.ref('password'), null], "پسورد تکرار شده اشتباه است"),
+      .oneOf([yup.ref('password'), null], "پسورد تکرار شده اشتباه است")
+      .required("رمز خود را تکرار کنید"),
     mobile: yup
       .string()
-      .required("تلفن همراه خود را وارد کنید")
       .matches(
         /^(((\+98|0098)-?)|0)9[0-9]{2}-?[0-9]{3}-?[0-9]{4}$/,
         "شماره تلفن صحیح نمیباشد"
-      ),
+      )
+      .required("تلفن همراه خود را وارد کنید"),
   }),
 });
 
@@ -61,6 +61,7 @@ const onSubmit = () => {
 }
 ///////////////////////////////
 const handleAcceptRegister = (values) => {
+  console.log("request");
   const userInfo = {
     userName: values.userName.replace(" ", '_'),
     password: values.password,
@@ -76,8 +77,8 @@ const handleAcceptRegister = (values) => {
   <div class="ParentRegister">
     <div class="Register">
       <img class="Logo" src="../assets/image/logo.png" alt="لوگو" />
-      <form @submit.pervent="onSubmit" class="FormInputRegister">
-        <!-- //////////////////////// -->
+      <!-- //////////////////////// -->
+      <div class="FormInputRegister">
         <div class="flex flex-col items-center justify-center">
           <input v-model="userName" placeholder="نام و نام خانوداگی" class="RegisterInput" type="text" />
           <transition-expand>
@@ -114,9 +115,9 @@ const handleAcceptRegister = (values) => {
         </div>
         <!-- //////////////////////// -->
         <div class="w-full flex justify-center items-center">
-          <button class="RegisterBtn">ثبت نام</button>
+          <button @click="onSubmit" class="RegisterBtn">ثبت نام</button>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>

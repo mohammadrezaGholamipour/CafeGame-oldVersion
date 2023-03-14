@@ -1,4 +1,4 @@
-﻿import AuthService from '../util/AuthService'
+﻿import AuthService from '@/util/AuthService'
 import axios from 'axios';
 // //////////////////////////////////
 const HttClient = axios.create({

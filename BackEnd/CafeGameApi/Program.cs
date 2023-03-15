@@ -1,4 +1,5 @@
-﻿using CafeGameApi.ConfigModels;
+﻿using System.Net.Mail;
+using CafeGameApi.ConfigModels;
 using CafeGameApi.Context;
 using CafeGameApi.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,13 +10,25 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Net;
+using CafeGameApi.Config;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddHttpContextAccessor();
 var config = builder.Configuration;
-builder.Services.Configure<JwtOptions>(config.GetSection("JwtOptions"));
+builder.Services.Configure<JwtOptions>(config.GetRequiredSection(nameof(JwtOptions)));
+builder.Services.Configure<SmtpOptions>(config.GetRequiredSection(nameof(SmtpOptions)));
+var smtpOptions = config.GetRequiredSection(nameof(SmtpOptions)).Get<SmtpOptions>();
+
+builder.Services
+    .AddSingleton<SmtpClient>(new SmtpClient(smtpOptions!.Host)
+    {
+        Port = smtpOptions.Port,
+        Credentials = smtpOptions.Credential,
+        EnableSsl = smtpOptions.EnableSsh
+    });
 
 //DataBase
 var folder = Environment.SpecialFolder.LocalApplicationData;
@@ -223,12 +236,14 @@ using (var serviceScope = app.Services.CreateScope())
         }
     }
 
-    if ((await userManager.FindByNameAsync("admin")) == null)
+    var oldAdmin = await userManager.FindByNameAsync("admin");
+    var adminPass = config.GetSection("AdminPassword").Get<string>();
+    if (oldAdmin is null)
     {
         var user = await userManager.CreateAsync(new IdentityUser<int>("admin")
         {
             Email = "admin@admin.admin"
-        }, "admin123");
+        }, adminPass ?? "admin123");
         if (!user.Succeeded)
         {
             throw new Exception(user.Errors
@@ -237,6 +252,18 @@ using (var serviceScope = app.Services.CreateScope())
         }
         var admin = await userManager.FindByNameAsync("admin");
         await userManager.AddToRoleAsync(admin!, AppConstants.UserRoles.Admin);
+    }
+    else if (!string.IsNullOrWhiteSpace(adminPass)
+             && !(await userManager.CheckPasswordAsync(oldAdmin, adminPass)))
+    {
+        var user = await userManager.RemovePasswordAsync(oldAdmin);
+        if (!user.Succeeded)
+        {
+            throw new Exception(user.Errors
+                .Select(x => x.Description)
+                .Aggregate((x, y) => x + "\n" + y));
+        }
+        await userManager.AddPasswordAsync(oldAdmin, adminPass);
     }
 }
 

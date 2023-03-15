@@ -81,4 +81,23 @@ public class FoodController : AppBaseUserController
 
         return result > 0 ? Ok() : NoContent();
     }
+
+    [HttpGet("food-sold/{id:int}")]
+    public IActionResult GetFoodSoldCount([FromRoute] int id, 
+        [FromQuery] DateTime? startDate, 
+        [FromQuery] DateTime? endDate)
+    {
+        var total = _context.Bills
+            .AsNoTracking()
+            .Where(x => x.UserId == this.AppUserId)
+            .Where(x => startDate == null || x.StartTime > startDate)
+            .Where(x => endDate == null || x.EndTime < endDate)
+            .Include(x => x.BillFoods)
+            .ThenInclude(x => x.Food)
+            .Where(x => x.BillFoods.Any(y => y.FoodId == id))
+            .Select(x => x.BillFoods.First(y => y.FoodId == id).Count)
+            .Aggregate((x, y) => x + y);
+
+        return Ok(total);
+    }
 }

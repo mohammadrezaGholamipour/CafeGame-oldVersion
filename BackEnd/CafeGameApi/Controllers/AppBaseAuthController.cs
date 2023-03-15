@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
 
@@ -17,13 +18,20 @@ public class AppBaseAuthController : ControllerBase
 {
     private readonly JwtOptions _jwtOptions;
     private readonly UserManager<IdentityUser<int>> _userManager;
+    private readonly SignInManager<IdentityUser<int>> _signInManager;
+    private readonly SmtpClient _smtpClient;
+    private readonly IConfiguration _configuration;
 
-    public AppBaseAuthController(IOptions<JwtOptions> jwtOptions, UserManager<IdentityUser<int>> userManager)
+    public AppBaseAuthController(IOptions<JwtOptions> jwtOptions, UserManager<IdentityUser<int>> userManager, SmtpClient smtpClient, SignInManager<IdentityUser<int>> signInManager, IConfiguration configuration)
     {
         _userManager = userManager;
+        _smtpClient = smtpClient;
+        _signInManager = signInManager;
+        _configuration = configuration;
         _jwtOptions = jwtOptions?.Value ?? new JwtOptions();
     }
 
+    #region Private Methods
     private JwtSecurityToken GenerateJwt(IEnumerable<Claim> claims)
     {
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));
@@ -52,54 +60,55 @@ public class AppBaseAuthController : ControllerBase
 
         return GenerateJwt(claims);
     }
+    #endregion
 
     [HttpPost("login")]
-    public async Task<IActionResult> AttemptLogin(LoginRequest loginModel)
+    public async Task<IActionResult> AttemptLogin([FromBody] LoginRequest loginModel)
     {
         var user = await _userManager.FindByEmailAsync(loginModel.Email);
 
         if (user == null)
             return NotFound();
 
-        switch (await _userManager.GetRolesAsync(user))
+        if (!(await _signInManager.CheckPasswordSignInAsync(user,
+                loginModel.Password,
+                false)).Succeeded)
+            return BadRequest("Wrong Password");
+
+        return await _userManager.GetRolesAsync(user) switch
         {
-            case var value when value.Contains(AppConstants.UserRoles.NotRegisteredUser):
-                return Ok(new LoginResponse
-                {
-                    UserState = UserState.NotRegistered,
-                    Token = string.Empty
-                });
-            case var value when value.Contains(AppConstants.UserRoles.RegisteredUser):
-                return Ok(new LoginResponse
-                {
-                    UserState = UserState.Registered,
-                    Token = new JwtSecurityTokenHandler().WriteToken(
-                        GenerateLoginJwtToken(user.Id.ToString(), user.Email!, AppConstants.UserRoles.RegisteredUser))
-                });
-            case var value when value.Contains(AppConstants.UserRoles.Banned):
-                return Ok(new LoginResponse
+            var value when value.Contains(AppConstants.UserRoles.Banned) =>
+                Ok(new LoginResponse
                 {
                     UserState = UserState.Banned,
                     Token = string.Empty
-                });
-            case var value when value.Contains(AppConstants.UserRoles.Admin):
-                return Ok(new LoginResponse
-                {
-                    UserState = UserState.Admin,
-                    Token = new JwtSecurityTokenHandler().WriteToken(
-                        GenerateLoginJwtToken(user.Id.ToString(), user.Email!, AppConstants.UserRoles.Admin))
-                });
-            default:
-                return Ok(new LoginResponse
+                }),
+            var value when value.Contains(AppConstants.UserRoles.NotRegisteredUser) =>
+                Ok(new LoginResponse
                 {
                     UserState = UserState.NotRegistered,
                     Token = string.Empty
-                });
-        }
+                }),
+            var value when value.Contains(AppConstants.UserRoles.RegisteredUser) =>
+                Ok(new LoginResponse
+                {
+                    UserState = UserState.Registered,
+                    Token = new JwtSecurityTokenHandler().WriteToken(GenerateLoginJwtToken(user.Id.ToString(),
+                    user.Email!, AppConstants.UserRoles.RegisteredUser))
+                }),
+            var value when value.Contains(AppConstants.UserRoles.Admin) =>
+                Ok(new LoginResponse
+                {
+                    UserState = UserState.Admin,
+                    Token = new JwtSecurityTokenHandler().WriteToken(GenerateLoginJwtToken(user.Id.ToString(),
+                    user.Email!, AppConstants.UserRoles.Admin))
+                }),
+            _ => Ok(new LoginResponse { UserState = UserState.NotRegistered, Token = string.Empty })
+        };
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register(RegisterRequest registerModel)
+    public async Task<IActionResult> Register([FromBody] RegisterRequest registerModel)
     {
         var userExists = await _userManager.FindByNameAsync(registerModel.UserName);
         if (userExists != null)
@@ -123,5 +132,52 @@ public class AppBaseAuthController : ControllerBase
                 });
 
         return BadRequest(result.Errors);
+    }
+
+    [HttpGet("reset-pass")]
+    public async Task<IActionResult> ResetPassword([FromQuery] string email)
+    {
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            return BadRequest("Invalid Email");
+        }
+
+        var user = await _userManager.FindByEmailAsync(email);
+
+        if (user is null)
+        {
+            return NotFound("No User Registered With This Email");
+        }
+
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+        //Send token to email
+        var message = new MailMessage(_configuration["Smtp:Username"] 
+                                      ?? throw new NullReferenceException("email account not found"), 
+            email, 
+            "Password Reset", 
+            $"Your reset code is : {token}");
+
+        await _smtpClient.SendMailAsync(message);
+
+        return Ok("Email Sent");
+    }
+
+    [HttpPost("reset-pass")]
+    public async Task<IActionResult> ResetPassword([FromBody] LoginRequest model, [FromQuery] string token)
+    {
+        var user = await _userManager.FindByEmailAsync(model.Email);
+
+        if (user == null)
+            return NotFound();
+
+        var resetResult = await _userManager.ResetPasswordAsync(user, token, model.Password);
+
+        if (!resetResult.Succeeded)
+        {
+            return BadRequest(resetResult.Errors);
+        }
+
+        return await AttemptLogin(model);
     }
 }

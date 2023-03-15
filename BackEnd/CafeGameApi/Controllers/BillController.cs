@@ -26,7 +26,10 @@ public class BillController : AppBaseUserController
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index([FromQuery] int? id)
+    public async Task<IActionResult> Index([FromQuery] int? id,
+        [FromQuery] int? systemId,
+        [FromQuery] DateTime? startDate,
+        [FromQuery] DateTime? endDate)
     {
         return Ok(await _context.Bills
             .AsNoTracking()
@@ -34,6 +37,9 @@ public class BillController : AppBaseUserController
             .Include(x => x.BillFoods)
             .ThenInclude(x => x.Food)
             .Where(x => !id.HasValue || x.Id == id.Value)
+            .Where(x => systemId == null || x.SystemId == systemId)
+            .Where(x => startDate == null || x.StartTime > startDate)
+            .Where(x => endDate == null || x.EndTime < endDate)
             .ToListAsync());
     }
 
@@ -64,7 +70,7 @@ public class BillController : AppBaseUserController
         return result > 0 ? Ok(model.Entity.Id) : NoContent();
     }
 
-    [HttpPut("{id:int}/[action]")]
+    [HttpPut("{id:int}/set-foods")]
     public async Task<IActionResult> SetFoods([FromRoute] int id, [FromBody] List<SetFoodModel> foods)
     {
         var foodIds = foods.Select(x => x.FoodId).ToList();
@@ -98,7 +104,7 @@ public class BillController : AppBaseUserController
         return result > 0 ? Ok(result) : NoContent();
     }
 
-    [HttpPut("{id:int}/[action]")]
+    [HttpPut("{id:int}/close")]
     public async Task<IActionResult> Close([FromRoute] int id, [FromBody] DateTime endTime)
     {
         var model = await _context.Bills
@@ -156,7 +162,7 @@ public class BillController : AppBaseUserController
     }
 
     [HttpGet("/opens")]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Opens()
     {
         return Ok(await _context.Bills
             .Where(x => x.UserId == this.AppUserId)

@@ -14,7 +14,20 @@ const handleCloseModal = () => {
         <p class="font-bold">{{ props.dialog.headerInfo }}</p>
       </div>
       <div class="ModalMain pt-2">
-        {{ props.dialog.data }}
+        <div class="flex flex-col p-2 justify-center items-center">
+          <p class="bg-blue-500 p-2 text-lg rounded-md mb-2 text-white shadow-md">زمان بازی شده با دستگاه</p>
+          <p class="text-xl font-bold mt-3"> {{ props.dialog.data.totalTime.hours }} : {{
+            props.dialog.data.totalTime.minutes }} : {{
+    props.dialog.data.totalTime.seconds }} </p>
+        </div>
+        <div class="flex flex-col p-2 justify-center items-center">
+          <p class="bg-yellow-500 p-2 text-lg rounded-md mb-2 text-white shadow-md">هزینه بازی شده با دستگاه</p>
+          <div class="flex items-center text-xl font-bold mt-3">
+            <p class="mr-2">تومان</p>
+            <p> {{ props.dialog.data.totalMoney.toLocaleString() }}</p>
+          </div>
+        </div>
+
       </div>
     </div>
   </v-dialog>

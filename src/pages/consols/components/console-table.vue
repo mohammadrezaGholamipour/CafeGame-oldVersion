@@ -7,6 +7,12 @@ const props = defineProps(["consoleList", "billList", "foodList"]);
 const emit = defineEmits(["newConsole", "deleteConsole"]);
 ////////////////////////
 const state = reactive({
+  totalTime: {
+    hours: '',
+    minutes: '',
+    seconds: ''
+  },
+  totalMoney: '',
   confirmDialog: {
     text: "دستگاه انتخاب شده حذف شود؟",
     status: false,
@@ -34,8 +40,34 @@ const handleShowConfirmDialog = (items) => {
 };
 ///////////////////////////////////
 const handleShowDialog = (consoleSelected) => {
+  state.totalMoney = 0
+  state.totalTime.hours = 0
+  state.totalTime.minutes = 0
+  state.totalTime.seconds = 0
+  //////////////////////////
   const consoleBills = props.billList.filter((items) => items.systemId === consoleSelected.id && items.endTime)
   for (const bill of consoleBills) {
+    //////////////////////////
+    const startTime = new Date(`${bill.startTime}Z`);
+    const endTime = new Date(`${bill.endTime}Z`);
+    let delta = Math.abs(endTime.getTime() - startTime.getTime()) / 1000;
+    let days = Math.floor(delta / 86400);
+    delta -= days * 86400;
+    let hours = Math.floor(delta / 3600) % 24;
+    delta -= hours * 3600;
+    let minutes = Math.floor(delta / 60) % 60;
+    delta -= minutes * 60;
+    let seconds = Math.floor(delta % 60);
+    bill.time = {
+      hours,
+      minutes,
+      seconds,
+    };
+    //////////////////////////
+    state.totalTime.hours += bill.time.hours
+    state.totalTime.minutes += bill.time.minutes
+    state.totalTime.seconds += bill.time.seconds
+    //////////////////////////
     if (bill.billFoods.length) {
       bill.moneyPlayGame = bill.finalCost
       for (const foodBill of bill.billFoods) {
@@ -45,12 +77,18 @@ const handleShowDialog = (consoleSelected) => {
           }
         }
       }
+      state.totalMoney += bill.moneyPlayGame
     } else {
-      console.log("نداشته");
+      state.totalMoney += bill.finalCost
     }
+
+    //////////////////////////
   }
   state.dialog.headerInfo = "فاکتور های ثبت شده در این دستگاه";
-  state.dialog.data = consoleBills;
+  state.dialog.data = {
+    totalMoney: state.totalMoney,
+    totalTime: state.totalTime
+  };
   state.dialog.status = true;
 }
 ///////////////////////////////////

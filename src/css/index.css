@@ -198,7 +198,7 @@
     @apply flex items-center justify-between p-3 border-b border-gray-200 rounded-t-md;
   }
   .ModalMain {
-    @apply flex flex-col justify-center items-center w-full relative py-4 px-3;
+    @apply flex  justify-center items-center w-full relative py-4 px-3;
   }
   .ModalFooter {
     @apply flex items-center justify-evenly flex-wrap p-3 border-t border-gray-200 rounded-b-md;

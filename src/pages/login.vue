@@ -58,8 +58,14 @@ const handleAcceptLogin = (values) => {
       router.push('/')
     })
     .catch((error) => {
-      if (error.response.data.status === 404) {
-        toast.error('همچین کابری وجود ندارد لطفا ثبت نام کنید')
+      if (error.response?.data) {
+        if (error.response.data.status === 404) {
+          toast.error('همچین کابری وجود ندارد لطفا ثبت نام کنید')
+        } else if (error.response.data.status === 404) {
+          toast.error("رمز عبور اشتباه میباشد")
+        }
+      } else {
+        toast.error('ارتباط با سرور وصل نمیباشد')
       }
     })
 

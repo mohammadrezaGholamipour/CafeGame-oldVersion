@@ -108,8 +108,8 @@ const handleShowEndTime = (endTime) => {
         <tr v-if="props.bills.length" v-for="(items, index) in props.bills" :key="items.id">
           <td>{{ index + 1 }}</td>
           <td>
-            <div class="flex  items-center " :class="items.endTime ? 'justify-between' : 'justify-center'">
-              <p class="ml-2">{{ items.endTime ? handleShowEndTime(items.endTime) : '' }}</p>
+            <div class="flex items-center justify-between">
+              <p class="ml-2">{{ items.endTime ? handleShowEndTime(items.endTime) : 'هنوز تمام نشده است' }}</p>
               <button @click="
                 handleShowDialog(
                   {
@@ -144,7 +144,7 @@ const handleShowEndTime = (endTime) => {
             }}</p>
           </td>
         </tr>
-           <tr v-else>
+        <tr v-else>
           <td colspan="6">
             <div class="w-full flex items-center justify-center">
               <p class="text-center p-2 font-bold text-red-500 text-lg">

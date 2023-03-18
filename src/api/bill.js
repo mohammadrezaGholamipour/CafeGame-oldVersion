@@ -2,7 +2,7 @@ import HttClient from './axios-base'
 export default {
   get: () => HttClient.get('bill'),
   new: (systemId, rateId, startInfo) => HttClient.post(`bill/${systemId}/${rateId}`, startInfo),
-  setFood: (id, setfoods) => HttClient.put(`bill/${id}/SetFoods`, setfoods),
-  close: (id, finishInfo) => HttClient.put(`bill/${id}/Close`, finishInfo),
+  setFood: (id, setfoods) => HttClient.put(`bill/${id}/set-foods`, setfoods),
+  close: (id, finishInfo) => HttClient.put(`bill/${id}/close`, finishInfo),
   remove: (id) => HttClient.delete(`bill/${id}`),
 };

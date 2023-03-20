@@ -35,9 +35,9 @@ const handleLoading = computed(() => {
 })
 </script>
 <template>
-  <div v-if="!handleLoading">
+  <div class="w-full" v-if="!handleLoading">
     <router-view v-slot="{ Component, route }">
-      <transition-fade appear group :duration="1000">
+      <transition-fade class="w-full" appear group :duration="1000">
         <BtnQuickAccess v-show="route.meta.menu" />
         <component :is="Component" />
         <MenuFeatures />

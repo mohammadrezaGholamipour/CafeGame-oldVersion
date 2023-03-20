@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, watch, onMounted } from "vue";
+import { reactive, watch, onMounted, computed } from "vue";
 import { useToast } from "vue-toastification";
 import { useRouter } from "vue-router";
 import PayModal from "./pay-modal.vue";
@@ -45,6 +45,11 @@ const handleShowAndHideMoneyList = (id) => {
   if (props.moneyList.length) {
     const playstation = props.consoleList.find((items) => items.id === id);
     playstation.showAndHideListMoney = !playstation.showAndHideListMoney;
+    const home = document.getElementsByClassName('ParentHome');
+    const backGround = document.createElement('div');
+    backGround.className = "background-select-money"
+    backGround.onclick = handleHidenBackGroundSelectMoney
+    home[0].appendChild(backGround)
   } else {
     router.push('/moneys')
   }
@@ -53,7 +58,17 @@ const handleShowAndHideMoneyList = (id) => {
 const handleMoneySelect = (money, playstation) => {
   playstation.moneySelected = money;
   playstation.showAndHideListMoney = false;
+  const backGround = document.getElementsByClassName('background-select-money');
+  backGround[0].remove()
 };
+////////////////////////////
+const handleHidenBackGroundSelectMoney = () => {
+  const backGround = document.getElementsByClassName('background-select-money');
+  backGround[0].remove()
+  props.consoleList.forEach((item) => {
+    item.showAndHideListMoney = false
+  })
+}
 ////////////////////////////
 const handleChangeConsoleStatus = (playstation) => {
   if (playstation.status) {

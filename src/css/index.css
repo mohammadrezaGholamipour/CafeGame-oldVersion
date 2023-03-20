@@ -112,6 +112,7 @@
     background-image: url(../assets/image/BgHome.jpg);
     background-size: cover;
     height: 100vh;
+    width: 100%;
   }
   .ParentMain {
     @apply flex justify-evenly items-center  flex-wrap w-full p-2;
@@ -322,6 +323,12 @@
   }
   .bill-info-start {
     @apply w-full flex-row-reverse flex-wrap flex items-center justify-between bg-slate-200 shadow-md rounded-md p-5;
+  }
+  .background-select-money {
+    position: absolute;
+    z-index: 5001;
+    height: 100vh;
+    width: 100vw;
   }
   @media only screen and (min-width: 576px) {
     .ModalDivOne {

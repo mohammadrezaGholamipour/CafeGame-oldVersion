@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, watch, onMounted, computed } from "vue";
+import { reactive, watch, onMounted } from "vue";
 import { useToast } from "vue-toastification";
 import { useRouter } from "vue-router";
 import PayModal from "./pay-modal.vue";

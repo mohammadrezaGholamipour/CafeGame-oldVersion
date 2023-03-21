@@ -1,14 +1,11 @@
 <script setup>
 import { reactive, onMounted } from "vue";
-import { useRouter } from "vue-router";
 ///////////////////////
 onMounted(() => {
   const menuFeatures = document.getElementById("menuFeatures");
   menuFeatures.dataset.bsTarget = "#offcanvasMenuFeatures";
   menuFeatures.dataset.bsToggle = "offcanvas";
 });
-///////////////////////
-const router = useRouter();
 /////////////////////
 const state = reactive({
   BtnquickAccess: [
@@ -29,7 +26,6 @@ const state = reactive({
 ///////////////////////////////
 const handleClick = (name) => {
   if (name === "home") {
-    router.push({ name: "home" });
     window.location = '/'
 
   }

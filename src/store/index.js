@@ -90,6 +90,7 @@ export const useStore = defineStore('pinia', {
       this.billList = false
       this.userInfo = []
     }
+
   },
   getters: {
     getConsoleList: (state) => state.consoleList,

@@ -226,7 +226,7 @@ const requestSetFood = (billId, food) => {
 };
 </script>
 <template>
-  <div class="w-full h-full p-3 flex flex-wrap items-center justify-center">
+  <div class="w-full h-full mt-10 p-3 flex flex-wrap items-center justify-center">
     <div v-for="(playstation, index) in props.consoleList" :key="playstation.id" class="Console">
       <!-- //////////////////////////////// -->
       <p class="ConsoleNumber">

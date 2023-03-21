@@ -27,7 +27,6 @@ const handleCloseModal = () => {
             <p> {{ props.dialog.data.totalMoney.toLocaleString() }}</p>
           </div>
         </div>
-
       </div>
     </div>
   </v-dialog>

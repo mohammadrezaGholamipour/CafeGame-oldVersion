@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@morev/vue-transitions": "^2.3.4",
+    "@vueuse/core": "^9.13.0",
     "axios": "^1.2.5",
     "jalali-moment": "^3.3.11",
     "persian-number-tostring": "^1.0.0",

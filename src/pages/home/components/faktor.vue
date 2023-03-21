@@ -1,7 +1,10 @@
 <script setup>
+import { useWindowSize } from '@vueuse/core'
 import { reactive, computed } from "vue";
 ///////////////////////////////////////////
 const props = defineProps(["payModal", "foodSelected"]);
+///////////////////////////////////////////
+const { width } = useWindowSize()
 ///////////////////////////////////////////
 const state = reactive({
   headerFoods: [
@@ -25,7 +28,7 @@ const handleTotalFoodMoney = computed(() => {
 });
 </script>
 <template>
-  <div class="flex w-full justify-center items-center p-2">
+  <div class="flex w-full justify-center items-center">
     <div v-if="!props.foodSelected.length" class="flex items-center">
       <img src="@/assets/image/money.svg" width="50" />
       <p class="text-3xl ml-1">هزارتومان</p>
@@ -33,7 +36,8 @@ const handleTotalFoodMoney = computed(() => {
         {{ props.payModal.playstation.userMoney?.toLocaleString() }}
       </p>
     </div>
-    <table v-else dir="rtl" class="TableFoods">
+    <!-- /////////////////////////////// -->
+    <table v-else-if="width > 600" dir="rtl" class="TableFoods">
       <thead class="bg-[#d1d1d180]">
         <tr>
           <td v-for="(items, index) in state.headerFoods" :key="index">
@@ -84,5 +88,55 @@ const handleTotalFoodMoney = computed(() => {
         </tr>
       </tfoot>
     </table>
+    <!-- //////////////////////////// -->
+    <div v-else class="w-full flex flex-col items-center justify-start">
+      <div v-for="(items, index) in props.foodSelected" :key="index" class="parent-mobile-table">
+        <div class="flex flex-col justify-between items-end">
+          <!-- ////////////////////////////// -->
+          <div class="flex items-center justify-end">
+            <i class="fa-duotone fa-arrow-down-wide-short" />
+            <p class="ml-1">ردیف</p>
+          </div>
+          <div class="flex items-center justify-end">
+            <i class="fa-duotone fa-plate-utensils" />
+            <p class="ml-1">نام محصول</p>
+          </div>
+          <div class="flex items-center justify-end">
+            <i class="fa-duotone fa-money-bill-1-wave" />
+            <p class="ml-1">قیمت محصول</p>
+          </div>
+          <div class="flex items-center justify-end">
+            <i class="fa-duotone fa-cash-register" />
+            <p class="ml-1">تعداد</p>
+          </div>
+          <div class="flex items-center justify-end">
+            <i class="fa-duotone fa-receipt" />
+            <p class="ml-1">جمع</p>
+          </div>
+          <!-- ////////////////////////////// -->
+        </div>
+        <div class="flex flex-col justify-between items-center">
+          <p>{{ index + 1 }}</p>
+          <p>{{ items.name }}</p>
+          <p>{{ items.cost?.toLocaleString() }}</p>
+          <p>{{ items.count }}</p>
+          <p>{{ (items.count * items.cost).toLocaleString() }}</p>
+        </div>
+      </div>
+      <div class="bg-red-500 flex flex-col items-center rounded-md shadow-md overflow-hidden mt-3 justify-center w-full text-white">
+        <div class="flex w-full justify-between items-center p-2">
+          <p>{{ handleTotalFoodMoney.toLocaleString() }}</p>
+          <p>جمع هزینه خوراکی</p>
+        </div>
+        <div class="flex w-full justify-between items-center p-2">
+          <p> {{ props.payModal.playstation.userMoney?.toLocaleString() }}</p>
+          <p>هزینه بازی شده</p>
+        </div>
+        <div class="flex w-full justify-between items-center bg-blue-600 p-2">
+          <p> {{ (handleTotalFoodMoney + props.payModal.playstation.userMoney).toLocaleString() }}</p>
+          <p>جمع کل</p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>

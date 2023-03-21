@@ -33,6 +33,10 @@ const handleLoading = computed(() => {
     return false
   }
 })
+////////////////////////
+window.addEventListener('close', () => {
+  alert('dfaf')
+})
 </script>
 <template>
   <div class="w-full" v-if="!handleLoading">

@@ -199,7 +199,7 @@
     @apply flex items-center justify-between p-3 border-b border-gray-200 rounded-t-md;
   }
   .ModalMain {
-    @apply flex  justify-center items-center w-full relative py-4 px-3;
+    @apply flex max-h-[400px] overflow-y-scroll scroll-smooth flex-wrap  justify-center items-start w-full relative p-3;
   }
   .ModalFooter {
     @apply flex items-center justify-evenly flex-wrap p-3 border-t border-gray-200 rounded-b-md;
@@ -208,7 +208,7 @@
     @apply flex m-1 items-center justify-between p-2 px-5 rounded-md text-green-900 bg-green-200 hover:bg-green-400 transition-all;
   }
   .Parent-food-store {
-    @apply p-3 flex w-full text-center justify-center  items-center;
+    @apply  flex w-full text-center  overflow-y-scroll  justify-center items-center ;
   }
   .consolePay {
     @apply p-2 text-3xl;
@@ -329,6 +329,9 @@
     z-index: 5001;
     height: 100vh;
     width: 100vw;
+  }
+  .parent-mobile-table {
+    @apply flex items-center flex-row-reverse justify-between mt-3 w-full p-2 bg-slate-200 shadow-md rounded-md;
   }
   @media only screen and (min-width: 576px) {
     .ModalDivOne {

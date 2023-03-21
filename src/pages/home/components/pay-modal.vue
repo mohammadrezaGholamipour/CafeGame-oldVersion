@@ -32,7 +32,7 @@ const handleFinishBill = () => {
 };
 </script>
 <template>
-  <v-dialog v-model="props.payModal.status" persistent width="600">
+  <v-dialog v-model="props.payModal.status" persistent width="600" >
     <div class="flex w-full flex-col justify-center bg-white rounded-md">
       <!-- //////////////////////////////////// -->
       <div class="ModalHeader">

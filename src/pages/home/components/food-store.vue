@@ -1,10 +1,12 @@
 <script setup>
 import { reactive, computed, watch } from "vue";
+import { useWindowSize } from '@vueuse/core'
 import { useRouter } from "vue-router";
 //////////////////////////
 const emit = defineEmits(["foodSelected"]);
 const props = defineProps(["payModal"]);
 //////////////////////////
+const { width } = useWindowSize()
 const router = useRouter()
 //////////////////////////
 const state = reactive({
@@ -48,7 +50,7 @@ watch(
 </script>
 <template>
   <div class="Parent-food-store">
-    <table dir="rtl" class="TableFoods">
+    <table v-if="width > 500" dir="rtl" class="TableFoods ">
       <thead class="bg-[#d1d1d180]">
         <tr>
           <td v-for="(items, index) in state.headerFoods" :key="index">
@@ -85,5 +87,43 @@ watch(
         </td>
       </tr>
     </table>
+    <div v-if="width <= 500" class="w-full flex flex-col items-center justify-start">
+      <div v-if="props.payModal.foodList.length" v-for="(items, index) in foodList" :key="index"
+        class="parent-mobile-table">
+        <div class="flex flex-col justify-between items-end">
+          <!-- ////////////////////////////// -->
+          <div class="flex items-center justify-end">
+            <i class="fa-duotone fa-plate-utensils" />
+            <p class="ml-1">نام محصول</p>
+          </div>
+          <div class="flex items-center justify-end">
+            <i class="fa-duotone fa-money-bill-1-wave" />
+            <p class="ml-1">قیمت محصول</p>
+          </div>
+          <div class="flex items-center justify-end">
+            <i class="fa-duotone fa-cash-register" />
+            <p class="ml-1">تعداد</p>
+          </div>
+          <!-- ////////////////////////////// -->
+        </div>
+        <div class="flex flex-col justify-between items-center">
+          <p>{{ items.name }}</p>
+          <p>{{ items.cost?.toLocaleString() }}</p>
+          <div class="inline-flex justify-center items-center">
+            <i class="fa-duotone fa-circle-minus text-red-500 cursor-pointer"
+              @click="handleCount(items.id, 'Decrease')"></i>
+            <p class="mx-3 font-bold">{{ items.count }}</p>
+            <i class="fa-duotone fa-circle-plus text-green-600 cursor-pointer"
+              @click="handleCount(items.id, 'Increase')"></i>
+          </div>
+        </div>
+      </div>
+      <div v-else class="w-full flex items-center justify-center cursor-pointer">
+        <p @click="router.push('/foods')" class="text-center  p-4 font-bold text-red-500 text-lg">
+          لیست خوراکی ها خالی میباشد (برای افزودن کلیک کنید)
+        </p>
+        <i class="fa-duotone fa-utensils-slash text-lg text-red-700"></i>
+      </div>
+    </div>
   </div>
 </template>

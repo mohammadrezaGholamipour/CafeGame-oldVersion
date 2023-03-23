@@ -1,7 +1,10 @@
 <script setup>
+import { useWindowSize } from '@vueuse/core'
 import { computed, reactive } from "vue";
 ////////////////////////////
 const props = defineProps(["billFood", "foods"]);
+///////////////////////////////
+const { width } = useWindowSize()
 ///////////////////////////////
 const state = reactive({
   headerBillFood: [
@@ -51,7 +54,7 @@ const handleTotalFoodMoney = computed(() => {
 </script>
 <template>
   <div class="w-full overflow-y-scroll max-h-[500px] rounded-md">
-    <table dir="rtl" class="Table-bills ">
+    <table v-if="width > 650" dir="rtl" class="Table-bills ">
       <thead class="bg-[#d1d1d180]">
         <tr>
           <td v-for="(items, index) in state.headerBillFood" :key="index">
@@ -84,5 +87,49 @@ const handleTotalFoodMoney = computed(() => {
         </tr>
       </tfoot>
     </table>
+    <!-- ///////////////////////////// -->
+    <div v-else class="w-full flex flex-col items-center justify-start">
+      <div v-for="(items, index) in handleFood.reverse()" :key="index" class="parent-mobile-table">
+        <div class="flex flex-col justify-between items-end">
+          <!-- ////////////////////////////// -->
+          <div class="flex items-center justify-end">
+            <i class="fa-duotone fa-arrow-down-wide-short" />
+            <p class="ml-1">ردیف</p>
+          </div>
+          <div class="flex items-center justify-end">
+            <i class="fa-duotone fa-burger-soda text-yellow-700" />
+            <p class="ml-1">نام محصول</p>
+          </div>
+          <div class="flex items-center justify-end">
+            <i class="fa-duotone fa-money-bill-1-wave text-green-500" />
+            <p class="ml-1">قیمت واحد</p>
+          </div>
+          <div class="flex items-center justify-end">
+            <i class="fa-duotone fa-cash-register" />
+            <p class="ml-1">تعداد</p>
+          </div>
+          <div class="flex items-center justify-end">
+            <i class="fa-duotone fa-cash-register text-blue-500" />
+            <p class="ml-1">جمع کل</p>
+          </div>
+          <!-- ////////////////////////////// -->
+        </div>
+        <div class="flex flex-col justify-between items-center">
+          <p>{{ index + 1 }}</p>
+          <p>{{ items.name }}</p>
+          <p>{{ items.cost?.toLocaleString() }} تومان</p>
+          <p>{{ items.count }}</p>
+          <p>{{ items.total.toLocaleString() }} تومان</p>
+        </div>
+      </div>
+      <div v-if="handleFood.length > 1"
+        class="bg-red-500 flex flex-col items-center rounded-md shadow-md overflow-hidden mt-3 justify-center w-full text-white">
+        <div class="flex w-full justify-between items-center p-2">
+          <p> {{ handleTotalFoodMoney.toLocaleString() }} تومان</p>
+          <p>جمع کل</p>
+        </div>
+
+      </div>
+    </div>
   </div>
 </template>

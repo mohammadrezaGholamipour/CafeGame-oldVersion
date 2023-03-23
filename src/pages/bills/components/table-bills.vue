@@ -1,5 +1,6 @@
 <script setup>
 import BillInfoDialog from "./bill-info-dialog.vue";
+import { useWindowSize } from '@vueuse/core'
 import BillTime from "./bill-time.vue";
 import BillFood from "./bill-food.vue";
 import moment from "jalali-moment";
@@ -7,12 +8,14 @@ import { reactive } from "vue";
 /////////////////////////////
 const props = defineProps(["bills", "foods", "moneys"]);
 /////////////////////////////
+const { width } = useWindowSize()
+/////////////////////////////
 const state = reactive({
   headerBills: [
     { name: "ردیف", icon: "fa-duotone fa-arrow-down-wide-short" },
     {
       name: "اطلاعات زمان شروع و پایان",
-      icon: "fa-duotone fa-hourglass-start text-red-500 ",
+      icon: "fa-duotone fa-hourglass-start text-red-500",
     },
     {
       name: "هزینه بازی",
@@ -93,7 +96,7 @@ const handleShowEndTime = (endTime) => {
 </script>
 <template>
   <div class="overflow-y-scroll h-[86vh] flex items-center flex-col justify-start mt-15 rounded-md w-[90vw]">
-    <table class="Table-bills">
+    <table v-if="width > 950" class="Table-bills">
       <thead>
         <tr>
           <th class="sticky top-0 bg-slate-200" v-for="(items, index) in state.headerBills" :key="index">
@@ -156,10 +159,82 @@ const handleShowEndTime = (endTime) => {
         </tr>
       </tbody>
     </table>
+    <!-- ///////////////////// -->
+    <div v-else class="w-full flex flex-col items-center justify-start">
+      <div v-for="(items, index) in props.bills" :key="index" class="parent-mobile-table min-w-[306px] flex-row">
+        <div class="flex flex-col justify-between items-start">
+          <!-- ////////////////////////////// -->
+          <div class="flex items-center justify-end py-1">
+            <p class="ml-1">ردیف</p>
+            <i class="fa-duotone fa-arrow-down-wide-short" />
+          </div>
+          <div class="flex items-center justify-end py-1">
+            <p class="ml-1">اطلاعات زمان</p>
+            <i class="fa-duotone fa-hourglass-start text-red-500" />
+          </div>
+          <div class="flex items-center justify-end py-1">
+            <p class="ml-1">هزینه بازی</p>
+            <i class="fa-duotone fa-money-bill-1-wave text-green-500" />
+          </div>
+          <div class="flex items-center justify-end py-1">
+            <p class="ml-1">خوراکی ها</p>
+            <i class="fa-duotone fa-burger-soda text-yellow-700" />
+          </div>
+          <div class="flex items-center justify-end py-1">
+            <p class="ml-1">شماره دستگاه</p>
+            <i class="fa-brands fa-playstation text-blue-500" />
+          </div>
+          <div class="flex items-center justify-end py-1">
+            <p class="ml-1">پرداخت شده</p>
+            <i class="fa-duotone fa-cash-register text-green-700" />
+          </div>
+          <!-- ////////////////////////////// -->
+        </div>
+        <div class="flex flex-col justify-between items-center">
+          <p class="py-1">{{ index + 1 }}</p>
+          <p>
+          <div class="flex items-center justify-between py-1">
+            <p class="ml-2">{{ items.endTime ? handleShowEndTime(items.endTime) : 'هنوز تمام نشده است' }}</p>
+            <button @click="
+              handleShowDialog(
+                {
+                  start: items.startTime,
+                  end: items.endTime,
+                },
+                'time'
+              )
+            " class="BtnChange h-[24px] mr-0">
+              نمایش
+            </button>
+
+          </div>
+          </p>
+          <p class="py-1">{{ handleFindMoney(items.hourRateId) }}</p>
+          <p>
+          <div class="flex justify-center py-1">
+            <button @click="handleShowDialog(items.billFoods, 'food')" v-if="items.billFoods.length"
+              class="BtnChange h-[24px] mr-0">
+              نمایش
+            </button>
+
+            <p v-else>بدون خوراکی</p>
+          </div>
+          </p>
+          <p class="py-1">{{ items.systemId }}</p>
+          <p>
+          <p class="font-bold py-1"> {{
+            items.finalCost
+            ? `${items.finalCost?.toLocaleString()} تومان`
+            : "هنوز تمام نشده است"
+          }}</p>
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
   <!-- ///////////////////////////////// -->
   <BillInfoDialog :dialog="state.dialog" @close="handleCloseDialog">
     <BillTime v-if="state.dialog.component === 'time'" :billTime="state.dialog.data" />
-    <BillFood :foods="props.foods" :billFood="state.dialog.data" v-else />
+    <BillFood :foods="props.foods" :billFood="state.dialog.data" v-if="state.dialog.component === 'food'" />
   </BillInfoDialog>
 </template>

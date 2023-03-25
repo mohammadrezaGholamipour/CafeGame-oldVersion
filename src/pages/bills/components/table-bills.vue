@@ -161,7 +161,7 @@ const handleShowEndTime = (endTime) => {
     </table>
     <!-- ///////////////////// -->
     <div v-else class="w-full flex flex-col items-center justify-start">
-      <div v-for="(items, index) in props.bills" :key="index" class="parent-mobile-table min-w-[306px] flex-row">
+      <div v-for="(items, index) in props.bills" :key="index" class="parent-mobile-table min-w-[300px] flex-row">
         <div class="flex flex-col justify-between items-start">
           <!-- ////////////////////////////// -->
           <div class="flex items-center justify-end py-1">
@@ -195,27 +195,19 @@ const handleShowEndTime = (endTime) => {
           <p>
           <div class="flex items-center justify-between py-1">
             <p class="ml-2">{{ items.endTime ? handleShowEndTime(items.endTime) : 'هنوز تمام نشده است' }}</p>
-            <button @click="
-              handleShowDialog(
-                {
-                  start: items.startTime,
-                  end: items.endTime,
-                },
-                'time'
-              )
-            " class="BtnChange h-[24px] mr-0">
+            <p class="text-red-500 font-bold"
+              @click="handleShowDialog({ start: items.startTime, end: items.endTime, }, 'time')">
               نمایش
-            </button>
-
+            </p>
           </div>
           </p>
           <p class="py-1">{{ handleFindMoney(items.hourRateId) }}</p>
           <p>
           <div class="flex justify-center py-1">
-            <button @click="handleShowDialog(items.billFoods, 'food')" v-if="items.billFoods.length"
-              class="BtnChange h-[24px] mr-0">
+            <p @click="handleShowDialog(items.billFoods, 'food')" v-if="items.billFoods.length"
+              class="text-red-500 font-bold">
               نمایش
-            </button>
+            </p>
 
             <p v-else>بدون خوراکی</p>
           </div>

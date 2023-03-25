@@ -1,11 +1,14 @@
 <script setup>
 import PersianNumberToString from "persian-number-tostring";
 import confirmDialog from "@/components/confirm-dialog.vue";
+import { useWindowSize } from '@vueuse/core'
 import NewMoney from "./new-money.vue";
 import { reactive } from "vue";
 ///////////////////////
 const emit = defineEmits(["newMoney", "removeMoney"]);
 const props = defineProps(["listMoney"]);
+///////////////////////
+const { width } = useWindowSize()
 ///////////////////////
 const state = reactive({
   tableHeader: [
@@ -41,24 +44,22 @@ const handleCloseconfirmDialog = (value) => {
 };
 </script>
 <template>
-  <div class="flex w-full flex-col justify-start items-start mt-12">
-    <button @click="state.formModal = true" class="btn-new-money">
-      <p class="ml-2">قیمت جدید</p>
-      <i class="fa-duotone fa-money-bill-1-wave"></i>
-    </button>
-    <table class="table-money">
+  <div class="overflow-y-scroll h-[86vh] flex items-center flex-col justify-start mt-15 rounded-md w-[90vw]">
+    <div class="w-full flex items-center justify-start">
+      <button @click="state.formModal = true" class="btn-new-money">
+        <p class="ml-2">قیمت جدید</p>
+        <i class="fa-duotone fa-money-bill-1-wave"></i>
+      </button>
+    </div>
+    <table v-if="width > 550" class="table-money">
       <thead>
         <tr>
-          <td
-            v-for="(items, index) in state.tableHeader"
-            :key="index"
-            class="p-3"
-          >
+          <th class="sticky top-0 p-3 bg-slate-200 z-50" v-for="(items, index) in state.tableHeader" :key="index">
             <div class="flex text-lg font-bold items-center justify-center">
               <p class="ml-2">{{ items.name }}</p>
               <i :class="items.icon"></i>
             </div>
-          </td>
+          </th>
         </tr>
       </thead>
       <tbody v-if="props.listMoney.length">
@@ -90,15 +91,41 @@ const handleCloseconfirmDialog = (value) => {
       </tr>
     </table>
     <!-- /////////////////////////// -->
-    <NewMoney
-      @close="state.formModal = false"
-      :formModal="state.formModal"
-      @money="handleNewMoney"
-    />
+    <div v-else class="w-full flex flex-col items-center justify-start">
+      <div v-for="(items, index) in props.listMoney" :key="index" class="parent-mobile-table min-w-[300px] flex-row">
+        <div class="flex flex-col justify-between items-start">
+          <!-- ////////////////////////////// -->
+          <div class="flex items-center justify-end py-1">
+            <p class="ml-1">ردیف</p>
+            <i class="fa-duotone fa-arrow-down-wide-short" />
+          </div>
+          <div class="flex items-center justify-end py-1">
+            <p class="ml-1">قیمت به عدد</p>
+            <i class="fa-duotone fa-money-bill-1-wave text-red-500" />
+          </div>
+          <div class="flex items-center justify-end py-1">
+            <p class="ml-1">عملیات</p>
+            <i class="fa-duotone fa-cash-register text-yellow-500" />
+          </div>
+          <!-- ////////////////////////////// -->
+        </div>
+        <div class="flex flex-col justify-between items-center">
+          <p class="py-1">{{ index + 1 }}</p>
+          <p>{{ items.rate.toLocaleString() }}</p>
+          <p>
+          <div class="inline-flex justify-center items-center">
+            <button @click="handleSelectedMoney(items.id)" class="BtnRemove">
+              <p class="ml-1">حذف</p>
+              <i class="fa-duotone fa-trash"></i>
+            </button>
+          </div>
+          </p>
+        </div>
+      </div>
+    </div>
     <!-- /////////////////////////// -->
-    <confirmDialog
-      @acceptOrCansel="handleCloseconfirmDialog"
-      :confirmDialog="state.confirmDialog"
-    />
+    <NewMoney @close="state.formModal = false" :formModal="state.formModal" @money="handleNewMoney" />
+    <!-- /////////////////////////// -->
+    <confirmDialog @acceptOrCansel="handleCloseconfirmDialog" :confirmDialog="state.confirmDialog" />
   </div>
 </template>

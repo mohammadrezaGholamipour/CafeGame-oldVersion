@@ -163,7 +163,7 @@
     height: 100vh;
   }
   .TableFoods {
-    @apply w-full bg-white rounded-md overflow-hidden shadow-md;
+    @apply w-full bg-white rounded-md shadow-md;
   }
   .btn-new-food {
     @apply my-3 flex items-center mt-0 p-2 bg-red-500 border-2 border-black text-white hover:bg-red-600 transition-all rounded-lg shadow-md;
@@ -279,7 +279,7 @@
     @apply bg-[#d1d1d180];
   }
   .table-money {
-    @apply w-full text-center rounded-md overflow-hidden shadow-md mt-1 bg-white;
+    @apply w-full text-center rounded-md  shadow-md mt-1 bg-white;
   }
   .table-money tbody tr:nth-child(even) {
     @apply bg-slate-200;
@@ -331,7 +331,7 @@
     width: 100vw;
   }
   .parent-mobile-table {
-    @apply flex items-center flex-row-reverse justify-between mt-3 w-full p-2 bg-slate-200 shadow-md rounded-md;
+    @apply flex items-center flex-row-reverse justify-between mt-3 w-full p-2 bg-white shadow-lg rounded-md;
   }
   @media only screen and (min-width: 576px) {
     .ModalDivOne {

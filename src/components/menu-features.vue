@@ -68,6 +68,7 @@ watch(
 const handleLogOut = (path) => {
   if (path === '/login') {
     AuthService.removeTokenUser()
+    AuthService.removeState()
     router.push('/login')
     store.logOut()
   }

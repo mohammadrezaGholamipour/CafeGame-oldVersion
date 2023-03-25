@@ -89,7 +89,7 @@ const handleTotalFoodMoney = computed(() => {
     </table>
     <!-- ///////////////////////////// -->
     <div v-else class="w-full flex flex-col items-center justify-start">
-      <div v-for="(items, index) in handleFood.reverse()" :key="index" class="parent-mobile-table">
+      <div v-for="(items, index) in handleFood.reverse()" :key="index" class="parent-mobile-table bg-slate-200">
         <div class="flex flex-col justify-between items-end">
           <!-- ////////////////////////////// -->
           <div class="flex items-center justify-end">

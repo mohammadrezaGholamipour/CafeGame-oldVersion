@@ -1,10 +1,11 @@
 <script setup>
 import BillInfoDialog from "./bill-info-dialog.vue";
 import { useWindowSize } from '@vueuse/core'
+import { computed, reactive } from "vue";
 import BillTime from "./bill-time.vue";
 import BillFood from "./bill-food.vue";
 import moment from "jalali-moment";
-import { reactive } from "vue";
+import BillFilterDialog from "./bill-filter-dialog.vue";
 /////////////////////////////
 const props = defineProps(["bills", "foods", "moneys"]);
 /////////////////////////////
@@ -36,6 +37,10 @@ const state = reactive({
     data: {},
     status: false,
     component: "",
+  },
+  filterDialog: {
+    status: false,
+    filterStatus: false
   },
 });
 /////////////////////////////////
@@ -92,17 +97,48 @@ const handleShowEndTime = (endTime) => {
   }
 
 
-} 
+}
+//////////////////////
+const handleFilter = () => {
+  if (state.filterDialog.filterStatus) {
+    state.filterDialog.filterStatus = !state.filterDialog.filterStatus
+  } else {
+    state.filterDialog.status = true
+  }
+}
+////////////////////
+const styleBtnSearch = computed(() => {
+  if (state.filterDialog.filterStatus) {
+    return '--fa-primary-color: #775a5a; --fa-secondary-color: #d93636;'
+  } else { return '--fa-primary-color: #5e91d4; --fa-secondary-color: #367cba;' }
+})
+////////////////////
+const handleAcceptOrCanselFilter = (status) => {
+  state.filterDialog.status = false
+  if (status) {
+    requestGetBillFilter('data')
+  } else {
+    state.filterDialog.filterStatus = false
+  }
+}
+////////////////////
+const requestGetBillFilter = (data) => {
+  console.log(data);
+  state.filterDialog.filterStatus = true
+}
 </script>
 <template>
   <div class="overflow-y-scroll h-[86vh] flex items-center flex-col justify-start mt-15 rounded-md w-[90vw]">
-    <table v-if="width > 950" class="Table-bills">
+    <table v-if="width > 980" class="Table-bills">
       <thead>
         <tr>
           <th class="sticky top-0 bg-slate-200" v-for="(items, index) in state.headerBills" :key="index">
             <div class="td-header-foods">
               <p class="ml-2 font-bold">{{ items.name }}</p>
               <i :class="items.icon" />
+              <i @click="handleFilter" v-if="items.name === 'ردیف'"
+                class="fa-duotone fa-magnifying-glass fa-beat-fade mr-2 cursor-pointer text-xl"
+                :style="styleBtnSearch"></i>
             </div>
           </th>
         </tr>
@@ -229,4 +265,6 @@ const handleShowEndTime = (endTime) => {
     <BillTime v-if="state.dialog.component === 'time'" :billTime="state.dialog.data" />
     <BillFood :foods="props.foods" :billFood="state.dialog.data" v-if="state.dialog.component === 'food'" />
   </BillInfoDialog>
+  <!-- ///////////////////////////////// -->
+  <BillFilterDialog :dialog="state.filterDialog" @acceptOrCansel="handleAcceptOrCanselFilter" />
 </template>

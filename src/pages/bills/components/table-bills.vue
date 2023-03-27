@@ -113,23 +113,23 @@ const styleBtnSearch = computed(() => {
   } else { return '--fa-primary-color: #5e91d4; --fa-secondary-color: #367cba;' }
 })
 ////////////////////
-const handleAcceptOrCanselFilter = (status) => {
+const handleAcceptOrCanselFilter = (status, filterData) => {
   state.filterDialog.status = false
   if (status) {
-    requestGetBillFilter('data')
+    requestGetBillFilter(filterData)
   } else {
     state.filterDialog.filterStatus = false
   }
 }
 ////////////////////
-const requestGetBillFilter = (data) => {
-  console.log(data);
+const requestGetBillFilter = (filterData) => {
+  console.log(filterData);
   state.filterDialog.filterStatus = true
 }
 </script>
 <template>
   <div class="overflow-y-scroll h-[86vh] flex items-center flex-col justify-start mt-15 rounded-md w-[90vw]">
-    <table v-if="width > 980" class="Table-bills">
+    <table v-if="width > 1022" class="Table-bills">
       <thead>
         <tr>
           <th class="sticky top-0 bg-slate-200" v-for="(items, index) in state.headerBills" :key="index">

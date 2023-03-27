@@ -1,3 +1,4 @@
+import Vue3PersianDatetimePicker from 'vue3-persian-datetime-picker'
 import VueTransitions from '@morev/vue-transitions';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
@@ -22,6 +23,7 @@ const vuetify = createVuetify({
 //////////////////////
 const app = createApp(App)
 /////////////////////////
+app.component('DatePicker', Vue3PersianDatetimePicker)
 app.use(VueTransitions)
 app.use(createPinia())
 app.use(moment)

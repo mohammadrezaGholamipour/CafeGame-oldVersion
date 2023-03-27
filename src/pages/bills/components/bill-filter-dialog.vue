@@ -25,8 +25,8 @@ watch(() => props.dialog.status, () => {
 const handleAcceptOrCanselModal = (status) => {
   const filterData = {
     playstation: state.playstation.value,
-    startDate: state.startDate,
-    endDate: state.endDate,
+    startDate: state.startDate ? new Date(state.startDate).toISOString() : state.startDate,
+    endDate: state.endDate ? new Date(state.endDate).toISOString() : state.endDate,
   }
   state.playstation.status = false
   ///////////////////////

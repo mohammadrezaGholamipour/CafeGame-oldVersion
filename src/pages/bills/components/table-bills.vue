@@ -1,17 +1,19 @@
 <script setup>
+import BillFilterDialog from "./bill-filter-dialog.vue";
+import { computed, reactive, onMounted } from "vue";
 import BillInfoDialog from "./bill-info-dialog.vue";
 import { useWindowSize } from '@vueuse/core'
-import { computed, reactive } from "vue";
 import BillTime from "./bill-time.vue";
 import BillFood from "./bill-food.vue";
 import moment from "jalali-moment";
-import BillFilterDialog from "./bill-filter-dialog.vue";
+import billApi from '@/api/bill'
 /////////////////////////////
 const props = defineProps(["bills", "foods", "moneys"]);
 /////////////////////////////
 const { width } = useWindowSize()
 /////////////////////////////
 const state = reactive({
+  billList: [],
   headerBills: [
     { name: "ردیف", icon: "fa-duotone fa-arrow-down-wide-short" },
     {
@@ -42,6 +44,10 @@ const state = reactive({
     status: false,
     filterStatus: false
   },
+});
+/////////////////////////////////
+onMounted(() => {
+  state.billList = props.bills
 });
 /////////////////////////////////
 const handleFindMoney = (hourRateId) => {
@@ -102,6 +108,7 @@ const handleShowEndTime = (endTime) => {
 const handleFilter = () => {
   if (state.filterDialog.filterStatus) {
     state.filterDialog.filterStatus = !state.filterDialog.filterStatus
+    state.billList = props.bills
   } else {
     state.filterDialog.status = true
   }
@@ -123,8 +130,15 @@ const handleAcceptOrCanselFilter = (status, filterData) => {
 }
 ////////////////////
 const requestGetBillFilter = (filterData) => {
-  console.log(filterData);
-  state.filterDialog.filterStatus = true
+  const url = `bill?systemId=${filterData.playstation ? filterData.playstation : ''}&startDate=${filterData.startDate ? filterData.startDate.replace(':', '%3A') : ''}&endDate=${filterData.endDate ? filterData.endDate.replace(':', '%3A') : ''}`;
+  ////////////////////
+  billApi.getFilter(url)
+    .then((response) => {
+      state.billList = response
+      state.filterDialog.filterStatus = true
+    }).catch((error) => {
+      console.log(error);
+    })
 }
 </script>
 <template>
@@ -144,7 +158,7 @@ const requestGetBillFilter = (filterData) => {
         </tr>
       </thead>
       <tbody>
-        <tr v-if="props.bills.length" v-for="(items, index) in props.bills" :key="items.id">
+        <tr v-if="state.billList.length" v-for="(items, index) in state.billList" :key="items.id">
           <td>{{ index + 1 }}</td>
           <td>
             <div class="flex items-center justify-between">
@@ -197,7 +211,7 @@ const requestGetBillFilter = (filterData) => {
     </table>
     <!-- ///////////////////// -->
     <div v-else class="w-full flex flex-col items-center justify-start">
-      <div v-for="(items, index) in props.bills" :key="index" class="parent-mobile-table min-w-[300px] flex-row">
+      <div v-for="(items, index) in state.billList" :key="index" class="parent-mobile-table min-w-[300px] flex-row">
         <div class="flex flex-col justify-between items-start">
           <!-- ////////////////////////////// -->
           <div class="flex items-center justify-end py-1">

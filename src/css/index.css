@@ -137,13 +137,26 @@
     @apply flex items-center w-full relative justify-center text-center cursor-pointer bg-slate-300 rounded-md px-1 p-3;
     width: 110px;
   }
+  .SelectedConsoleFilter {
+    @apply flex items-center w-full relative justify-center text-center cursor-pointer bg-slate-300 rounded-md px-1 p-3;
+    width: 150px;
+  }
   .UlMoney {
     @apply flex flex-col bg-white items-center justify-center mt-1 rounded-md shadow-md overflow-hidden absolute;
     z-index: 99999;
     width: 109px;
     top: 48px;
   }
+  .UlConsoleFilter {
+    @apply flex flex-col bg-white items-center justify-center mt-1 rounded-md shadow-md overflow-hidden absolute;
+    z-index: 99999;
+    width: 150px;
+    top: 48px;
+  }
   .UlMoney li {
+    @apply p-1 w-full text-lg text-center cursor-pointer hover:bg-slate-300 transition-all;
+  }
+  .UlConsoleFilter li {
     @apply p-1 w-full text-lg text-center cursor-pointer hover:bg-slate-300 transition-all;
   }
   .ConsoleMoney {
@@ -240,6 +253,9 @@
     @apply p-3  text-lg font-bold;
   }
   .food-input {
+    @apply p-3 m-2 rounded-md text-right bg-slate-200 outline-none;
+  }
+  .bill-filter-input {
     @apply p-3 m-2 rounded-md text-right bg-slate-200 outline-none;
   }
   .menu-setting {

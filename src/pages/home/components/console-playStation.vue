@@ -245,6 +245,10 @@ const requestSetFood = (billId, food) => {
         </transition-scale>
       </div>
       <!-- /////////////////////////////// -->
+      <transition-fade>
+        <i v-if="playstation.status" class="fa-duotone fa-sliders fa-beat setting-console"></i>
+      </transition-fade>
+      <!-- /////////////////////////////// -->
       <div class="flex w-full flex-col justify-start items-center">
         <div v-if="playstation.status" class="ConsoleMoney">
           {{

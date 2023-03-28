@@ -137,14 +137,21 @@
     @apply flex items-center w-full relative justify-center text-center cursor-pointer bg-slate-300 rounded-md px-1 p-3;
     width: 110px;
   }
+  .setting-console {
+    @apply cursor-pointer text-xl;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
   .SelectedConsoleFilter {
     @apply flex items-center w-full relative justify-center text-center cursor-pointer bg-slate-200 rounded-md px-1 p-3;
     width: 150px;
   }
   .UlMoney {
-    @apply flex flex-col bg-white items-center justify-center mt-1 rounded-md shadow-md overflow-hidden absolute;
+    @apply flex flex-col overflow-y-scroll bg-white items-center justify-start mt-1 rounded-md shadow-md overflow-hidden absolute;
     z-index: 99999;
     width: 109px;
+    height: 108px;
     top: 48px;
   }
   .UlConsoleFilter {
@@ -221,7 +228,7 @@
     @apply flex m-1 items-center justify-between p-2 px-5 rounded-md text-green-900 bg-green-200 hover:bg-green-400 transition-all;
   }
   .Parent-food-store {
-    @apply  flex w-full text-center  overflow-y-scroll  justify-center items-center ;
+    @apply flex w-full text-center  overflow-y-scroll  justify-center items-center;
   }
   .consolePay {
     @apply p-2 text-3xl;

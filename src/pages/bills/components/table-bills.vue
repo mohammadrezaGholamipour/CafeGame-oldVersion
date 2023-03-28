@@ -184,7 +184,6 @@ const requestGetBillFilter = (filterData) => {
                 class="BtnChange mr-0">
                 نمایش
               </button>
-
               <p v-else>بدون خوراکی</p>
             </div>
           </td>
@@ -211,6 +210,9 @@ const requestGetBillFilter = (filterData) => {
     </table>
     <!-- ///////////////////// -->
     <div v-else class="w-full flex flex-col items-center justify-start">
+      <button @click="handleFilter" class="bg-white shadow-lg font-bold text-black p-3 rounded-md">فیلتر ها <i
+          class="fa-duotone fa-magnifying-glass fa-beat-fade mr-2 cursor-pointer text-xl"
+          :style="styleBtnSearch"></i></button>
       <div v-for="(items, index) in state.billList" :key="index" class="parent-mobile-table min-w-[300px] flex-row">
         <div class="flex flex-col justify-between items-start">
           <!-- ////////////////////////////// -->

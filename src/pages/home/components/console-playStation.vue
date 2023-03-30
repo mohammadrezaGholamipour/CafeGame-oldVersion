@@ -214,8 +214,8 @@ const handleFinishPlaystation = (foodSelected) => {
   }
 };
 ///////////////////////////
-const getImageUrl = (name) => {
-  return new URL(`./dir/${name}.png`, import.meta.url).href
+const getImageUrl = (imagePath) => {
+  return new URL(imagePath, import.meta.url).href
 }
 ///////////////////////////
 const requestSetFood = (billId, food) => {
@@ -235,7 +235,7 @@ const requestSetFood = (billId, food) => {
     <div v-for="(playstation, index) in props.consoleList" :key="playstation.id" class="Console">
       <!-- //////////////////////////////// -->
       <p class="ConsoleNumber">
-        <v-img :src="getImageUrl(index + 1)" width="50" />
+        <img :src="getImageUrl(`/assets/${index + 1}.png`)" width="50" />
       </p>
       <!-- ////////////////////////////////// -->
       <div class="ConsoleTimer">

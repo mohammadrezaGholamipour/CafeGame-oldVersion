@@ -16,7 +16,6 @@ coverage
 
 /cypress/videos/
 /cypress/screenshots/
-/public/FontAwesom
 /BackEnd
 # Editor directories and files
 .vscode/*

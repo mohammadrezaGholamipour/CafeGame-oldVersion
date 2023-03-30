@@ -100,6 +100,10 @@ const handleCloseDialog = () => {
   }, 200);
 };
 ///////////////////////////////////
+const getImageUrl = (imagePath) => {
+  return new URL(imagePath, import.meta.url).href
+}
+///////////////////////////////////
 const handleNewConsole = () => {
   emit("newConsole");
 };
@@ -118,8 +122,7 @@ const handleNewConsole = () => {
           <img src="@/assets/image/logoConsole.png" width="150" />
           <div class="flex mt-2 w-full justify-center items-center p-2">
             <i @click="handleShowDialog(items)" class="fa-duotone fa-circle-question console-icon text-gray-200"></i>
-            <img :src="`@/assets/image/${index + 1}.png`" class="bg-white rounded-full outline-none"
-              width="50" />
+            <img :src="getImageUrl(`/assets/${index + 1}.png`)" class="bg-white rounded-full outline-none" width="50" />
             <i class="fa-duotone fa-trash-can-list console-icon text-gray-200"
               @click="handleShowConfirmDialog(items)"></i>
           </div>

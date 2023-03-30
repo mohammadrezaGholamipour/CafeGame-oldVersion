@@ -94,50 +94,50 @@ const consoleSelected = (consoleId) => {
 </template>
 <style>
 .vpd-input-group {
-  height: 40px;
+  height: 40px !important;
 }
 
 .vpd-icon-btn {
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px !important;
+  border-bottom-right-radius: 10px !important;
 }
 
 .form-control {
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px !important;
+  border-bottom-left-radius: 10px !important;
   padding-left: 0px !important;
   width: 150px !important;
 }
 
 .vpd-wrapper {
-  border-radius: 5px;
+  border-radius: 5px !important;
 }
 
 .vpd-content {
-  border-radius: 15px;
+  border-radius: 15px !important;
 }
 
 .vpd-actions {
-  text-align: center;
+  text-align: center !important;
 }
 
 .vpd-column-content {
-  display: flex;
-  flex-direction: column;
+  display: flex !important;
+  flex-direction: column !important;
 }
 
 .vpd-simple-content {
-  border-bottom: solid 1px rgb(73, 73, 73);
+  border-bottom: solid 1px rgb(73, 73, 73) !important;
 }
 
 .vpd-column-header {
-  border-bottom: dashed 1px rgb(131, 131, 131);
+  border-bottom: dashed 1px rgb(131, 131, 131) !important;
 }
 
 .vpd-addon-list-item.vpd-selected {
-  border-radius: 5px;
-  font-weight: 800;
-  background-color: #af3434;
+  border-radius: 5px !important;
+  font-weight: 800 !important;
+  background-color: #af3434 !important;
   color: white !important;
 }
 </style>

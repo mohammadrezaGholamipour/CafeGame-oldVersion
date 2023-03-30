@@ -151,7 +151,7 @@
     @apply flex flex-col overflow-y-scroll bg-white items-center justify-start mt-1 rounded-md shadow-md overflow-hidden absolute;
     z-index: 99999;
     width: 109px;
-    height: 108px;
+    max-height: 108px;
     top: 48px;
   }
   .UlConsoleFilter {

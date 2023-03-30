@@ -2,7 +2,7 @@
 import axios from 'axios';
 // //////////////////////////////////
 const HttClient = axios.create({
-  baseURL: 'http://localhost:8505/api/',
+  baseURL: 'https://cafegameapi.iran.liara.run/api/',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json;charset=UTF-8',

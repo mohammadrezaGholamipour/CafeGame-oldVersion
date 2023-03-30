@@ -214,6 +214,10 @@ const handleFinishPlaystation = (foodSelected) => {
   }
 };
 ///////////////////////////
+const getImageUrl = (name) => {
+  return new URL(`./dir/${name}.png`, import.meta.url).href
+}
+///////////////////////////
 const requestSetFood = (billId, food) => {
   billApi
     .setFood(billId, food)
@@ -224,13 +228,14 @@ const requestSetFood = (billId, food) => {
       toast.error("خوراکی ها در این فاکتور ثبت نشد");
     });
 };
+///////////////////////////
 </script>
 <template>
   <div class="w-full h-full mt-10 p-3 flex flex-wrap items-center justify-center">
     <div v-for="(playstation, index) in props.consoleList" :key="playstation.id" class="Console">
       <!-- //////////////////////////////// -->
       <p class="ConsoleNumber">
-        <img :src="`src/assets/image/numbers/${index + 1}.png`" width="50" />
+        <v-img :src="getImageUrl(index + 1)" width="50" />
       </p>
       <!-- ////////////////////////////////// -->
       <div class="ConsoleTimer">

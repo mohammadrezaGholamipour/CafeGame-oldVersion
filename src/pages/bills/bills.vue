@@ -6,6 +6,7 @@ const store = useStore()
 </script>
 <template>
   <div class="Parent-bills">
-    <TableBills :moneys="store.getMoneyList" :foods="store.getFoodList" :bills="store.getBillList" />
+    <TableBills :moneys="store.getMoneyList" :consoles="store.getConsoleList" :foods="store.getFoodList"
+      :bills="store.getBillList" />
   </div>
 </template>

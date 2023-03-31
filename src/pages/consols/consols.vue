@@ -19,7 +19,7 @@ const state = reactive({
 const requestNewConsole = () => {
   if (store.getConsoleList.length < 8) {
     console
-      .new({ name: String(Math.random() * 100) })
+      .new({ name: String(store.getConsoleList.length + 1) })
       .then(() => {
         toast.success("دستگاه با موفقیت اضافه شد");
         store.requestGetConsoles()
@@ -48,7 +48,7 @@ const requestRemoveConsole = (id) => {
 </script>
 <template>
   <div class="parent-consols">
-    <ConsoleTable @deleteConsole="requestRemoveConsole" :foodList="store.getFoodList" :billList="store.getBillList" :consoleList="store.getConsoleList"
-      @newConsole="requestNewConsole" />
+    <ConsoleTable @deleteConsole="requestRemoveConsole" :foodList="store.getFoodList" :billList="store.getBillList"
+      :consoleList="store.getConsoleList" @newConsole="requestNewConsole" />
   </div>
 </template>

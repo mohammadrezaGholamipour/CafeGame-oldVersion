@@ -33,8 +33,8 @@ const handleAcceptOrCanselModal = (status) => {
   emit("acceptOrCansel", status, filterData);
 };
 /////////////////////////
-const consoleSelected = (consoleId) => {
-  state.playstation.value = consoleId
+const consoleSelected = (consoleName) => {
+  state.playstation.value = consoleName
   state.playstation.status = false
 }
 </script>
@@ -63,8 +63,8 @@ const consoleSelected = (consoleId) => {
           </div>
           <transition-expand>
             <ul v-if="state.playstation.status" class="UlConsoleFilter">
-              <li @click="consoleSelected(console.id)" v-for="console in store.getConsoleList" :key="console.id">
-                {{ console.id }} دستگاه شماره
+              <li @click="consoleSelected(console.name)" v-for="console in store.getConsoleList" :key="console.id">
+                {{ console.name }} دستگاه شماره
               </li>
             </ul>
           </transition-expand>

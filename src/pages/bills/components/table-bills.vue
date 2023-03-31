@@ -8,7 +8,7 @@ import BillFood from "./bill-food.vue";
 import moment from "jalali-moment";
 import billApi from '@/api/bill'
 /////////////////////////////
-const props = defineProps(["bills", "foods", "moneys"]);
+const props = defineProps(["bills", "foods", "moneys", "consoles"]);
 /////////////////////////////
 const { width } = useWindowSize()
 /////////////////////////////
@@ -129,6 +129,11 @@ const handleAcceptOrCanselFilter = (status, filterData) => {
   }
 }
 ////////////////////
+const handleFindConsole = (systemId) => {
+  const console = props.consoles.find((item) => item.id === systemId)
+  return console.name
+}
+////////////////////
 const requestGetBillFilter = (filterData) => {
   const url = `bill?systemId=${filterData.playstation ? filterData.playstation : ''}&startDate=${filterData.startDate ? filterData.startDate.replace(':', '%3A') : ''}&endDate=${filterData.endDate ? filterData.endDate.replace(':', '%3A') : ''}`;
   ////////////////////
@@ -187,7 +192,7 @@ const requestGetBillFilter = (filterData) => {
               <p v-else>بدون خوراکی</p>
             </div>
           </td>
-          <td>{{ items.systemId }}</td>
+          <td>{{ handleFindConsole(items.systemId) }}</td>
           <td>
             <p class="font-bold"> {{
               items.finalCost

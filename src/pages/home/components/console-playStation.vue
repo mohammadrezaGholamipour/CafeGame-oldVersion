@@ -169,7 +169,7 @@ const handleBillNotFinished = (billList) => {
         (items) => items.id === bill.hourRateId
       );
       /////////////////////////////////////////////
-      const startTime = new Date(`${bill.startTime}Z`);
+      const startTime = new Date(bill.startTime);
       let delta = Math.abs(new Date().getTime() - startTime.getTime()) / 1000;
       let days = Math.floor(delta / 86400);
       delta -= days * 86400;

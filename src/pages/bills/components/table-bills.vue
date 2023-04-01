@@ -79,8 +79,8 @@ const handleCloseDialog = () => {
 };
 //////////////////////////////
 const handleShowEndTime = (endTime) => {
-  const finishFaktorDay = Number(moment(`${endTime}z`).locale("fa").format("DD"))
-  const finishFaktorMonth = Number(moment(`${endTime}z`).locale("fa").format("MM"))
+  const finishFaktorDay = Number(moment(endTime).locale("fa").format("DD"))
+  const finishFaktorMonth = Number(moment(endTime).locale("fa").format("MM"))
   ///////////////////////////////////////////
   const dayNow = Number(moment().locale("fa").format("DD"))
   const monthNow = Number(moment().locale("fa").format("MM"))
@@ -269,7 +269,7 @@ const requestGetBillFilter = (filterData) => {
             <p v-else>بدون خوراکی</p>
           </div>
           </p>
-          <p class="py-1">{{ items.systemId }}</p>
+          <p class="py-1">{{ handleFindConsole(items.systemId) }}</p>
           <p>
           <p class="font-bold py-1"> {{
             items.finalCost

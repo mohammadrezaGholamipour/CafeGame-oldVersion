@@ -1,4 +1,5 @@
 <script setup>
+import PaymentMethodDialog from "./payment-method-dialog.vue";
 import FoodStore from "./food-store.vue";
 import { reactive, watch } from "vue";
 import Faktor from "./faktor.vue";
@@ -7,6 +8,7 @@ const emit = defineEmits(["continue", "finish"]);
 const props = defineProps(["payModal"]);
 //////////////////////////////////////////
 const state = reactive({
+  paymentMethodModal: false,
   faktorOrFood: false,
   foodSelected: [],
 });
@@ -27,12 +29,16 @@ watch(
   }
 );
 ///////////////////////////////////
-const handleFinishBill = () => {
-  emit("finish", state.foodSelected);
+const handleBill = (status) => {
+  state.paymentMethodModal = false
+  if (status) {
+    emit("finish", state.foodSelected);
+  }
 };
+
 </script>
 <template>
-  <v-dialog v-model="props.payModal.status" persistent width="600" >
+  <v-dialog v-model="props.payModal.status" persistent width="600">
     <div class="flex w-full flex-col justify-center bg-white rounded-md">
       <!-- //////////////////////////////////// -->
       <div class="ModalHeader">
@@ -59,6 +65,7 @@ const handleFinishBill = () => {
         <div class="ModalMain">
           <FoodStore @foodSelected="handleFoodSelected" v-show="state.faktorOrFood" :payModal="props.payModal" />
           <Faktor :foodSelected="state.foodSelected" v-show="!state.faktorOrFood" :payModal="props.payModal" />
+
         </div>
       </transition-slide>
       <!-- //////////////////////////////////// -->
@@ -67,11 +74,13 @@ const handleFinishBill = () => {
           <i class="fa-duotone fa-chevrons-left mr-2"></i>
           <p>ادامه دادن</p>
         </button>
-        <button v-show="!state.faktorOrFood" @click="handleFinishBill" class="BtnAccept">
+        <button v-show="!state.faktorOrFood" @click="state.paymentMethodModal = true" class="BtnAccept">
           <i class="fa-duotone fa-badge-check mr-2"></i>
           <p>پایان</p>
         </button>
       </div>
+      <!-- //////////////////////////////////// -->
+      <PaymentMethodDialog @close="handleBill" :dialog="state.paymentMethodModal" />
       <!-- //////////////////////////////////// -->
     </div>
   </v-dialog>

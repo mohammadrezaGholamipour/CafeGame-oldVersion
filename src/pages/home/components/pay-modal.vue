@@ -29,10 +29,10 @@ watch(
   }
 );
 ///////////////////////////////////
-const handleBill = (status) => {
+const handleBill = (status, paymentMethod) => {
   state.paymentMethodModal = false
   if (status) {
-    emit("finish", state.foodSelected);
+    emit("finish", paymentMethod, state.foodSelected);
   }
 };
 

@@ -2,6 +2,7 @@ import Vue3PersianDatetimePicker from 'vue3-persian-datetime-picker'
 import VueTransitions from '@morev/vue-transitions';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
+import '@mdi/font/css/materialdesignicons.css'
 import "vue-toastification/dist/index.css";
 import { createVuetify } from 'vuetify'
 import '@morev/vue-transitions/styles';

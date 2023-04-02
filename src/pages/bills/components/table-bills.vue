@@ -21,7 +21,7 @@ const state = reactive({
       icon: "fa-duotone fa-hourglass-start text-red-500",
     },
     {
-      name: "هزینه بازی",
+      name: "مبلغ واحد",
       icon: "fa-duotone fa-money-bill-1-wave text-green-500",
     },
     { name: "خوراکی ها", icon: "fa-duotone fa-burger-soda text-yellow-700" },
@@ -30,8 +30,12 @@ const state = reactive({
       icon: "fa-brands fa-playstation text-blue-500",
     },
     {
+      name: "روش پرداخت",
+      icon: "fa-duotone fa-cash-register text-red-700",
+    },
+    {
       name: "مبلغ پرداخت شده",
-      icon: "fa-duotone fa-cash-register text-green-700",
+      icon: "fa-duotone fa-money-bill-1-wave text-green-500",
     },
   ],
   dialog: {
@@ -145,6 +149,22 @@ const requestGetBillFilter = (filterData) => {
       console.log(error);
     })
 }
+//////////////////////////////
+const handlePaymentMethod = (paymentMethod, finalCost) => {
+  if (finalCost) {
+    switch (paymentMethod) {
+      case 0:
+        return 'نقد';
+      case 1:
+        return 'کارت';
+      case 2:
+        return 'اکانت';
+    }
+  } else {
+    return '-'
+  }
+
+}
 </script>
 <template>
   <div class="overflow-y-scroll h-[86vh] flex items-center flex-col justify-start mt-15 rounded-md w-[90vw]">
@@ -193,11 +213,12 @@ const requestGetBillFilter = (filterData) => {
             </div>
           </td>
           <td>{{ handleFindConsole(items.systemId) }}</td>
+          <td>{{ handlePaymentMethod(items.paymentMethod, items.finalCost) }}</td>
           <td>
             <p class="font-bold"> {{
               items.finalCost
               ? `${items.finalCost?.toLocaleString()} تومان`
-              : "هنوز تمام نشده است"
+              : "-"
             }}</p>
           </td>
         </tr>
@@ -242,6 +263,10 @@ const requestGetBillFilter = (filterData) => {
             <i class="fa-brands fa-playstation text-blue-500" />
           </div>
           <div class="flex items-center justify-end py-1">
+            <p class="ml-1">روش پرداخت</p>
+            <i class="fa-duotone fa-cash-register text-green-700" />
+          </div>
+          <div class="flex items-center justify-end py-1">
             <p class="ml-1">پرداخت شده</p>
             <i class="fa-duotone fa-cash-register text-green-700" />
           </div>
@@ -270,13 +295,13 @@ const requestGetBillFilter = (filterData) => {
           </div>
           </p>
           <p class="py-1">{{ handleFindConsole(items.systemId) }}</p>
-          <p>
+          <p class="py-1">{{ handlePaymentMethod(items.paymentMethod, items.finalCost) }}</p>
           <p class="font-bold py-1"> {{
             items.finalCost
             ? `${items.finalCost?.toLocaleString()} تومان`
-            : "هنوز تمام نشده است"
+            : "-"
           }}</p>
-          </p>
+
         </div>
       </div>
     </div>

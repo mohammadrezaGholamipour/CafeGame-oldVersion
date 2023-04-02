@@ -198,21 +198,29 @@ const handleContinuePlaystation = () => {
   }, 200);
 };
 ///////////////////////////
-const handleFinishPlaystation = (foodSelected) => {
-  const billId = state.payModal.billPlaystation.id;
-  const food = [];
-  if (foodSelected.length) {
-    for (const item of foodSelected) {
-      food.push({
-        foodId: item.id,
-        count: item.count,
-      });
-    }
-    requestSetFood(billId, food);
-  } else {
-    requestFinishBill(state.payModal.playstation, new Date().toISOString());
-  }
+const handleFinishPlaystation = (paymentMethod, foodSelected) => {
+  requestBillPayment(paymentMethod, foodSelected)
 };
+///////////////////////////
+const requestBillPayment = (paymentMethod, foodSelected) => {
+  const billId = state.payModal.billPlaystation.id;
+  billApi.paymentMethod(billId, paymentMethod)
+    .then(() => {
+      const food = [];
+      if (foodSelected.length) {
+        for (const item of foodSelected) {
+          food.push({
+            foodId: item.id,
+            count: item.count,
+          });
+        }
+        requestSetFood(billId, food);
+      } else {
+        requestFinishBill(state.payModal.playstation, new Date().toISOString());
+      }
+    })
+    .catch(() => { toast.error('خطا در سرور لطفا مجددا امتحان کنید') })
+}
 ///////////////////////////
 const getImageUrl = (imagePath) => {
   return new URL(imagePath, import.meta.url).href

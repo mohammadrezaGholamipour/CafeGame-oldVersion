@@ -264,11 +264,11 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
           </div>
           <div class="flex items-center justify-end py-1">
             <p class="ml-1">روش پرداخت</p>
-            <i class="fa-duotone fa-cash-register text-green-700" />
+            <i class="fa-duotone fa-cash-register text-red-700" />
           </div>
           <div class="flex items-center justify-end py-1">
             <p class="ml-1">پرداخت شده</p>
-            <i class="fa-duotone fa-cash-register text-green-700" />
+            <i class="fa-duotone fa-money-bill-1-wave text-green-500" />
           </div>
           <!-- ////////////////////////////// -->
         </div>

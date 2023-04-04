@@ -277,6 +277,7 @@ const requestRemoveBill = (status) => {
         state.confirmDialog.playstation.showAndHideListMoney = false;
         state.confirmDialog.playstation.moneySelected = {};
         clearInterval(state.confirmDialog.playstation.timer)
+        state.confirmDialog.playstation.timer = "";
         state.confirmDialog.playstation.time = {
           hours: "00",
           minutes: "00",

@@ -1,9 +1,11 @@
 <script setup>
+import SettingConsoleDialog from './setting-console-dialog.vue'
 import { reactive, watch, onMounted } from "vue";
 import { useToast } from "vue-toastification";
 import { useRouter } from "vue-router";
 import PayModal from "./pay-modal.vue";
 import billApi from "@/api/bill";
+import ConfirmDialog from '../../../components/confirm-dialog.vue';
 ////////////////////////
 const props = defineProps(["consoleList", "moneyList", "foodList", "billList"]);
 const emit = defineEmits(["requestGetBills"]);
@@ -18,6 +20,15 @@ const state = reactive({
     foodList: [],
     status: false,
   },
+  settingDialog: {
+    playstation: {},
+    status: false
+  },
+  confirmDialog: {
+    text: "فاکتور مورد نظر حذف شود؟",
+    playstation: {},
+    status: false
+  }
 });
 /////////////////////
 onMounted(() => {
@@ -237,6 +248,48 @@ const requestSetFood = (billId, food) => {
     });
 };
 ///////////////////////////
+const handleShowSettingDialog = (playstation) => {
+  state.settingDialog.playstation = playstation
+  state.settingDialog.status = true
+}
+/////////////////////////
+const handleCloseSettingConsoleDialog = (status) => {
+  if (status) {
+    console.log("salam");
+  } else {
+    state.settingDialog.status = false
+    state.settingDialog.playstation = {}
+  }
+}
+//////////////////////////
+const handleRemoveBill = (playstation) => {
+  state.confirmDialog.status = true
+  state.confirmDialog.playstation = playstation
+}
+//////////////////////
+const requestRemoveBill = (status) => {
+  state.confirmDialog.status = false
+  if (status) {
+    const billId = props.billList.find((item) => item.systemId === state.confirmDialog.playstation.id && !item.endTime).id
+    billApi.remove(billId)
+      .then(() => {
+        state.confirmDialog.playstation.status = false
+        state.confirmDialog.playstation.showAndHideListMoney = false;
+        state.confirmDialog.playstation.moneySelected = {};
+        clearInterval(state.confirmDialog.playstation.timer)
+        state.confirmDialog.playstation.time = {
+          hours: "00",
+          minutes: "00",
+          seconds: "00",
+        };
+        state.confirmDialog.playstation.userMoney = "";
+        emit('requestGetBills')
+      })
+      .catch(() => {
+        toast.error('فاکتور مورد نظر حذف نشد')
+      })
+  }
+}
 </script>
 <template>
   <div class="w-full h-full mt-10 p-3 flex flex-wrap items-center justify-center">
@@ -259,7 +312,13 @@ const requestSetFood = (billId, food) => {
       </div>
       <!-- /////////////////////////////// -->
       <transition-fade>
-        <i v-if="playstation.status" class="fa-duotone fa-sliders fa-beat setting-console"></i>
+        <i v-if="playstation.status" @click="handleShowSettingDialog(playstation)"
+          class="fa-duotone fa-sliders fa-beat setting-console"></i>
+      </transition-fade>
+      <!-- /////////////////////////////// -->
+      <transition-fade>
+        <i v-if="playstation.status" @click="handleRemoveBill(playstation)"
+          class="fa-duotone fa-trash fa-beat remove-bill"></i>
       </transition-fade>
       <!-- /////////////////////////////// -->
       <div class="flex w-full flex-col justify-start items-center">
@@ -300,6 +359,10 @@ const requestSetFood = (billId, food) => {
     </div>
     <!-- ////////////////////////////////////// -->
     <PayModal @continue="handleContinuePlaystation" @finish="handleFinishPlaystation" :payModal="state.payModal" />
+    <!-- ////////////////////////////////////// -->
+    <SettingConsoleDialog @close="handleCloseSettingConsoleDialog" :settingDialog="state.settingDialog" />
+    <!-- ////////////////////////////////////// -->
+    <ConfirmDialog @acceptOrCansel="requestRemoveBill" :confirmDialog="state.confirmDialog" />
     <!-- ////////////////////////////////////// -->
   </div>
 </template>

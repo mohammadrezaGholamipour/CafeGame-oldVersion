@@ -70,7 +70,7 @@ const handleBill = (status, paymentMethod) => {
       </transition-slide>
       <!-- //////////////////////////////////// -->
       <div class="ModalFooter p-2">
-        <button @click="emit('continue')" class="BtnRemove">
+        <button v-show="!state.faktorOrFood" @click="emit('continue')" class="BtnRemove">
           <i class="fa-duotone fa-chevrons-left mr-2"></i>
           <p>ادامه دادن</p>
         </button>

@@ -2,17 +2,12 @@
 const emit = defineEmits(["acceptOrCansel"]);
 const props = defineProps(["confirmDialog"]);
 //////////////////////////////////////////
-const handleCloseDialog = (value) => {
-  emit("acceptOrCansel", value);
+const handleCloseDialog = (status) => {
+  emit("acceptOrCansel", status);
 };
 </script>
 <template>
-  <v-dialog
-    :modelValue="props.confirmDialog.status"
-    :update:modelValue="handleCloseDialog"
-    persistent
-    width="333"
-  >
+  <v-dialog :modelValue="props.confirmDialog.status" :update:modelValue="handleCloseDialog" persistent width="333">
     <div class="flex w-full flex-col justify-center bg-white rounded-md">
       <div class="ModalMain">
         <p class="text-xl text-center">{{ props.confirmDialog.text }}</p>

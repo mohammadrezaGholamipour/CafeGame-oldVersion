@@ -357,6 +357,12 @@
   .parent-mobile-table {
     @apply flex items-center flex-row-reverse justify-between mt-3 w-full p-2 bg-white shadow-lg rounded-md;
   }
+  .remove-bill{
+    @apply cursor-pointer text-xl;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+  }
   @media only screen and (min-width: 576px) {
     .ModalDivOne {
       max-width: 600px !important;

@@ -100,10 +100,10 @@ const handleShowEndTime = (endTime) => {
       case finishFaktorDay + 3:
         return 'سه روز پیش';
       default:
-        return moment(`${endTime}z`).locale("fa").format("YY/MM/DD");
+        return moment(endTime).locale("fa").format("YY/MM/DD");
     }
   } else {
-    return moment(`${endTime}z`).locale("fa").format("YY/MM/DD")
+    return moment(endTime).locale("fa").format("YY/MM/DD")
   }
 
 
@@ -223,7 +223,7 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
           </td>
         </tr>
         <tr v-else>
-          <td colspan="6">
+          <td colspan="7">
             <div class="w-full flex items-center justify-center">
               <p class="text-center p-2 font-bold text-red-500 text-lg">
                 لیست تراکنش ها خالی میباشد

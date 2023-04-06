@@ -1,6 +1,7 @@
 import { useToast } from "vue-toastification";
 import console from "@/api/console";
 import { defineStore } from 'pinia'
+import moment from "jalali-moment";
 import money from "@/api/money";
 import food from "@/api/food";
 import bill from "@/api/bill";
@@ -77,7 +78,16 @@ export const useStore = defineStore('pinia', {
       bill
         .get()
         .then((response) => {
-          this.billList = response.reverse();
+          / ////////////////
+          let notFinished = []
+          let billSort = []
+          ///////////////////
+          notFinished = response.filter(item => !item.endTime)
+          /////////////////
+          billSort = response.sort((first, two) => { Number(moment(first.endTime).locale("fa").format("DD")) - Number(moment(two.endTime).locale("fa").format("DD")) })
+          billSort.reverse()
+          this.billList = [...notFinished, ...billSort]
+          ////////////////////
         })
         .catch(() => {
           toast.error("لیست فاکتور ها دریافت نشد");

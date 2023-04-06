@@ -39,7 +39,7 @@ const consoleSelected = (consoleName) => {
 }
 </script>
 <template>
-  <v-dialog :update:modelValue="handleAcceptOrCanselModal" :modelValue="props.dialog.status" height="310" width="600"
+  <v-dialog :update:modelValue="handleAcceptOrCanselModal" :modelValue="props.dialog.status" height="310" width="300"
     persistent>
     <div class="flex w-full h-full flex-col justify-between bg-white rounded-md">
       <div class="ModalHeader">
@@ -48,9 +48,9 @@ const consoleSelected = (consoleName) => {
         <p class="font-bold">فیلتر ها</p>
       </div>
       <!-- /////////////////////// -->
-      <div class="flex flex-col-reverse justify-center items-center p-2">
+      <div class="flex flex-col justify-start items-s p-2">
         <!-- ////////////////////////// -->
-        <div class="relative w-full flex mt-5 justify-center">
+        <div class="relative w-full flex justify-center">
           <div @click.self="state.playstation.status = !state.playstation.status" class="SelectedConsoleFilter">
             <i v-if="state.playstation.value" @click="state.playstation.value = ''"
               class="fa-solid fa-circle-xmark text-red-600 cursor-pointer w-[20%]"></i>
@@ -70,7 +70,7 @@ const consoleSelected = (consoleName) => {
           </transition-expand>
         </div>
         <!-- /////////////////// -->
-        <div class="flex flex-row-reverse justify-evenly flex-wrap w-full items-center">
+        <div class="flex flex-col justify-center w-full mt-3 items-center">
           <DatePicker format="YYYY-MM-DD HH:mm:ss" display-format="jDD/jMMMM/jYYYY" class="m-1" dir="rtl"
             v-model="state.startDate" simple placeholder="تاریخ شروع" />
           <DatePicker format="YYYY-MM-DD HH:mm:ss" display-format="jDD/jMMMM/jYYYY" class="m-1" dir="rtl"
@@ -93,6 +93,10 @@ const consoleSelected = (consoleName) => {
   </v-dialog>
 </template>
 <style>
+.vpd-main {
+  width: 100%;
+}
+
 .vpd-input-group {
   height: 40px !important;
 }

@@ -25,6 +25,7 @@ const state = reactive({
       icon: "fa-duotone fa-money-bill-1-wave text-green-500",
     },
     { name: "خوراکی ها", icon: "fa-duotone fa-burger-soda text-yellow-700" },
+    { name: "هزینه بازی شده", icon: "fa-duotone fa-coin text-green-600" },
     {
       name: "شماره دستگاه",
       icon: "fa-brands fa-playstation text-blue-500",
@@ -165,6 +166,25 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
   }
 
 }
+//////////////////////////
+const handlePlayMoney = (bill) => {
+  let totalMoney = 0
+  if (bill.billFoods.length) {
+    bill.moneyPlayGame = bill.finalCost
+    for (const foodBill of bill.billFoods) {
+      for (const food of props.foods) {
+        if (foodBill.foodId === food.id) {
+          bill.moneyPlayGame -= food.cost * foodBill.count
+        }
+      }
+    }
+    totalMoney += bill.moneyPlayGame
+  } else {
+    totalMoney += bill.finalCost
+  }
+  return totalMoney ? `${totalMoney.toLocaleString()} تومان` : '-'
+}
+
 </script>
 <template>
   <div class="overflow-y-scroll h-[86vh] flex items-center flex-col justify-start mt-15 rounded-md w-[90vw]">
@@ -212,6 +232,7 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
               <p v-else>بدون خوراکی</p>
             </div>
           </td>
+          <td>{{ handlePlayMoney(items) }}</td>
           <td>{{ handleFindConsole(items.systemId) }}</td>
           <td>{{ handlePaymentMethod(items.paymentMethod, items.finalCost) }}</td>
           <td>
@@ -223,7 +244,7 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
           </td>
         </tr>
         <tr v-else>
-          <td colspan="7">
+          <td colspan="8">
             <div class="w-full flex items-center justify-center">
               <p class="text-center p-2 font-bold text-red-500 text-lg">
                 لیست تراکنش ها خالی میباشد
@@ -301,7 +322,6 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
             ? `${items.finalCost?.toLocaleString()} تومان`
             : "-"
           }}</p>
-
         </div>
       </div>
     </div>

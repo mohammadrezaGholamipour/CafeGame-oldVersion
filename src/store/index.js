@@ -78,14 +78,21 @@ export const useStore = defineStore('pinia', {
       bill
         .get()
         .then((response) => {
-          / ////////////////
+          ////////////////
           let notFinished = []
           let billSort = []
           ///////////////////
-          notFinished = response.filter(item => !item.endTime)
+          response.forEach(item => {
+            if (item.endTime) {
+              billSort.push(item)
+            } else {
+              notFinished.push(item)
+            }
+          })
           /////////////////
-          billSort = response.sort((first, two) => { Number(moment(first.endTime).locale("fa").format("DD")) - Number(moment(two.endTime).locale("fa").format("DD")) })
+          billSort.sort((a, b) => Number(moment(a.endTime).locale("fa").format("DD")) - Number(moment(b.endTime).locale("fa").format("DD")))
           billSort.reverse()
+          /////////////////
           this.billList = [...notFinished, ...billSort]
           ////////////////////
         })

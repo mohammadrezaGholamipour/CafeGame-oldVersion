@@ -144,7 +144,7 @@
     top: 10px;
   }
   .SelectedConsoleFilter {
-    @apply flex items-center w-full relative justify-center text-center cursor-pointer bg-slate-200 rounded-md px-1 p-3;
+    @apply flex items-center shadow-lg w-full relative justify-center text-center cursor-pointer bg-slate-300 rounded-md px-1 p-3;
     width: 150px;
   }
   .UlMoney {

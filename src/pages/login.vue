@@ -1,7 +1,8 @@
 <script setup>
 import { useForm, ErrorMessage, useField } from "vee-validate";
+import Loading from "@/components/loading.vue";
 import { useToast } from "vue-toastification";
-import AuthService from "../util/AuthService";
+import AuthService from "@/util/AuthService";
 import accountApi from '@/api/account/login'
 import { useStore } from '@/store/index'
 import { useRouter } from "vue-router";
@@ -13,6 +14,7 @@ const toast = useToast();
 const store = useStore()
 ///////////////////////////
 const state = reactive({
+  loading: false,
   timer: false,
   schema: yup.object({
     email: yup
@@ -46,6 +48,7 @@ const onSubmit = () => {
 }
 ///////////////////////////////
 const handleAcceptLogin = (values) => {
+  state.loading = true
   const userlogin = {
     email: values.email,
     password: values.password,
@@ -68,30 +71,36 @@ const handleAcceptLogin = (values) => {
         toast.error('ارتباط با سرور وصل نمیباشد')
       }
     })
+    .finally(() => {
+      state.loading = false
+    })
 
 }
 </script>
 <template>
-  <div class="parent-login">
-    <div class="login">
-      <img class="Logo" src="../assets/image/logo.png" alt="لوگو" />
-      <!-- //////////////////////// -->
-      <div class="flex flex-col items-center justify-center">
-        <input v-model="email" placeholder="ایمیل" class="LoginInput" type="text" />
-        <transition-expand>
-          <ErrorMessage v-if="email" class="ErrorMessage" name="email" />
-        </transition-expand>
+  <div class="parent-login">|
+    <transitions-scale group>
+      <Loading v-if="state.loading" />
+      <div v-else class="login">
+        <img class="Logo" src="../assets/image/logo.png" alt="لوگو" />
+        <!-- //////////////////////// -->
+        <div class="flex flex-col items-center justify-center">
+          <input v-model="email" placeholder="ایمیل" class="LoginInput" type="text" />
+          <transition-expand>
+            <ErrorMessage v-if="email" class="ErrorMessage" name="email" />
+          </transition-expand>
+        </div>
+        <!-- //////////////////////// -->
+        <div class="flex flex-col items-center justify-center">
+          <input v-model="password" placeholder="رمزعبور" class="LoginInput" type="password" />
+          <transition-expand>
+            <ErrorMessage v-if="password" class="ErrorMessage" name="password" />
+          </transition-expand>
+        </div>
+        <!-- //////////////////////// -->
+        <button @click="onSubmit" class="loginBtn">وارد شدن</button>
+        <p class="mt-3 text-white cursor-pointer" @click="router.push('/register')">ثبت نام نکرده اید؟</p>
       </div>
-      <!-- //////////////////////// -->
-      <div class="flex flex-col items-center justify-center">
-        <input v-model="password" placeholder="رمزعبور" class="LoginInput" type="password" />
-        <transition-expand>
-          <ErrorMessage v-if="password" class="ErrorMessage" name="password" />
-        </transition-expand>
-      </div>
-      <!-- //////////////////////// -->
-      <button @click="onSubmit" class="loginBtn">وارد شدن</button>
-      <p class="mt-3 text-white cursor-pointer" @click="router.push('/register')">ثبت نام نکرده اید؟</p>
-    </div>
+    </transitions-scale>
   </div>
 </template>

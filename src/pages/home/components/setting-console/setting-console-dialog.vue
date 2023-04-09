@@ -1,5 +1,9 @@
 <script setup>
 import { reactive } from 'vue';
+import Food from './components/food.vue';
+import ChangeBillMoney from './components/changeBillMoney.vue';
+import AlarmBill from './components/alarmBill.vue';
+import EditBill from './components/editBill.vue';
 /////////////////////////////
 const props = defineProps(["settingDialog"]);
 const emit = defineEmits(["close"]);
@@ -11,12 +15,32 @@ const state = reactive({
     { name: 'گزاشتن یاد اور', icon: '', value: 3 },
     { name: 'تغییر در فاکتور', icon: '', value: 4 },
   ],
-  tabSetting: 'two'
+  settingData: [
+    { name: 'food', value: '' },
+    { name: 'changeBillMoney', value: '' },
+    { name: 'alarmBill', value: '' },
+    { name: 'editBill', value: '' },
+  ],
+  tabSetting: 1,
 })
+//////////////////////////////////////////
+const handleFindComponent = (tabSetting) => {
+  switch (tabSetting) {
+    case 1:
+      return Food;
+    case 2:
+      return ChangeBillMoney;
+    case 3:
+      return AlarmBill;
+    case 4:
+      return EditBill;
+  }
+}
 //////////////////////////////////////////
 const handleCloseDialog = (status) => {
   emit('close', status)
 }
+//////////////////////////////////////////
 </script>
 <template>
   <v-dialog v-model="props.settingDialog.status" persistent width="592">
@@ -28,24 +52,18 @@ const handleCloseDialog = (status) => {
         <p class="font-bold">تنظیمات</p>
       </div>
       <!-- //////////////////////////////////// -->
-      <div class="ModalMain p-0 justify-center items-center">
+      <div class=" ModalMain overflow-visible  justify-center items-center" style="padding: 0px;">
         <div class="flex w-full items-center justify-center">
           <v-tabs class="" v-model="state.tabSetting" bg-color="red">
             <v-tab v-for="item in state.tabSettingList" :key="item.value" :value="item.value">{{ item.name }}</v-tab>
           </v-tabs>
         </div>
-        <v-window class="w-full bg-black flex mt-2 justify-center items-center" v-model="state.tabSetting">
-          <v-window-item :value="1">
-            One
-          </v-window-item>
-          <v-window-item :value="2">
-            Two
-          </v-window-item>
-          <v-window-item :value="3">
-            Three
-          </v-window-item>
-          <v-window-item :value="4">
-            Three
+        <v-window class="w-ful overflow-visible flex my-2 justify-center items-center" v-model="state.tabSetting">
+          <v-window-item :value="state.tabSetting">
+            <transition-fade group>
+              <component :playstation="props.settingDialog.playstation" :is=handleFindComponent(state.tabSetting)>
+              </component>
+            </transition-fade>
           </v-window-item>
         </v-window>
       </div>

@@ -1,5 +1,5 @@
 <script setup>
-import SettingConsoleDialog from './setting-console-dialog.vue'
+import SettingConsoleDialog from './setting-console/setting-console-dialog.vue'
 import { reactive, watch, onMounted } from "vue";
 import { useToast } from "vue-toastification";
 import { useRouter } from "vue-router";

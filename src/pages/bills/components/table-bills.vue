@@ -207,7 +207,7 @@ const handlePlayMoney = (bill) => {
           <td>{{ index + 1 }}</td>
           <td>
             <div class="flex items-center justify-between">
-              <p class="ml-2">{{ items.endTime ? handleShowEndTime(items.endTime) : 'هنوز تمام نشده است' }}</p>
+              <p class="ml-2">{{ items.endTime ? handleShowEndTime(items.endTime) : ' تمام نشده است' }}</p>
               <button @click="
                 handleShowDialog(
                   {
@@ -297,7 +297,7 @@ const handlePlayMoney = (bill) => {
           <p class="py-1">{{ index + 1 }}</p>
           <p>
           <div class="flex items-center justify-between py-1">
-            <p class="ml-2">{{ items.endTime ? handleShowEndTime(items.endTime) : 'هنوز تمام نشده است' }}</p>
+            <p class="ml-2">{{ items.endTime ? handleShowEndTime(items.endTime) : 'تمام نشده است' }}</p>
             <p class="text-red-500 font-bold"
               @click="handleShowDialog({ start: items.startTime, end: items.endTime, }, 'time')">
               نمایش

@@ -229,7 +229,7 @@
     @apply flex m-1 items-center justify-between p-2 px-5 rounded-md text-green-900 bg-green-200 hover:bg-green-400 transition-all;
   }
   .Parent-food-store {
-    @apply flex w-full text-center  overflow-y-scroll  justify-center items-center;
+    @apply flex w-full text-center overflow-y-scroll justify-center items-center;
   }
   .consolePay {
     @apply p-2 text-3xl;

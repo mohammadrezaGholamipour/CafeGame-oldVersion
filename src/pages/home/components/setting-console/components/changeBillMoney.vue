@@ -1,13 +1,15 @@
 <script setup>
 import { useStore } from '@/store/index'
-import { reactive } from 'vue';
+import { reactive, watch } from 'vue';
 /////////////////////////
+const emit = defineEmits(["consoleSetting"]);
 const props = defineProps(["playstation"]);
 ////////////////////////////////
 const store = useStore()
 ////////////////////////////////
 const state = reactive({
   money: {
+    name: 'changeBillMoney',
     value: '',
     status: false
   }
@@ -17,6 +19,12 @@ const handleMoneySelect = (money) => {
   state.money.value = money
   state.money.status = false
 }
+//////////////////////
+watch(() => state.money.value, (value) => {
+  if (value.rate !== props.playstation.moneySelected.rate) {
+    emit('consoleSetting', state.money)
+  }
+})
 </script>
 <template>
   <div class="flex w-full justify-center items-center">

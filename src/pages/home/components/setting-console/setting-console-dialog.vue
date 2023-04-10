@@ -41,6 +41,11 @@ const handleCloseDialog = (status) => {
   emit('close', status)
 }
 //////////////////////////////////////////
+const handleConsoleSetting = (data) => {
+  const consoleSetting = state.settingData.find((item) => item.name === data.name)
+  consoleSetting.value = data.value
+  console.log(state.settingData);
+}
 </script>
 <template>
   <v-dialog v-model="props.settingDialog.status" persistent width="592">
@@ -58,12 +63,15 @@ const handleCloseDialog = (status) => {
             <v-tab v-for="item in state.tabSettingList" :key="item.value" :value="item.value">{{ item.name }}</v-tab>
           </v-tabs>
         </div>
-        <v-window class="w-ful overflow-visible flex my-2 justify-center items-center" v-model="state.tabSetting">
-          <v-window-item :value="state.tabSetting">
-            <transition-fade group>
-              <component :playstation="props.settingDialog.playstation" :is=handleFindComponent(state.tabSetting)>
+        <v-window :class="state.tabSetting !== 2 ? 'overflow-y-scroll' : 'overflow-visible'"
+          class="w-full flex my-2 justify-center items-center" v-model="state.tabSetting">
+          <v-window-item :class="state.tabSetting !== 2 ? 'overflow-y-scroll' : 'overflow-visible'"
+            :value="state.tabSetting">
+            <transition-scale group>
+              <component @consoleSetting="handleConsoleSetting" :playstation="props.settingDialog.playstation"
+                :is=handleFindComponent(state.tabSetting)>
               </component>
-            </transition-fade>
+            </transition-scale>
           </v-window-item>
         </v-window>
       </div>
@@ -82,3 +90,9 @@ const handleCloseDialog = (status) => {
     </div>
   </v-dialog>
 </template>
+<style>
+.v-window__container {
+  width: 100%;
+  max-height: 250px;
+}
+</style>

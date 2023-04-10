@@ -1,12 +1,18 @@
 <script setup>
-import { reactive } from 'vue';
-import Food from './components/food.vue';
 import ChangeBillMoney from './components/changeBillMoney.vue';
 import AlarmBill from './components/alarmBill.vue';
 import EditBill from './components/editBill.vue';
+import Food from './components/food.vue';
+import { reactive, watch } from 'vue';
 /////////////////////////////
 const props = defineProps(["settingDialog"]);
 const emit = defineEmits(["close"]);
+//////////////////////////////////////////
+watch(() => props.settingDialog.status, (value) => {
+  if (!value) {
+    state.settingData.forEach((item) => item.value = '')
+  }
+})
 //////////////////////////////////////////
 const state = reactive({
   tabSettingList: [
@@ -38,14 +44,20 @@ const handleFindComponent = (tabSetting) => {
 }
 //////////////////////////////////////////
 const handleCloseDialog = (status) => {
-  emit('close', status)
+  if (status) {
+    const consoleSetting = state.settingData.filter((item) => item.value)
+    emit('close', status, consoleSetting)
+  } else {
+    emit('close', status)
+  }
+
 }
 //////////////////////////////////////////
 const handleConsoleSetting = (data) => {
   const consoleSetting = state.settingData.find((item) => item.name === data.name)
   consoleSetting.value = data.value
-  console.log(state.settingData);
 }
+///////////////////////
 </script>
 <template>
   <v-dialog v-model="props.settingDialog.status" persistent width="592">

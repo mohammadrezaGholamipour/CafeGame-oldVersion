@@ -253,9 +253,9 @@ const handleShowSettingDialog = (playstation) => {
   state.settingDialog.status = true
 }
 /////////////////////////
-const handleCloseSettingConsoleDialog = (status) => {
-  if (status) {
-    console.log("salam");
+const handleCloseSettingConsoleDialog = (status, consoleSetting) => {
+  if (status && consoleSetting.length) {
+    console.log(consoleSetting, state.settingDialog.playstation);
   } else {
     state.settingDialog.status = false
     state.settingDialog.playstation = {}

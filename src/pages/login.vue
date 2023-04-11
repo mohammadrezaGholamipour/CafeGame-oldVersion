@@ -79,7 +79,7 @@ const handleAcceptLogin = (values) => {
 </script>
 <template>
   <div class="parent-login">|
-    <transitions-scale group>
+    <transition-scale group>
       <Loading v-if="state.loading" />
       <div v-else class="login">
         <img class="Logo" src="../assets/image/logo.png" alt="لوگو" />
@@ -101,6 +101,6 @@ const handleAcceptLogin = (values) => {
         <button @click="onSubmit" class="loginBtn">وارد شدن</button>
         <p class="mt-3 text-white cursor-pointer" @click="router.push('/register')">ثبت نام نکرده اید؟</p>
       </div>
-    </transitions-scale>
+    </transition-scale>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, computed, watch } from "vue";
+import { reactive, computed, watch, onMounted } from "vue";
 import { useWindowSize } from '@vueuse/core'
 import { useRouter } from "vue-router";
 import { useStore } from '@/store/index'
@@ -23,8 +23,14 @@ const state = reactive({
   }
 });
 //////////////////////////
+onMounted(() => {
+  state.food.value = props.playstation?.billFoods
+  emit("consoleSetting", state.food);
+});
+//////////////////////////
 const foodList = computed(() => {
   const foodStoreList = store.getFoodList;
+  state.food.value = props.playstation?.billFoods
   if (props.playstation?.billFoods?.length) {
     foodStoreList.forEach((food) => {
       food.count = 0
@@ -51,20 +57,8 @@ const handleCount = (foodId, type) => {
   }
 };
 //////////////////////////
-watch(
-  () => foodList.value,
-  (value) => {
-    const selected = value.some((items) => items.count);
-    if (selected) {
-      state.food.value = value.filter((items) => !!items.count);
-      emit("consoleSetting", state.food);
-    } else {
-      state.food.value = ''
-      emit("consoleSetting", state.food);
-    }
-  },
-  { deep: true }
-);
+
+//////////////////////////
 </script>
 <template>
   <div class="Parent-food-store">

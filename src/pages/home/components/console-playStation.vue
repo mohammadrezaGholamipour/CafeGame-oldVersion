@@ -249,6 +249,7 @@ const requestSetFoodAndFinishBill = (billId, food) => {
 };
 ///////////////////////////
 const requestSetFood = (billId, food) => {
+  console.log(billId, food);
   billApi
     .setFood(billId, food)
     .then(() => { emit("requestGetBills") })
@@ -282,11 +283,13 @@ const handleCloseSettingConsoleDialog = (status, consoleSetting) => {
       switch (item.name) {
         case 'food':
           const food = [];
-          for (const foodItem of item.value) {
-            food.push({
-              foodId: foodItem.id,
-              count: foodItem.count,
-            });
+          if (item.value.length) {
+            for (const foodItem of item.value) {
+              food.push({
+                foodId: foodItem.id,
+                count: foodItem.count,
+              });
+            }
           }
           requestSetFood(state.settingDialog.playstation.billId, food)
           break;

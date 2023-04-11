@@ -8,11 +8,11 @@ import { reactive, watch } from 'vue';
 const props = defineProps(["settingDialog"]);
 const emit = defineEmits(["close"]);
 //////////////////////////////////////////
-watch(() => props.settingDialog.status, (value) => {
-  if (!value) {
-    state.settingData.forEach((item) => item.value = '')
-  }
-})
+// watch(() => props.settingDialog.status, (value) => {
+//   if (!value) {
+//     state.settingData.forEach((item) => item.value = '')
+//   }
+// })
 //////////////////////////////////////////
 const state = reactive({
   tabSettingList: [
@@ -45,7 +45,7 @@ const handleFindComponent = (tabSetting) => {
 //////////////////////////////////////////
 const handleCloseDialog = (status) => {
   if (status) {
-    const consoleSetting = state.settingData.filter((item) => item.value)
+    const consoleSetting = state.settingData.filter((item) => !!item.value)
     emit('close', status, consoleSetting)
   } else {
     emit('close', status)

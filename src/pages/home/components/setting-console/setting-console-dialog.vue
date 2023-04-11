@@ -79,11 +79,11 @@ const handleConsoleSetting = (data) => {
           class="w-full flex my-2 justify-center items-center" v-model="state.tabSetting">
           <v-window-item :class="state.tabSetting !== 2 ? 'overflow-y-scroll' : 'overflow-visible'"
             :value="state.tabSetting">
-            <transition-scale group>
+            <transition-expand>
               <component @consoleSetting="handleConsoleSetting" :playstation="props.settingDialog.playstation"
                 :is=handleFindComponent(state.tabSetting)>
               </component>
-            </transition-scale>
+            </transition-expand>
           </v-window-item>
         </v-window>
       </div>

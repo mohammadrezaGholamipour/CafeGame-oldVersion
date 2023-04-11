@@ -6,5 +6,6 @@ export default {
   setFood: (id, setfoods) => HttClient.put(`bill/${id}/set-foods`, setfoods),
   close: (id, finishInfo) => HttClient.put(`bill/${id}/close`, finishInfo),
   remove: (id) => HttClient.delete(`bill/${id}`),
+  changeMoney: (id, money) => HttClient.put(`bill/${id}/change-rate`, money),
   paymentMethod: (billId, paymentMethod) => HttClient.put(`bill/${billId}/change-payment`, paymentMethod),
 };

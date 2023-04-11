@@ -5,6 +5,7 @@ import { useRouter } from "vue-router";
 import { useStore } from '@/store/index'
 ///////////////////////////////////////
 const emit = defineEmits(["consoleSetting"]);
+const props = defineProps(["playstation"]);
 //////////////////////////
 const { width } = useWindowSize()
 const router = useRouter()
@@ -24,7 +25,18 @@ const state = reactive({
 //////////////////////////
 const foodList = computed(() => {
   const foodStoreList = store.getFoodList;
-  foodStoreList.forEach((items) => (items.count = 0));
+  if (props.playstation?.billFoods?.length) {
+    foodStoreList.forEach((food) => {
+      food.count = 0
+      for (const foodSelected of props.playstation.billFoods) {
+        if (food.id === foodSelected.foodId) {
+          food.count = foodSelected.count
+        }
+      }
+    });
+  } else {
+    foodStoreList.forEach((food) => (food.count = 0));
+  }
   return foodStoreList;
 });
 //////////////////////////
@@ -93,7 +105,7 @@ watch(
         </td>
       </tr>
     </table>
-    <div v-if="width <= 500" class="w-full flex flex-col items-center justify-start">
+    <div v-if="width <= 500" class="w-full flex flex-col items-center justify-start bg-slate-200">
       <div v-if="store.getFoodList.length" v-for="(items, index) in foodList" :key="index" class="parent-mobile-table">
         <div class="flex flex-col justify-between items-end">
           <!-- ////////////////////////////// -->

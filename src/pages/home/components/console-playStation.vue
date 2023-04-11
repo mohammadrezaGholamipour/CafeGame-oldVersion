@@ -1,11 +1,11 @@
 <script setup>
 import SettingConsoleDialog from './setting-console/setting-console-dialog.vue'
+import ConfirmDialog from '@/components/confirm-dialog.vue';
 import { reactive, watch, onMounted } from "vue";
 import { useToast } from "vue-toastification";
 import { useRouter } from "vue-router";
 import PayModal from "./pay-modal.vue";
 import billApi from "@/api/bill";
-import ConfirmDialog from '../../../components/confirm-dialog.vue';
 ////////////////////////
 const props = defineProps(["consoleList", "moneyList", "foodList", "billList"]);
 const emit = defineEmits(["requestGetBills"]);
@@ -225,7 +225,7 @@ const requestBillPayment = (paymentMethod, foodSelected) => {
             count: item.count,
           });
         }
-        requestSetFood(billId, food);
+        requestSetFoodAndFinishBill(billId, food);
       } else {
         requestFinishBill(state.payModal.playstation, new Date().toISOString());
       }
@@ -237,7 +237,7 @@ const getImageUrl = (imagePath) => {
   return new URL(imagePath, import.meta.url).href
 }
 ///////////////////////////
-const requestSetFood = (billId, food) => {
+const requestSetFoodAndFinishBill = (billId, food) => {
   billApi
     .setFood(billId, food)
     .then(() => {
@@ -248,14 +248,55 @@ const requestSetFood = (billId, food) => {
     });
 };
 ///////////////////////////
+const requestSetFood = (billId, food) => {
+  billApi
+    .setFood(billId, food)
+    .then(() => { emit("requestGetBills") })
+    .catch(() => {
+      toast.error("خوراکی ها در این فاکتور ثبت نشد");
+    });
+};
+///////////////////////////
+const changeMoney = (billId, money) => {
+  billApi.changeMoney(billId, money.id)
+    .then(() => {
+      emit("requestGetBills")
+      state.settingDialog.playstation.moneySelected = money
+
+    })
+    .catch(() => { toast.error('قیمت واحد فاکتور عوض نشد') })
+}
+///////////////////////////
 const handleShowSettingDialog = (playstation) => {
+  const billId = props.billList.find((item) => item.systemId === playstation.id && !item.endTime).id
+  const billFoods = props.billList.find((item) => item.systemId === playstation.id && !item.endTime).billFoods
   state.settingDialog.playstation = playstation
+  state.settingDialog.playstation.billId = billId
+  state.settingDialog.playstation.billFoods = billFoods
   state.settingDialog.status = true
 }
 /////////////////////////
 const handleCloseSettingConsoleDialog = (status, consoleSetting) => {
   if (status && consoleSetting.length) {
-    console.log(consoleSetting, state.settingDialog.playstation);
+    for (const item of consoleSetting) {
+      switch (item.name) {
+        case 'food':
+          const food = [];
+          for (const foodItem of item.value) {
+            food.push({
+              foodId: foodItem.id,
+              count: foodItem.count,
+            });
+          }
+          requestSetFood(state.settingDialog.playstation.billId, food)
+          break;
+        case 'changeBillMoney':
+          changeMoney(state.settingDialog.playstation.billId, item.value)
+          break;
+      }
+    }
+
+    state.settingDialog.status = false
   } else {
     state.settingDialog.status = false
     state.settingDialog.playstation = {}

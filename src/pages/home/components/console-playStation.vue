@@ -249,7 +249,6 @@ const requestSetFoodAndFinishBill = (billId, food) => {
 };
 ///////////////////////////
 const requestSetFood = (billId, food) => {
-  console.log(billId, food);
   billApi
     .setFood(billId, food)
     .then(() => { emit("requestGetBills") })

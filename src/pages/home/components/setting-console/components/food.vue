@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, computed, watch, onMounted } from "vue";
+import { reactive, onMounted, watch } from "vue";
 import { useWindowSize } from '@vueuse/core'
 import { useRouter } from "vue-router";
 import { useStore } from '@/store/index'
@@ -17,22 +17,19 @@ const state = reactive({
     { name: "قیمت محصول", icon: "fa-duotone fa-money-bill-1-wave" },
     { name: "تعداد", icon: "fa-duotone fa-cash-register" },
   ],
+  foodList: [],
   food: {
     name: 'food',
     value: []
   }
+
 });
+
 //////////////////////////
 onMounted(() => {
-  state.food.value = props.playstation?.billFoods
-  emit("consoleSetting", state.food);
-});
-//////////////////////////
-const foodList = computed(() => {
-  const foodStoreList = store.getFoodList;
-  state.food.value = props.playstation?.billFoods
+  state.foodList = store.getFoodList;
   if (props.playstation?.billFoods?.length) {
-    foodStoreList.forEach((food) => {
+    state.foodList.forEach((food) => {
       food.count = 0
       for (const foodSelected of props.playstation.billFoods) {
         if (food.id === foodSelected.foodId) {
@@ -41,13 +38,12 @@ const foodList = computed(() => {
       }
     });
   } else {
-    foodStoreList.forEach((food) => (food.count = 0));
+    state.foodList.forEach((food) => (food.count = 0));
   }
-  return foodStoreList;
-});
+})
 //////////////////////////
 const handleCount = (foodId, type) => {
-  const food = foodList.value.find((items) => items.id === foodId);
+  const food = state.foodList.find((items) => items.id === foodId);
   if (type === "Decrease") {
     if (food.count) {
       food.count--;
@@ -57,7 +53,20 @@ const handleCount = (foodId, type) => {
   }
 };
 //////////////////////////
-
+watch(
+  () => state.foodList,
+  (value) => {
+    const selected = value.some((items) => !!items.count);
+    if (selected) {
+      state.food.value = value.filter((items) => !!items.count);
+      emit("consoleSetting", state.food);
+    } else {
+      state.food.value = []
+      emit("consoleSetting", state.food);
+    }
+  },
+  { deep: true }
+);
 //////////////////////////
 </script>
 <template>
@@ -74,7 +83,7 @@ const handleCount = (foodId, type) => {
         </tr>
       </thead>
       <tbody v-if="store.getFoodList.length" class="test">
-        <tr v-for="(items, index) in foodList" :key="index">
+        <tr v-for="(items, index) in state.foodList" :key="index">
           <td>{{ items.name }}</td>
           <td>{{ items.cost?.toLocaleString() }}</td>
           <td>
@@ -100,7 +109,8 @@ const handleCount = (foodId, type) => {
       </tr>
     </table>
     <div v-if="width <= 500" class="w-full flex flex-col items-center justify-start bg-slate-200">
-      <div v-if="store.getFoodList.length" v-for="(items, index) in foodList" :key="index" class="parent-mobile-table">
+      <div v-if="store.getFoodList.length" v-for="(items, index) in state.foodList" :key="index"
+        class="parent-mobile-table">
         <div class="flex flex-col justify-between items-end">
           <!-- ////////////////////////////// -->
           <div class="flex items-center justify-end">

@@ -37,6 +37,9 @@ HttClient.interceptors.response.use(
         case 400:
           break;
         case 401:
+          AuthService.removeTokenUser()
+          AuthService.removeState()
+          window.location.href = '/login'
           break;
         case 403:
           break;

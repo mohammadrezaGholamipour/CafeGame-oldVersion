@@ -1,11 +1,11 @@
 <script setup>
-import { reactive, onMounted, watch } from "vue";
+import { reactive, onMounted } from "vue";
 import { useWindowSize } from '@vueuse/core'
 import { useRouter } from "vue-router";
 import { useStore } from '@/store/index'
 ///////////////////////////////////////
 const emit = defineEmits(["consoleSetting"]);
-const props = defineProps(["playstation"]);
+const props = defineProps(["playstation", "oldValue"]);
 //////////////////////////
 const { width } = useWindowSize()
 const router = useRouter()
@@ -20,7 +20,7 @@ const state = reactive({
   foodList: [],
   food: {
     name: 'food',
-    value: []
+    value: ''
   }
 
 });
@@ -28,18 +28,29 @@ const state = reactive({
 //////////////////////////
 onMounted(() => {
   state.foodList = store.getFoodList;
-  if (props.playstation?.billFoods?.length) {
-    state.foodList.forEach((food) => {
-      food.count = 0
-      for (const foodSelected of props.playstation.billFoods) {
-        if (food.id === foodSelected.foodId) {
-          food.count = foodSelected.count
+  //////////////////////////
+  state.foodList.forEach((food) => {
+    //////////////////////////
+    if (props.playstation?.billFoods?.length) {
+      for (const foodBill of props.playstation.billFoods) {
+        if (props.oldValue.length) {
+          for (const foodSelected of props.oldValue) {
+            if (foodBill.foodId === foodSelected.id) {
+              foodBill.count = foodSelected.count
+            }
+          }
+        }
+        if (food.id === foodBill.foodId) {
+          food.count = foodBill.count
         }
       }
-    });
-  } else {
-    state.foodList.forEach((food) => (food.count = 0));
-  }
+    }
+    //////////////////////////
+    if (isNaN(food.count)) {
+      food.count = 0
+    }
+    //////////////////////////
+  });
 })
 //////////////////////////
 const handleCount = (foodId, type) => {
@@ -51,22 +62,9 @@ const handleCount = (foodId, type) => {
   } else {
     food.count++;
   }
+  state.food.value = state.foodList
+  emit("consoleSetting", state.food);
 };
-//////////////////////////
-watch(
-  () => state.foodList,
-  (value) => {
-    const selected = value.some((items) => !!items.count);
-    if (selected) {
-      state.food.value = value.filter((items) => !!items.count);
-      emit("consoleSetting", state.food);
-    } else {
-      state.food.value = []
-      emit("consoleSetting", state.food);
-    }
-  },
-  { deep: true }
-);
 //////////////////////////
 </script>
 <template>

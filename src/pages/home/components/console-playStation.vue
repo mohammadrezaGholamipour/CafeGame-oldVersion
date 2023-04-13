@@ -284,10 +284,12 @@ const handleCloseSettingConsoleDialog = (status, consoleSetting) => {
           const food = [];
           if (item.value.length) {
             for (const foodItem of item.value) {
-              food.push({
-                foodId: foodItem.id,
-                count: foodItem.count,
-              });
+              if (foodItem.count) {
+                food.push({
+                  foodId: foodItem.id,
+                  count: foodItem.count,
+                });
+              }
             }
           }
           requestSetFood(state.settingDialog.playstation.billId, food)
@@ -300,6 +302,7 @@ const handleCloseSettingConsoleDialog = (status, consoleSetting) => {
 
     state.settingDialog.status = false
   } else {
+    emit("requestGetBills")
     state.settingDialog.status = false
     state.settingDialog.playstation = {}
   }

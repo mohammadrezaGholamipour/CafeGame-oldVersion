@@ -58,6 +58,18 @@ const handleConsoleSetting = (data) => {
   consoleSetting.value = data.value
 }
 ///////////////////////
+const handleOldValue = (tabSetting) => {
+  switch (tabSetting) {
+    case 1:
+      return state.settingData[0].value;
+    case 2:
+      return state.settingData[1].value;
+    case 3:
+      return state.settingData[2].value;
+    case 4:
+      return state.settingData[3].value;
+  }
+}
 </script>
 <template>
   <v-dialog v-model="props.settingDialog.status" persistent width="592">
@@ -80,8 +92,8 @@ const handleConsoleSetting = (data) => {
           <v-window-item :class="state.tabSetting !== 2 ? 'overflow-y-scroll' : 'overflow-visible'"
             :value="state.tabSetting">
             <transition-expand>
-              <component @consoleSetting="handleConsoleSetting" :playstation="props.settingDialog.playstation"
-                :is=handleFindComponent(state.tabSetting)>
+              <component @consoleSetting="handleConsoleSetting" :oldValue="handleOldValue(state.tabSetting)"
+                :playstation="props.settingDialog.playstation" :is=handleFindComponent(state.tabSetting)>
               </component>
             </transition-expand>
           </v-window-item>

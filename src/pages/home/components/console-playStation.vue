@@ -302,7 +302,6 @@ const handleCloseSettingConsoleDialog = (status, consoleSetting) => {
 
     state.settingDialog.status = false
   } else {
-    emit("requestGetBills")
     state.settingDialog.status = false
     state.settingDialog.playstation = {}
   }

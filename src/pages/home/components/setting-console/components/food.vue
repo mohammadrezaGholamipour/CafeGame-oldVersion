@@ -1,11 +1,11 @@
 <script setup>
-import { reactive, onMounted } from "vue";
 import { useWindowSize } from '@vueuse/core'
-import { useRouter } from "vue-router";
+import { reactive, onMounted } from "vue";
 import { useStore } from '@/store/index'
+import { useRouter } from "vue-router";
 ///////////////////////////////////////
-const emit = defineEmits(["consoleSetting"]);
 const props = defineProps(["playstation", "oldValue"]);
+const emit = defineEmits(["consoleSetting"]);
 //////////////////////////
 const { width } = useWindowSize()
 const router = useRouter()
@@ -20,41 +20,43 @@ const state = reactive({
   foodList: [],
   food: {
     name: 'food',
-    value: ''
+    value: []
   }
 
 });
 
 //////////////////////////
 onMounted(() => {
-  state.foodList = store.getFoodList;
+  //////////////////////////
+  for (const item of store.getFoodList) {
+    state.foodList.push({ id: item.id, name: item.name, cost: item.cost, count: 0 })
+  }
   //////////////////////////
   state.foodList.forEach((food) => {
     //////////////////////////
     if (props.playstation?.billFoods?.length) {
       for (const foodBill of props.playstation.billFoods) {
-        if (props.oldValue.length) {
-          for (const foodSelected of props.oldValue) {
-            if (foodBill.foodId === foodSelected.id) {
-              foodBill.count = foodSelected.count
-            }
-          }
-        }
         if (food.id === foodBill.foodId) {
           food.count = foodBill.count
         }
       }
     }
     //////////////////////////
-    if (isNaN(food.count)) {
-      food.count = 0
+    if (props.oldValue.length) {
+      for (const foodSelected of props.oldValue) {
+        if (food.id === foodSelected.id) {
+          food.count = foodSelected.count
+        }
+      }
     }
     //////////////////////////
   });
 })
 //////////////////////////
 const handleCount = (foodId, type) => {
+  //////////////////////////
   const food = state.foodList.find((items) => items.id === foodId);
+  //////////////////////////
   if (type === "Decrease") {
     if (food.count) {
       food.count--;
@@ -62,7 +64,12 @@ const handleCount = (foodId, type) => {
   } else {
     food.count++;
   }
-  state.food.value = state.foodList
+  //////////////////////////
+  state.food.value = []
+  for (const item of state.foodList) {
+    state.food.value.push({ id: item.id, name: item.name, cost: item.cost, count: item.count })
+  }
+  //////////////////////////
   emit("consoleSetting", state.food);
 };
 //////////////////////////

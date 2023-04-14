@@ -65,6 +65,7 @@ const handleCount = (foodId, type) => {
     food.count++;
   }
   //////////////////////////
+
   state.food.value = []
   for (const item of state.foodList) {
     state.food.value.push({ id: item.id, name: item.name, cost: item.cost, count: item.count })

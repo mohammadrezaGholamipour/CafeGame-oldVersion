@@ -168,7 +168,7 @@
     @apply p-1 w-full text-lg text-center cursor-pointer hover:bg-slate-300 transition-all;
   }
   .ConsoleMoney {
-    @apply flex my-2 items-center justify-center text-3xl transition-all;
+    @apply flex flex-col my-2 items-center justify-start text-2xl transition-all;
   }
   .BtnConsoleStart {
     @apply flex items-center justify-between p-2 px-5 rounded-md text-green-900 bg-green-300 hover:bg-green-400 transition-all;
@@ -357,7 +357,7 @@
   .parent-mobile-table {
     @apply flex items-center flex-row-reverse justify-between mt-3 w-full p-2 bg-white shadow-lg rounded-md;
   }
-  .remove-bill{
+  .remove-bill {
     @apply cursor-pointer text-xl;
     position: absolute;
     left: 10px;

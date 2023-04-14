@@ -175,6 +175,7 @@ const handleBillNotFinished = (billList) => {
     const playstation = props.consoleList.find(
       (console) => console.id === bill.systemId
     );
+    handleShowBillFoodMoney(playstation, bill.billFoods)
     if (!playstation.timer) {
       const money = props.moneyList.find(
         (items) => items.id === bill.hourRateId
@@ -336,6 +337,34 @@ const requestRemoveBill = (status) => {
       })
   }
 }
+const handleShowBillFoodMoney = (playstation, billFoods) => {
+  if (billFoods.length) {
+    /////////////////////
+    let billFoodList = [];
+    for (const food of props.foodList) {
+      for (const billFood of billFoods) {
+        if (food.id === billFood.foodId) {
+          billFood.name = food.name;
+          billFood.cost = food.cost;
+          billFood.total = billFood.cost * billFood.count;
+          billFoodList.push(billFood);
+        }
+      }
+    }
+    ///////////////////
+    const foodMoney = [];
+    for (const item of billFoodList) {
+      foodMoney.push(item.total);
+    }
+    const totalFoodMoney = foodMoney.reduce((total, item) => {
+      return total + item;
+    });
+    ///////////////////
+    playstation.foodMoney = totalFoodMoney.toLocaleString()
+  } else {
+    playstation.foodMoney = ''
+  }
+}
 </script>
 <template>
   <div class="w-full h-full mt-10 p-3 flex flex-wrap items-center justify-center">
@@ -359,19 +388,29 @@ const requestRemoveBill = (status) => {
       <!-- /////////////////////////////// -->
       <transition-fade>
         <i v-if="playstation.status" @click="handleShowSettingDialog(playstation)"
-          class="fa-duotone fa-sliders fa-beat setting-console"></i>
+          class="fa-duotone fa-sliders fa-beat setting-console text-blue-700"></i>
       </transition-fade>
       <!-- /////////////////////////////// -->
       <transition-fade>
         <i v-if="playstation.status" @click="handleRemoveBill(playstation)"
-          class="fa-duotone fa-trash fa-beat remove-bill"></i>
+          class="fa-duotone fa-trash fa-beat remove-bill text-red-700"></i>
       </transition-fade>
       <!-- /////////////////////////////// -->
       <div class="flex w-full flex-col justify-start items-center">
-        <div v-if="playstation.status" class="ConsoleMoney">
-          {{
-            playstation.userMoney ? playstation.userMoney.toLocaleString() : ""
-          }}
+        <div v-if="playstation.status" class="ConsoleMoney text-2xl">
+          <transition-scale>
+            <div v-if="playstation.userMoney" class="flex items-center">
+              <p> {{ playstation.userMoney.toLocaleString() }}</p>
+              <i class="fa-duotone fa-money-bill-1-wave text-green-500 mr-2"></i>
+            </div>
+          </transition-scale>
+          <!-- ///////////////////// -->
+          <transition-scale>
+            <div v-if="playstation?.foodMoney?.length" class="flex items-center">
+              <p>{{ playstation.foodMoney }}</p>
+              <i class="fa-duotone fa-burger-soda text-yellow-700 mr-2"></i>
+            </div>
+          </transition-scale>
         </div>
         <!-- /////////////////////////// -->
         <div class="relative w-full flex justify-center" v-else>

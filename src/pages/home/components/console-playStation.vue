@@ -168,7 +168,7 @@ const requestFinishBill = (playstation, finishInfo) => {
       }, 200);
     })
     .catch(() => {
-      toast.error("پایان انجام نشد");
+      toast.error("فاکتور بسته نشد");
     });
 };
 //////////////////////////////
@@ -305,6 +305,9 @@ const handleCloseSettingConsoleDialog = (status, consoleSetting) => {
         case 'changeBillMoney':
           changeMoney(state.settingDialog.playstation.billId, item.value)
           break;
+        case 'editBill':
+          requestEditBill(state.settingDialog.playstation.billId, item.value)
+          break;
       }
     }
 
@@ -313,6 +316,12 @@ const handleCloseSettingConsoleDialog = (status, consoleSetting) => {
     state.settingDialog.status = false
     state.settingDialog.playstation = {}
   }
+}
+//////////////////////////
+const requestEditBill = (billId, time) => {
+  billApi.changeTime(billId, time)
+    .then(() => { emit("requestGetBills") })
+    .catch((error) => { console.log(error); })
 }
 //////////////////////////
 const handleRemoveBill = (playstation) => {

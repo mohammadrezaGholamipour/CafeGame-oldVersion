@@ -1,7 +1,7 @@
 <script setup>
-import { reactive, computed, watch } from "vue";
 import { useWindowSize } from '@vueuse/core'
 import { useRouter } from "vue-router";
+import { reactive, watch } from "vue";
 //////////////////////////
 const emit = defineEmits(["foodSelected"]);
 const props = defineProps(["payModal"]);
@@ -17,14 +17,8 @@ const state = reactive({
   ],
 });
 //////////////////////////
-const foodList = computed(() => {
-  const foodStoreList = props.payModal.foodList;
-  foodStoreList.forEach((items) => (items.count = 0));
-  return foodStoreList;
-});
-//////////////////////////
 const handleCount = (foodId, type) => {
-  const food = foodList.value.find((items) => items.id === foodId);
+  const food = props.payModal.foodList.find((items) => items.id === foodId);
   if (type === "Decrease") {
     if (food.count) {
       food.count--;
@@ -35,7 +29,7 @@ const handleCount = (foodId, type) => {
 };
 //////////////////////////
 watch(
-  () => foodList.value,
+  () => props.payModal.foodList,
   (value) => {
     const selected = value.some((items) => items.count);
     if (selected) {
@@ -62,7 +56,7 @@ watch(
         </tr>
       </thead>
       <tbody v-if="props.payModal.foodList.length" class="test">
-        <tr v-for="(items, index) in foodList" :key="index">
+        <tr v-for="(items, index) in props.payModal.foodList" :key="index">
           <td>{{ items.name }}</td>
           <td>{{ items.cost?.toLocaleString() }}</td>
           <td>
@@ -88,7 +82,7 @@ watch(
       </tr>
     </table>
     <div v-if="width <= 500" class="w-full flex flex-col items-center justify-start">
-      <div v-if="props.payModal.foodList.length" v-for="(items, index) in foodList" :key="index"
+      <div v-if="props.payModal.foodList.length" v-for="(items, index) in props.payModal.foodList" :key="index"
         class="parent-mobile-table">
         <div class="flex flex-col justify-between items-end">
           <!-- ////////////////////////////// -->

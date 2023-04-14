@@ -10,7 +10,7 @@ const props = defineProps(["payModal"]);
 const state = reactive({
   paymentMethodModal: false,
   faktorOrFood: false,
-  foodSelected: [],
+  foodSelected: '',
 });
 ///////////////////////////////////
 const handleFoodSelected = (food) => {
@@ -22,9 +22,20 @@ watch(
   (value) => {
     if (!value) {
       setTimeout(() => {
-        state.foodSelected = [];
+        state.foodSelected = '';
         state.faktorOrFood = false;
       }, 200);
+    } else {
+      if (props.payModal.billPlaystation.billFoods.length) {
+        props.payModal.foodList.forEach((food) => {
+          for (const foodBill of props.payModal.billPlaystation.billFoods) {
+            if (food.id === foodBill.foodId) {
+              food.count = foodBill.count
+            }
+          }
+        })
+        state.foodSelected = props.payModal.foodList.filter((items) => !!items.count);
+      }
     }
   }
 );

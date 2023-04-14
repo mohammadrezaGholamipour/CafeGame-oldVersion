@@ -24,7 +24,7 @@ watch(() => props.dialog.status, () => {
 /////////////////////////
 const handleAcceptOrCanselModal = (status) => {
   const filterData = {
-    playstation: state.playstation.value,
+    playstation: state.playstation.value.id,
     startDate: state.startDate ? new Date(state.startDate).toISOString() : state.startDate,
     endDate: state.endDate ? new Date(state.endDate).toISOString() : state.endDate,
   }
@@ -33,8 +33,8 @@ const handleAcceptOrCanselModal = (status) => {
   emit("acceptOrCansel", status, filterData);
 };
 /////////////////////////
-const consoleSelected = (consoleName) => {
-  state.playstation.value = consoleName
+const consoleSelected = (console) => {
+  state.playstation.value = console
   state.playstation.status = false
 }
 </script>
@@ -56,14 +56,14 @@ const consoleSelected = (consoleName) => {
               class="fa-solid fa-circle-xmark text-red-600 cursor-pointer w-[20%]"></i>
             <p @click.self="state.playstation.status = !state.playstation.status" class="font-bold w-[80%]">
               {{
-                state.playstation.value ? state.playstation.value : 'شماره دستگاه'
+                state.playstation.value ? state.playstation.value.name : 'شماره دستگاه'
               }}
             </p>
 
           </div>
           <transition-expand>
             <ul v-if="state.playstation.status" class="UlConsoleFilter">
-              <li @click="consoleSelected(console.name)" v-for="console in store.getConsoleList" :key="console.id">
+              <li @click="consoleSelected(console)" v-for="console in store.getConsoleList" :key="console.id">
                 {{ console.name }} دستگاه شماره
               </li>
             </ul>

@@ -1,9 +1,9 @@
 <script setup>
+import { onMounted, reactive, watch } from 'vue';
 import { useStore } from '@/store/index'
-import { reactive, watch } from 'vue';
 /////////////////////////
+const props = defineProps(["playstation", "oldValue"]);
 const emit = defineEmits(["consoleSetting"]);
-const props = defineProps(["playstation"]);
 ////////////////////////////////
 const store = useStore()
 ////////////////////////////////
@@ -15,9 +15,16 @@ const state = reactive({
   }
 })
 /////////////////////////
+onMounted(() => {
+  if (props.oldValue) {
+    state.money.value = props.oldValue
+  }
+})
+/////////////////////////
 const handleMoneySelect = (money) => {
-  state.money.value = money
   state.money.status = false
+  state.money.value = money
+
 }
 //////////////////////
 watch(() => state.money.value, (value) => {

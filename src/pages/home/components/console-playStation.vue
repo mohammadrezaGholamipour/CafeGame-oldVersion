@@ -87,7 +87,10 @@ const handleChangeConsoleStatus = (playstation) => {
       (items) => items.systemId === playstation.id && !items.endTime
     );
     state.payModal.playstation = playstation;
-    state.payModal.foodList = props.foodList;
+    state.payModal.foodList = []
+    for (const item of props.foodList) {
+      state.payModal.foodList.push({ id: item.id, name: item.name, cost: item.cost, count: 0 })
+    }
     state.payModal.billPlaystation = bill;
     state.payModal.status = true;
   } else if (playstation.moneySelected.rate) {
@@ -218,15 +221,19 @@ const requestBillPayment = (paymentMethod, foodSelected) => {
   const billId = state.payModal.billPlaystation.id;
   billApi.paymentMethod(billId, paymentMethod)
     .then(() => {
-      const food = [];
-      if (foodSelected.length) {
-        for (const item of foodSelected) {
-          food.push({
-            foodId: item.id,
-            count: item.count,
-          });
+      if (foodSelected) {
+        if (foodSelected.length) {
+          const food = [];
+          for (const item of foodSelected) {
+            food.push({
+              foodId: item.id,
+              count: item.count,
+            });
+          }
+          requestSetFoodAndFinishBill(billId, food);
+        } else {
+          requestSetFoodAndFinishBill(billId, []);
         }
-        requestSetFoodAndFinishBill(billId, food);
       } else {
         requestFinishBill(state.payModal.playstation, new Date().toISOString());
       }

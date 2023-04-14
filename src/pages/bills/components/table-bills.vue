@@ -144,7 +144,23 @@ const requestGetBillFilter = (filterData) => {
   ////////////////////
   billApi.getFilter(url)
     .then((response) => {
-      state.billList = response
+      ////////////////
+      let notFinished = []
+      let billSort = []
+      ///////////////////
+      response.forEach(item => {
+        if (item.endTime) {
+          billSort.push(item)
+        } else {
+          notFinished.push(item)
+        }
+      })
+      /////////////////
+      billSort.sort((a, b) => Number(moment(a.endTime).locale("fa").format("DD")) - Number(moment(b.endTime).locale("fa").format("DD")))
+      billSort.reverse()
+      /////////////////
+      state.billList = [...notFinished, ...billSort]
+      ////////////////////
       state.filterDialog.filterStatus = true
     }).catch((error) => {
       console.log(error);

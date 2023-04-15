@@ -22,9 +22,9 @@ watch(
   (value) => {
     console.log(state.alarmBill.value);
     if (state.alarmBill.value.length > 3) {
-      state.alarmBill.value = filterNumbersWithSep(value); 
       emit('consoleSetting', state.alarmBill)
     }
+    state.alarmBill.value = filterNumbersWithSep(value);
   }
 );
 </script>

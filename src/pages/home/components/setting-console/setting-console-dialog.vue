@@ -1,8 +1,8 @@
 <script setup>
-import ChangeBillMoney from '@/components/changeBillMoney.vue';
-import AlarmBill from '@/components/alarmBill.vue';
-import EditBill from '@/components/editBill.vue';
-import Food from '@/components/food.vue';
+import ChangeBillMoney from './components/changeBillMoney.vue';
+import AlarmBill from './components/alarmBill.vue';
+import EditBill from './components/editBill.vue';
+import Food from './components/food.vue';
 import { reactive, watch } from 'vue';
 /////////////////////////////
 const props = defineProps(["settingDialog"]);

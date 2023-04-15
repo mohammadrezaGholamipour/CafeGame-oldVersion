@@ -1,8 +1,8 @@
 <script setup>
-import ChangeBillMoney from './components/changeBillMoney.vue';
-import AlarmBill from './components/alarmBill.vue';
-import EditBill from './components/editBill.vue';
-import Food from './components/food.vue';
+import ChangeBillMoney from '@/components/changeBillMoney.vue';
+import AlarmBill from '@/components/alarmBill.vue';
+import EditBill from '@/components/editBill.vue';
+import Food from '@/components/food.vue';
 import { reactive, watch } from 'vue';
 /////////////////////////////
 const props = defineProps(["settingDialog"]);
@@ -54,6 +54,7 @@ const handleCloseDialog = (status) => {
 }
 //////////////////////////////////////////
 const handleConsoleSetting = (data) => {
+  console.log(data);
   const consoleSetting = state.settingData.find((item) => item.name === data.name)
   consoleSetting.value = data.value
 }
@@ -89,8 +90,7 @@ const handleOldValue = (tabSetting) => {
         </div>
         <v-window :class="state.tabSetting !== 2 ? 'overflow-y-scroll' : 'overflow-visible'"
           class="w-full flex my-2 justify-center items-center" v-model="state.tabSetting">
-          <v-window-item :class="state.tabSetting !== 2 ? 'overflow-y-scroll' : 'overflow-visible'"
-            :value="state.tabSetting">
+          <v-window-item class="overflow-visible" :value="state.tabSetting">
             <transition-expand>
               <component @consoleSetting="handleConsoleSetting" :oldValue="handleOldValue(state.tabSetting)"
                 :playstation="props.settingDialog.playstation" :is=handleFindComponent(state.tabSetting)>

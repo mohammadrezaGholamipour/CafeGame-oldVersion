@@ -33,7 +33,7 @@ const state = reactive({
     },
     {
       id: 4,
-      name: "گزارش تراکنش ها",
+      name: 'گزارش فاکتور ها',
       path: "/bills",
       icon: "fa-duotone fa-sack-dollar text-green-500",
     },

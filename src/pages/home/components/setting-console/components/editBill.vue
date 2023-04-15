@@ -51,8 +51,9 @@ watch(
   (value) => {
     state.time.value = filterNumbers(value);
     ///////////////////////////
-    if (state.time.editBillType === "کم کردن" && Number(state.time.value) > props.playstation.time.minutes) {
-      toast.error(`حداکثر میتوانید ${props.playstation.time.minutes} دقیقه کم کنید`)
+    const minutes = (props.playstation.time.hours * 60) + props.playstation.time.minutes;
+    if (state.time.editBillType === "کم کردن" && Number(state.time.value) > minutes) {
+      toast.error(`حداکثر میتوانید ${minutes} دقیقه کم کنید`)
       state.time.value = ''
     } else {
       emit('consoleSetting', editeBill.value)
@@ -64,8 +65,9 @@ watch(
 watch(
   () => state.time.editBillType,
   () => {
-    if (state.time.editBillType === "کم کردن" && Number(state.time.value) > props.playstation.time.minutes) {
-      toast.error(`حداکثر میتوانید ${props.playstation.time.minutes} دقیقه کم کنید`)
+    const minutes = (props.playstation.time.hours * 60) + props.playstation.time.minutes;
+    if (state.time.editBillType === "کم کردن" && Number(state.time.value) > minutes) {
+      toast.error(`حداکثر میتوانید ${minutes} دقیقه کم کنید`)
       state.time.value = ''
     } else {
       emit('consoleSetting', editeBill.value)
@@ -76,12 +78,15 @@ watch(
 </script>
 <template>
   <div class="flex flex-col w-full justify-center items-center">
+    <!-- ////////////////////// -->
     <input placeholder="برحسب دقیقه" class="food-input text-center" v-model="state.time.value" type="text" />
+    <!-- //////////////////////// -->
     <v-radio-group v-model="state.time.editBillType" class="flex w-full justify-center" inline>
       <v-radio label="افزودن" value="افزودن" class="text-green-700 font-bold"></v-radio>
       <v-radio :disabled="!props.playstation?.time?.minutes" label="کم کردن" value="کم کردن"
         class="text-red-700 font-bold"></v-radio>
     </v-radio-group>
+    <!-- ///////////////////////// -->
   </div>
 </template>
 

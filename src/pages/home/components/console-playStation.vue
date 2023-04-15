@@ -306,7 +306,7 @@ const handleCloseSettingConsoleDialog = (status, consoleSetting) => {
           changeMoney(state.settingDialog.playstation.billId, item.value)
           break;
         case 'editBill':
-          requestEditBill(state.settingDialog.playstation.billId, item.value)
+          requestEditBill(state.settingDialog.playstation, item.value)
           break;
       }
     }
@@ -318,10 +318,14 @@ const handleCloseSettingConsoleDialog = (status, consoleSetting) => {
   }
 }
 //////////////////////////
-const requestEditBill = (billId, time) => {
-  billApi.changeTime(billId, time)
-    .then(() => { emit("requestGetBills") })
-    .catch((error) => { console.log(error); })
+const requestEditBill = (playstation, time) => {
+  billApi.changeTime(playstation.billId, time)
+    .then(() => {
+      clearInterval(playstation.timer)
+      playstation.timer = ''
+      emit("requestGetBills")
+    })
+    .catch(() => { toast.error('زمان فاکتور عوض نشد') })
 }
 //////////////////////////
 const handleRemoveBill = (playstation) => {

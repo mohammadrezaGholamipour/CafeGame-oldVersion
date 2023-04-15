@@ -1,4 +1,4 @@
-export const filterNumbers = (str, zero = true) => {
+export const filterNumbers = (str, zero = false) => {
   if (typeof str === "undefined" || str === null) str = "";
   str = str.toString().convertDigits("en").replace(/\D+/g, "");
   str = parseInt(str);

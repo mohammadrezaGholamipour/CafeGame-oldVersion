@@ -39,6 +39,8 @@ export const useStore = defineStore('pinia', {
               seconds: "00",
             };
             items.userMoney = "";
+            items.alarm = ''
+            items.alarmStatus = false
           });
           if (!this.moneyList) {
             this.requestGetMoneys()

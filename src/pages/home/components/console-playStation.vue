@@ -39,6 +39,13 @@ onMounted(() => {
       handleBillNotFinished(billsNotFinished);
     }
   }
+  props.consoleList.forEach((playstation) => {
+    for (const alarmItem of JSON.parse(localStorage.getItem("alarmList"))) {
+      if (playstation.id === alarmItem.playstationId) {
+        playstation.alarm = alarmItem
+      }
+    }
+  })
 })
 /////////////////////
 watch(
@@ -129,6 +136,19 @@ const handleTimer = (playstation, status) => {
       } else {
         playstation.userMoney = parseInt(Math.round(moneySelected));
       }
+      if (playstation.alarm) {
+        if (playstation.alarm.type === 'time') {
+          const hours = Number(playstation.alarm.value.hours)
+          const minutes = Number(playstation.alarm.value.minutes)
+          if (Number(playstation.time.hours) >= hours && Number(playstation.time.minutes) >= minutes) {
+            playstation.alarmStatus = true
+          }
+        } else {
+          if (playstation.userMoney >= playstation.alarm.value) {
+            playstation.alarmStatus = true
+          }
+        }
+      }
     }, 1000);
   } else {
     playstation.status = false;
@@ -139,6 +159,12 @@ const handleTimer = (playstation, status) => {
     playstation.moneySelected = {};
     playstation.userMoney = "";
     playstation.timer = "";
+    playstation.alarm = "";
+    playstation.alarmStatus = false
+    let alarmList = JSON.parse(localStorage.getItem("alarmList"))
+    alarmList = alarmList.filter((item) => item.playstationId !== playstation.id)
+    AuthService.setAlarm(JSON.stringify(alarmList))
+    console.log(JSON.parse(localStorage.getItem("alarmList")));
   }
 };
 //////////////////////////////
@@ -285,7 +311,14 @@ const handleAlarmBill = (playstation, alarm) => {
   }
   alarmList.push(alarm)
   AuthService.setAlarm(JSON.stringify(alarmList))
-  console.log(JSON.parse(localStorage.getItem("alarmList")));
+  ////////////////////////
+  props.consoleList.forEach((playstation) => {
+    for (const alarmItem of JSON.parse(localStorage.getItem("alarmList"))) {
+      if (playstation.id === alarmItem.playstationId) {
+        playstation.alarm = alarmItem
+      }
+    }
+  })
 }
 ///////////////////////////
 const handleShowSettingDialog = (playstation) => {
@@ -404,7 +437,8 @@ const handleShowBillFoodMoney = (playstation, billFoods) => {
 </script>
 <template>
   <div class="w-full h-full mt-10 p-3 flex flex-wrap items-center justify-center">
-    <div v-for="(playstation, index) in props.consoleList" :key="playstation.id" class="Console">
+    <div v-for="(playstation, index) in props.consoleList" :key="playstation.id"
+      :class="{ 'bg-yellow-200': playstation.alarmStatus }" class="Console">
       <!-- //////////////////////////////// -->
       <p class="ConsoleNumber">
         <img :src="getImageUrl(`/assets/${index + 1}.png`)" width="50" />

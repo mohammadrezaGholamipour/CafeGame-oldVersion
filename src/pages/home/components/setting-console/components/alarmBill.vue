@@ -97,7 +97,8 @@ watch(state.time, () => {
     <v-window class="overflow-visible" v-model="state.tabAlarm">
       <v-window-item value="time">
         <div class="flex flex-wrap mt-3 justify-center items-center">
-          <p class="text-center font-bold">حداقل باید {{ props.playstation?.time?.hours }} ساعت وارد کنید</p>
+          <p class="text-center font-bold" v-if="props.playstation?.time?.hours">حداقل باید {{
+            props.playstation?.time?.hours }} ساعت وارد کنید</p>
           <div class="flex flex-wrap justify-center items-center">
             <input placeholder="ساعت" class="food-input text-center " v-model="state.time.hours" type="text" />
             <input placeholder="دقیقه" class="food-input text-center" v-model="state.time.minutes" type="text" />

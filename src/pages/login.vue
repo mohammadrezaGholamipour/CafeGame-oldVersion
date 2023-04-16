@@ -57,6 +57,7 @@ const handleAcceptLogin = (values) => {
     .then((response) => {
       AuthService.setTokenUser(response.token)
       AuthService.setState(response.userState)
+      AuthService.setAlarm(JSON.stringify([]))
       store.setUserInfo(response)
       router.push('/')
     })

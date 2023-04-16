@@ -8,6 +8,14 @@ const AuthService = {
     window.localStorage.setItem("tokenUser", token);
   },
   ///////////////////////////////////////////////
+  setAlarm: (alarm) => {
+    window.localStorage.setItem("alarmList", alarm);
+  },
+  ///////////////////////////////////////////////
+  getAlarm: () => {
+    return localStorage.getItem("alarmList");
+  },
+  ///////////////////////////////////////////////
   setState: (state) => {
     window.localStorage.setItem("state", state);
   },
@@ -21,6 +29,10 @@ const AuthService = {
   ///////////////////////////////////////////////
   removeState: () => {
     window.localStorage.removeItem('state');
+  },
+  ///////////////////////////////////////////////
+  removeAlarm: () => {
+    window.localStorage.removeItem('alarmList');
   },
 };
 export default AuthService;

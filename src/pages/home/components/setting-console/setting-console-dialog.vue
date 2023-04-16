@@ -54,7 +54,6 @@ const handleCloseDialog = (status) => {
 }
 //////////////////////////////////////////
 const handleConsoleSetting = (data) => {
-  console.log(data);
   const consoleSetting = state.settingData.find((item) => item.name === data.name)
   consoleSetting.value = data.value
 }

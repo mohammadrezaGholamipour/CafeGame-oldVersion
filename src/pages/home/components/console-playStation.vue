@@ -3,6 +3,7 @@ import SettingConsoleDialog from './setting-console/setting-console-dialog.vue'
 import ConfirmDialog from '@/components/confirm-dialog.vue';
 import { reactive, watch, onMounted } from "vue";
 import { useToast } from "vue-toastification";
+import AuthService from "@/util/AuthService";
 import { useRouter } from "vue-router";
 import PayModal from "./pay-modal.vue";
 import billApi from "@/api/bill";
@@ -275,6 +276,18 @@ const changeMoney = (billId, money) => {
     .catch(() => { toast.error('قیمت واحد فاکتور عوض نشد') })
 }
 ///////////////////////////
+const handleAlarmBill = (playstation, alarm) => {
+  alarm.playstationId = playstation.id
+  ////////////////////
+  let alarmList = JSON.parse(localStorage.getItem("alarmList"))
+  if (alarmList.length) {
+    alarmList = alarmList.filter((item) => item.playstationId !== alarm.playstationId)
+  }
+  alarmList.push(alarm)
+  AuthService.setAlarm(JSON.stringify(alarmList))
+  console.log(JSON.parse(localStorage.getItem("alarmList")));
+}
+///////////////////////////
 const handleShowSettingDialog = (playstation) => {
   const billId = props.billList.find((item) => item.systemId === playstation.id && !item.endTime).id
   const billFoods = props.billList.find((item) => item.systemId === playstation.id && !item.endTime).billFoods
@@ -307,6 +320,9 @@ const handleCloseSettingConsoleDialog = (status, consoleSetting) => {
           break;
         case 'editBill':
           requestEditBill(state.settingDialog.playstation, item.value)
+          break;
+        case 'alarmBill':
+          handleAlarmBill(state.settingDialog.playstation, item.value)
           break;
       }
     }

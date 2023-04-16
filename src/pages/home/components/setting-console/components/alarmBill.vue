@@ -1,32 +1,92 @@
 <script setup>
 import { filterNumbersWithSep } from "@/util/filter-numbers";
 import { onMounted, reactive, watch } from 'vue';
+import { useToast } from "vue-toastification";
 ////////////////////////
 const props = defineProps(["playstation", "oldValue"]);
 const emit = defineEmits(["consoleSetting"]);
 ////////////////////
+const toast = useToast();
+////////////////////
 onMounted(() => {
-  console.log(props.playstation);
 })
 ////////////////////
 const state = reactive({
   tabAlarm: 'time',
-  alarmBill: {
-    name: 'alarmBill',
-    value: ''
+  money: '',
+  timer: '',
+  time: {
+    hours: '',
+    minutes: '',
   }
+
 })
 //////////////////////
 watch(
-  () => state.alarmBill.value,
+  () => state.money,
   (value) => {
-    console.log(state.alarmBill.value);
-    if (state.alarmBill.value.length > 3) {
-      emit('consoleSetting', state.alarmBill)
+    clearTimeout(state.timer)
+    state.money = filterNumbersWithSep(value);
+    ////////////////
+    if (state.money) {
+      state.timer = setTimeout(() => {
+        if (Number(state.money.replace(',', '')) <= props.playstation.userMoney) {
+          toast.error(`مبلغ وارد شده باید بیشتر از ${props.playstation.userMoney.toLocaleString()} باشد`)
+        } else {
+          const alarmBill = {
+            name: 'alarmBill',
+            value: state.money ? {
+              value: state.money.replace(',', ''),
+              type: 'money'
+            } : ''
+          }
+          //////////////////
+          emit('consoleSetting', alarmBill)
+        }
+      }, 1000);
     }
-    state.alarmBill.value = filterNumbersWithSep(value);
+
   }
 );
+//////////////////////
+watch(state.time, () => {
+  clearTimeout(state.timer)
+  state.timer = setTimeout(() => {
+    if (state.time.hours && state.time.minutes) {
+      if (Number(props.playstation?.time?.hours) > Number(state.time.hours)) {
+        toast.error(`ساعت وارد شده باید حداقل ${props.playstation?.time?.hours} باشد`)
+      } else if (Number(props.playstation?.time?.hours) === Number(state.time.hours)) {
+        if (Number(props.playstation?.time?.minutes) >= Number(state.time.minutes)) {
+          toast.error(`دقیقه وارد شده باید بیشتر از ${props.playstation?.time?.minutes} باشد`)
+        }
+        else {
+          const alarmBill = {
+            name: 'alarmBill',
+            value: {
+              value: state.time,
+              type: 'time'
+            }
+          }
+          //////////////////
+          emit('consoleSetting', alarmBill)
+        }
+      }
+      else {
+        const alarmBill = {
+          name: 'alarmBill',
+          value: {
+            value: state.time,
+            type: 'time'
+          }
+        }
+        //////////////////
+        emit('consoleSetting', alarmBill)
+      }
+    } else {
+      emit('consoleSetting', { name: 'alarmBill', value: '' })
+    }
+  }, 1000);
+})
 </script>
 <template>
   <div class="flex flex-col w-full overflow-visible items-center">
@@ -35,10 +95,22 @@ watch(
       <v-tab value="money">هزینه بازی</v-tab>
     </v-tabs>
     <v-window class="overflow-visible" v-model="state.tabAlarm">
-      <v-window-item value="time">time</v-window-item>
+      <v-window-item value="time">
+        <div class="flex flex-wrap mt-3 justify-center items-center">
+          <p class="text-center font-bold">حداقل باید {{ props.playstation?.time?.hours }} ساعت وارد کنید</p>
+          <div class="flex flex-wrap justify-center items-center">
+            <input placeholder="ساعت" class="food-input text-center " v-model="state.time.hours" type="text" />
+            <input placeholder="دقیقه" class="food-input text-center" v-model="state.time.minutes" type="text" />
+          </div>
+        </div>
+      </v-window-item>
       <v-window-item class="overflow-visible" value="money">
-        <input placeholder="قیمت مورد نظر را وارد کنید" class="food-input text-center" v-model="state.alarmBill.value"
-          type="text" />
+        <div class="flex mt-3 font-bold flex-col items-center justify-center">
+          <p class="text-center">مبلغ وارد شده باید بیشتر از {{ props.playstation?.userMoney?.toLocaleString() }} تومان
+            باشد</p>
+          <input placeholder="قیمت مورد نظر را وارد کنید" class="food-input text-center" v-model="state.money"
+            type="text" />
+        </div>
       </v-window-item>
     </v-window>
   </div>

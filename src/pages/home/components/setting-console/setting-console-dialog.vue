@@ -75,7 +75,7 @@ const handleOldValue = (tabSetting) => {
   <v-dialog v-model="props.settingDialog.status" persistent width="592">
     <div class="flex w-full flex-col justify-center bg-white rounded-md">
       <!-- //////////////////////////////////// -->
-      <div class="ModalHeader">
+      <div class="ModalHeader p-1.5">
         <i class="fa-solid fa-circle-xmark text-red-600 cursor-pointer text-3xl close"
           @click="handleCloseDialog(false)"></i>
         <p class="font-bold">تنظیمات</p>

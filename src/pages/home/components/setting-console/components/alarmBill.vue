@@ -1,5 +1,5 @@
 <script setup>
-import { filterNumbersWithSep } from "@/util/filter-numbers";
+import { filterNumbersWithSep, filterNumbers } from "@/util/filter-numbers";
 import { onMounted, reactive, watch } from 'vue';
 import { useToast } from "vue-toastification";
 ////////////////////////
@@ -49,43 +49,36 @@ watch(
   }
 );
 //////////////////////
-watch(state.time, () => {
+watch(() => state.time.hours, (value) => {
+  state.time.hours = filterNumbers(value)
+  if (Number(props.playstation?.time?.hours) > state.time.hours) {
+    toast.error(`ساعت وارد شده باید حداقل ${props.playstation?.time?.hours} باشد`)
+    state.time.hours = ''
+  }
+})
+//////////////////////
+watch(() => state.time.minutes, (value) => {
   clearTimeout(state.timer)
+  state.time.minutes == filterNumbers(value)
   state.timer = setTimeout(() => {
-    if (state.time.hours && state.time.minutes) {
-      if (Number(props.playstation?.time?.hours) > Number(state.time.hours)) {
-        toast.error(`ساعت وارد شده باید حداقل ${props.playstation?.time?.hours} باشد`)
-      } else if (Number(props.playstation?.time?.hours) === Number(state.time.hours)) {
-        if (Number(props.playstation?.time?.minutes) >= Number(state.time.minutes)) {
-          toast.error(`دقیقه وارد شده باید بیشتر از ${props.playstation?.time?.minutes} باشد`)
-        }
-        else {
-          const alarmBill = {
-            name: 'alarmBill',
-            value: {
-              value: state.time,
-              type: 'time'
-            }
-          }
-          //////////////////
-          emit('consoleSetting', alarmBill)
-        }
+    if ((Number(props.playstation?.time?.hours) === Number(state.time.hours))) {
+      if (Number(props.playstation?.time?.minutes) >= Number(state.time.minutes)) {
+        toast.error(`دقیقه وارد شده باید بیشتر از ${props.playstation?.time?.minutes} باشد`)
+        state.time.minutes = ''
       }
-      else {
-        const alarmBill = {
-          name: 'alarmBill',
-          value: {
-            value: state.time,
-            type: 'time'
-          }
-        }
-        //////////////////
-        emit('consoleSetting', alarmBill)
-      }
-    } else {
-      emit('consoleSetting', { name: 'alarmBill', value: '' })
     }
+
   }, 1000);
+
+})
+//////////////////////
+watch(state.time, () => {
+  console.log(state.time.hours.length);
+  console.log(state.time.minutes.length);
+  if (state.time.hours.length && state.time.minutes.length) {
+    console.log("fsadfas");
+    // emit('consoleSetting', { name: 'alarmBill', value: '' })
+  }
 })
 </script>
 <template>
@@ -94,18 +87,20 @@ watch(state.time, () => {
       <v-tab value="time">براساس زمان</v-tab>
       <v-tab value="money">هزینه بازی</v-tab>
     </v-tabs>
-    <v-window class="overflow-visible" v-model="state.tabAlarm">
+    <v-window class="overflow-visible w-full" v-model="state.tabAlarm">
       <v-window-item value="time">
         <div class="flex flex-wrap mt-3 justify-center items-center">
           <p class="text-center font-bold" v-if="props.playstation?.time?.hours">حداقل باید {{
             props.playstation?.time?.hours }} ساعت وارد کنید</p>
           <div class="flex flex-wrap justify-center items-center">
-            <input placeholder="ساعت" class="food-input text-center " v-model="state.time.hours" type="text" />
-            <input placeholder="دقیقه" class="food-input text-center" v-model="state.time.minutes" type="text" />
+            <input placeholder="ساعت" class="food-input text-center" maxlength="2" v-model="state.time.hours"
+              type="text" />
+            <input placeholder="دقیقه" class="food-input text-center" maxlength="2" v-model="state.time.minutes"
+              type="text" />
           </div>
         </div>
       </v-window-item>
-      <v-window-item class="overflow-visible" value="money">
+      <v-window-item class="overflow-visible w-full" value="money">
         <div class="flex mt-3 font-bold flex-col items-center justify-center">
           <p class="text-center">مبلغ وارد شده باید بیشتر از {{ props.playstation?.userMoney?.toLocaleString() }} تومان
             باشد</p>

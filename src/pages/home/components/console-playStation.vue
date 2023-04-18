@@ -388,6 +388,9 @@ const requestRemoveBill = (status) => {
     const billId = props.billList.find((item) => item.systemId === state.confirmDialog.playstation.id && !item.endTime).id
     billApi.remove(billId)
       .then(() => {
+        let alarmList = JSON.parse(localStorage.getItem("alarmList"))
+        alarmList = alarmList.filter((alarm) => alarm.playstationId !== state.confirmDialog.playstation.id)
+        AuthService.setAlarm(JSON.stringify(alarmList))
         state.confirmDialog.playstation.status = false
         state.confirmDialog.playstation.showAndHideListMoney = false;
         state.confirmDialog.playstation.moneySelected = {};
@@ -406,6 +409,7 @@ const requestRemoveBill = (status) => {
       })
   }
 }
+/////////////////////////
 const handleShowBillFoodMoney = (playstation, billFoods) => {
   if (billFoods.length) {
     /////////////////////
@@ -434,11 +438,18 @@ const handleShowBillFoodMoney = (playstation, billFoods) => {
     playstation.foodMoney = ''
   }
 }
+////////////////////////
+const handleRemoveAlarm = (playstation) => {
+  playstation.alarm = '';
+  let alarmList = JSON.parse(localStorage.getItem("alarmList"))
+  alarmList = alarmList.filter((alarm) => alarm.playstationId !== playstation.id)
+  AuthService.setAlarm(JSON.stringify(alarmList))
+}
 </script>
 <template>
   <div class="w-full h-full mt-10 p-3 flex flex-wrap items-center justify-center">
     <div v-for="(playstation, index) in props.consoleList" :key="playstation.id"
-      :class="{ 'bg-yellow-200': playstation.alarmStatus }" class="Console">
+      :class="{ 'bg-amber-400': playstation.alarmStatus }" class="Console">
       <!-- //////////////////////////////// -->
       <p class="ConsoleNumber">
         <img :src="getImageUrl(`/assets/${index + 1}.png`)" width="50" />
@@ -461,10 +472,17 @@ const handleShowBillFoodMoney = (playstation, billFoods) => {
           class="fa-duotone fa-sliders fa-beat setting-console text-blue-700"></i>
       </transition-fade>
       <!-- /////////////////////////////// -->
-      <transition-fade>
-        <i v-if="playstation.status" @click="handleRemoveBill(playstation)"
-          class="fa-duotone fa-trash fa-beat remove-bill text-red-700"></i>
-      </transition-fade>
+      <div class="flex items-center bill-tools">
+        <transition-fade>
+          <i @click="handleRemoveAlarm(playstation)" v-if="playstation.alarm"
+            class="fa-duotone fa-beat ml-2 cursor-pointer text-xl fa-bell-slash text-red-500"></i>
+        </transition-fade>
+        <transition-fade>
+          <i v-if="playstation.status" @click="handleRemoveBill(playstation)"
+            class="fa-duotone fa-trash cursor-pointer text-xl fa-beat text-red-700"></i>
+        </transition-fade>
+
+      </div>
       <!-- /////////////////////////////// -->
       <div class="flex w-full flex-col justify-start items-center">
         <div v-if="playstation.status" class="ConsoleMoney text-2xl">

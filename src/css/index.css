@@ -357,8 +357,7 @@
   .parent-mobile-table {
     @apply flex items-center flex-row-reverse justify-between mt-3 w-full p-2 bg-white shadow-lg rounded-md;
   }
-  .remove-bill {
-    @apply cursor-pointer text-xl;
+  .bill-tools {
     position: absolute;
     left: 10px;
     top: 10px;

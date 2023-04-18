@@ -49,36 +49,43 @@ watch(
   }
 );
 //////////////////////
-watch(() => state.time.hours, (value) => {
-  state.time.hours = filterNumbers(value)
-  if (Number(props.playstation?.time?.hours) > state.time.hours) {
-    toast.error(`ساعت وارد شده باید حداقل ${props.playstation?.time?.hours} باشد`)
-    state.time.hours = ''
-  }
-})
-//////////////////////
-watch(() => state.time.minutes, (value) => {
-  clearTimeout(state.timer)
-  state.time.minutes == filterNumbers(value)
-  state.timer = setTimeout(() => {
-    if ((Number(props.playstation?.time?.hours) === Number(state.time.hours))) {
-      if (Number(props.playstation?.time?.minutes) >= Number(state.time.minutes)) {
-        toast.error(`دقیقه وارد شده باید بیشتر از ${props.playstation?.time?.minutes} باشد`)
-        state.time.minutes = ''
-      }
-    }
-
-  }, 1000);
-
-})
-//////////////////////
 watch(state.time, () => {
-  console.log(state.time.hours.length);
-  console.log(state.time.minutes.length);
-  if (state.time.hours.length && state.time.minutes.length) {
-    console.log("fsadfas");
-    // emit('consoleSetting', { name: 'alarmBill', value: '' })
-  }
+  clearTimeout(state.timer)
+  state.timer = setTimeout(() => {
+    if (state.time.hours && state.time.minutes) {
+      if (Number(props.playstation?.time?.hours) > Number(state.time.hours)) {
+        toast.error(`ساعت وارد شده باید حداقل ${props.playstation?.time?.hours} باشد`)
+      } else if (Number(props.playstation?.time?.hours) === Number(state.time.hours)) {
+        if (Number(props.playstation?.time?.minutes) >= Number(state.time.minutes)) {
+          toast.error(`دقیقه وارد شده باید بیشتر از ${props.playstation?.time?.minutes} باشد`)
+        }
+        else {
+          const alarmBill = {
+            name: 'alarmBill',
+            value: {
+              value: state.time,
+              type: 'time'
+            }
+          }
+          //////////////////
+          emit('consoleSetting', alarmBill)
+        }
+      }
+      else {
+        const alarmBill = {
+          name: 'alarmBill',
+          value: {
+            value: state.time,
+            type: 'time'
+          }
+        }
+        //////////////////
+        emit('consoleSetting', alarmBill)
+      }
+    } else {
+      emit('consoleSetting', { name: 'alarmBill', value: '' })
+    }
+  }, 1000);
 })
 </script>
 <template>

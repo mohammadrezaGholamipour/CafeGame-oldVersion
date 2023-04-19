@@ -35,7 +35,7 @@ watch(() => state.money.value, (value) => {
 </script>
 <template>
   <div class="flex w-full justify-center items-center">
-    <p class="font-bold flex justify-center items-center flex-row-reverse text-center">قیمت واحد ثبت شده در فاکتور
+    <p class="font-bold flex justify-center items-center flex-row-reverse text-center">قیمت واحد ثبت شده 
     <div class="relative w-ful flex justify-center mr-2 ">
       <div @click="state.money.status = !state.money.status" class="SelectedMoneyConsole">
         <p class="font-bold">

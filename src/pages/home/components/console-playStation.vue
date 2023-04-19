@@ -1,5 +1,6 @@
 <script setup>
 import SettingConsoleDialog from './setting-console/setting-console-dialog.vue'
+import RequestLoading from '@/components/request-loading.vue';
 import ConfirmDialog from '@/components/confirm-dialog.vue';
 import { reactive, watch, onMounted } from "vue";
 import { useToast } from "vue-toastification";
@@ -15,6 +16,7 @@ const router = useRouter()
 const toast = useToast();
 ////////////////////////
 const state = reactive({
+  loading: false,
   payModal: {
     playstation: {},
     billPlaystation: {},
@@ -164,11 +166,11 @@ const handleTimer = (playstation, status) => {
     let alarmList = JSON.parse(localStorage.getItem("alarmList"))
     alarmList = alarmList.filter((item) => item.playstationId !== playstation.id)
     AuthService.setAlarm(JSON.stringify(alarmList))
-    console.log(JSON.parse(localStorage.getItem("alarmList")));
   }
 };
 //////////////////////////////
 const requestStartBill = (systemId, rateId, startInfo) => {
+  state.loading = true
   billApi
     .new(systemId, rateId, startInfo)
     .then(() => {
@@ -176,10 +178,16 @@ const requestStartBill = (systemId, rateId, startInfo) => {
     })
     .catch(() => {
       toast.error("شروع انجام نشد");
-    });
+    })
+    .finally(() => {
+      setTimeout(() => {
+        state.loading = false
+      }, 1000);
+    })
 };
 //////////////////////////////
 const requestFinishBill = (playstation, finishInfo) => {
+  state.loading = true
   const bill = props.billList.find(
     (items) => items.systemId === playstation.id && !items.endTime
   );
@@ -196,7 +204,12 @@ const requestFinishBill = (playstation, finishInfo) => {
     })
     .catch(() => {
       toast.error("فاکتور بسته نشد");
-    });
+    })
+    .finally(() => {
+      setTimeout(() => {
+        state.loading = false
+      }, 1000);
+    })
 };
 //////////////////////////////
 const handleBillNotFinished = (billList) => {
@@ -291,6 +304,7 @@ const requestSetFood = (billId, food) => {
       toast.error("خوراکی ها در این فاکتور ثبت نشد");
     });
 };
+///////////////////////////
 const requestRemoveFood = (billId) => {
   billApi
     .setFood(billId, [])
@@ -391,6 +405,7 @@ const confirmRemoveBill = (playstation) => {
 }
 //////////////////////|
 const requestRemoveBill = (billId) => {
+  state.loading = true
   billApi.remove(billId)
     .then(() => {
       let alarmList = JSON.parse(localStorage.getItem("alarmList"))
@@ -411,6 +426,11 @@ const requestRemoveBill = (billId) => {
     })
     .catch(() => {
       toast.error('فاکتور مورد نظر حذف نشد')
+    })
+    .finally(() => {
+      setTimeout(() => {
+        state.loading = false
+      }, 1000);
     })
 }
 //////////////////////
@@ -553,6 +573,10 @@ const handleRemoveAlarm = (playstation) => {
     <SettingConsoleDialog @close="handleCloseSettingConsoleDialog" :settingDialog="state.settingDialog" />
     <!-- ////////////////////////////////////// -->
     <ConfirmDialog @acceptOrCansel="handleRemoveBill" :confirmDialog="state.confirmDialog" />
+    <!-- ////////////////////////////////////// -->
+    <transition-fade>
+      <RequestLoading v-if="state.loading" />
+    </transition-fade>
     <!-- ////////////////////////////////////// -->
   </div>
 </template>

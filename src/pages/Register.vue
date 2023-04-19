@@ -120,8 +120,9 @@ const handleAcceptRegister = (values) => {
             </transition-expand>
           </div>
           <!-- //////////////////////// -->
-          <div class="w-full flex justify-center items-center">
+          <div class="w-full flex-col flex justify-center items-center">
             <button @click="onSubmit" class="RegisterBtn">ثبت نام</button>
+            <p @click="router.push('/login')" class="text-red-500 font-bold mt-2">رفتن به صفحه ورود</p>
           </div>
         </div>
       </div>

@@ -19,7 +19,7 @@
     </div>
   </div>
 </template>
-<style>
+<style scoped>
 .parent-loading {
   justify-content: center;
   align-items: center;

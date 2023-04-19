@@ -49,44 +49,48 @@ watch(
   }
 );
 //////////////////////
-watch(state.time, () => {
-  clearTimeout(state.timer)
-  state.timer = setTimeout(() => {
-    if (state.time.hours && state.time.minutes) {
-      if (Number(props.playstation?.time?.hours) > Number(state.time.hours)) {
-        toast.error(`ساعت وارد شده باید حداقل ${props.playstation?.time?.hours} باشد`)
-      } else if (Number(props.playstation?.time?.hours) === Number(state.time.hours)) {
-        if (Number(props.playstation?.time?.minutes) >= Number(state.time.minutes)) {
-          toast.error(`دقیقه وارد شده باید بیشتر از ${props.playstation?.time?.minutes} باشد`)
-        }
-        else {
-          const alarmBill = {
-            name: 'alarmBill',
-            value: {
-              value: state.time,
-              type: 'time'
-            }
-          }
-          //////////////////
-          emit('consoleSetting', alarmBill)
-        }
-      }
-      else {
-        const alarmBill = {
-          name: 'alarmBill',
-          value: {
-            value: state.time,
-            type: 'time'
-          }
-        }
-        //////////////////
-        emit('consoleSetting', alarmBill)
-      }
-    } else {
-      emit('consoleSetting', { name: 'alarmBill', value: '' })
-    }
-  }, 1000);
+watch(state.time.hours, (value) => {
+  state.time.hours = filterNumbers(value)
 })
+//////////////////////
+// watch(state.time, () => {
+//   clearTimeout(state.timer)
+//   state.timer = setTimeout(() => {
+//     if (state.time.hours && state.time.minutes) {
+//       if (Number(props.playstation?.time?.hours) > Number(state.time.hours)) {
+//         toast.error(`ساعت وارد شده باید حداقل ${props.playstation?.time?.hours} باشد`)
+//       } else if (Number(props.playstation?.time?.hours) === Number(state.time.hours)) {
+//         if (Number(props.playstation?.time?.minutes) >= Number(state.time.minutes)) {
+//           toast.error(`دقیقه وارد شده باید بیشتر از ${props.playstation?.time?.minutes} باشد`)
+//         }
+//         else {
+//           const alarmBill = {
+//             name: 'alarmBill',
+//             value: {
+//               value: state.time,
+//               type: 'time'
+//             }
+//           }
+//           //////////////////
+//           emit('consoleSetting', alarmBill)
+//         }
+//       }
+//       else {
+//         const alarmBill = {
+//           name: 'alarmBill',
+//           value: {
+//             value: state.time,
+//             type: 'time'
+//           }
+//         }
+//         //////////////////
+//         emit('consoleSetting', alarmBill)
+//       }
+//     } else {
+//       emit('consoleSetting', { name: 'alarmBill', value: '' })
+//     }
+//   }, 1000);
+// })
 </script>
 <template>
   <div class="flex flex-col w-full overflow-visible items-center">

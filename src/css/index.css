@@ -64,11 +64,11 @@
     @apply w-full flex overflow-y-scroll justify-start items-center;
     background-image: url(../assets/image/BgRegister.jpg);
     background-size: cover;
-    padding-right: 15vw;
     height: 100vh;
   }
   .Register {
-    @apply flex flex-col justify-center rounded-md items-center p-4;
+    @apply flex w-full flex-col justify-center rounded-md items-center p-4;
+    margin-right: 15vw;
     width: 550px;
   }
   .FormInputRegister {
@@ -103,8 +103,11 @@
       background-size: cover;
       height: 100vh;
     }
-    .ParentInputRegister {
-      @apply flex-col justify-center items-center;
+    .Register {
+      margin: 0;
+    }
+    .FormInputRegister {
+      @apply flex flex-col justify-center items-center;
     }
   }
   .ParentHome {

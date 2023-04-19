@@ -413,6 +413,8 @@ const requestRemoveBill = (billId) => {
       AuthService.setAlarm(JSON.stringify(alarmList))
       state.confirmDialog.playstation.status = false
       state.confirmDialog.playstation.showAndHideListMoney = false;
+      state.confirmDialog.playstation.alarmStatus = false;
+      state.confirmDialog.playstation.alarm = false;
       state.confirmDialog.playstation.moneySelected = {};
       clearInterval(state.confirmDialog.playstation.timer)
       state.confirmDialog.playstation.timer = "";
@@ -478,6 +480,8 @@ const handleShowBillFoodMoney = (playstation, billFoods) => {
 ////////////////////////
 const handleRemoveAlarm = (playstation) => {
   playstation.alarm = '';
+  playstation.alarmStatus = false
+  ////////////////////////////
   let alarmList = JSON.parse(localStorage.getItem("alarmList"))
   alarmList = alarmList.filter((alarm) => alarm.playstationId !== playstation.id)
   AuthService.setAlarm(JSON.stringify(alarmList))

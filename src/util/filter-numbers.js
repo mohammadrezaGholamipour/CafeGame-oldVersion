@@ -2,8 +2,7 @@ export const filterNumbers = (str, zero = true) => {
   if (typeof str === "undefined" || str === null) str = "";
   str = str.toString().convertDigits("en").replace(/\D+/g, "");
   str = parseInt(str);
-  str = str > 0 ? str : "";
-  return zero && str == "" ? 0 : str;
+  return str === 0 | str ? str : '';
 };
 
 export const filterNumbersWithSep = (str, zero = false) => {

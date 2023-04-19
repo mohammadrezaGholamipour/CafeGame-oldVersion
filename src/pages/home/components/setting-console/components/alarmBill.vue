@@ -9,6 +9,14 @@ const emit = defineEmits(["consoleSetting"]);
 const toast = useToast();
 ////////////////////
 onMounted(() => {
+  if (props.oldValue) {
+    if (props.oldValue.type === 'time') {
+      state.time.hours = props.oldValue.value.hours
+      state.time.minutes = props.oldValue.value.minutes
+    } else {
+      state.money = props.oldValue.value
+    }
+  }
 })
 ////////////////////
 const state = reactive({
@@ -49,48 +57,53 @@ watch(
   }
 );
 //////////////////////
-watch(state.time.hours, (value) => {
+watch(() => state.time.hours, (value) => {
   state.time.hours = filterNumbers(value)
 })
 //////////////////////
-// watch(state.time, () => {
-//   clearTimeout(state.timer)
-//   state.timer = setTimeout(() => {
-//     if (state.time.hours && state.time.minutes) {
-//       if (Number(props.playstation?.time?.hours) > Number(state.time.hours)) {
-//         toast.error(`ساعت وارد شده باید حداقل ${props.playstation?.time?.hours} باشد`)
-//       } else if (Number(props.playstation?.time?.hours) === Number(state.time.hours)) {
-//         if (Number(props.playstation?.time?.minutes) >= Number(state.time.minutes)) {
-//           toast.error(`دقیقه وارد شده باید بیشتر از ${props.playstation?.time?.minutes} باشد`)
-//         }
-//         else {
-//           const alarmBill = {
-//             name: 'alarmBill',
-//             value: {
-//               value: state.time,
-//               type: 'time'
-//             }
-//           }
-//           //////////////////
-//           emit('consoleSetting', alarmBill)
-//         }
-//       }
-//       else {
-//         const alarmBill = {
-//           name: 'alarmBill',
-//           value: {
-//             value: state.time,
-//             type: 'time'
-//           }
-//         }
-//         //////////////////
-//         emit('consoleSetting', alarmBill)
-//       }
-//     } else {
-//       emit('consoleSetting', { name: 'alarmBill', value: '' })
-//     }
-//   }, 1000);
-// })
+watch(() => state.time.minutes, (value) => {
+  state.time.minutes = filterNumbers(value)
+})
+//////////////////////
+watch(state.time, () => {
+  clearTimeout(state.timer)
+  if (state.time.hours && state.time.minutes) {
+    state.timer = setTimeout(() => {
+      if (Number(props.playstation?.time?.hours) > Number(state.time.hours)) {
+        toast.error(`ساعت وارد شده باید حداقل ${props.playstation?.time?.hours} باشد`)
+      } else if (Number(props.playstation?.time?.hours) === Number(state.time.hours)) {
+        if (Number(props.playstation?.time?.minutes) >= Number(state.time.minutes)) {
+          toast.error(`دقیقه وارد شده باید بیشتر از ${props.playstation?.time?.minutes} باشد`)
+        }
+        else {
+          const alarmBill = {
+            name: 'alarmBill',
+            value: {
+              value: state.time,
+              type: 'time'
+            }
+          }
+          //////////////////
+          emit('consoleSetting', alarmBill)
+        }
+      }
+      else {
+        const alarmBill = {
+          name: 'alarmBill',
+          value: {
+            value: state.time,
+            type: 'time'
+          }
+        }
+        //////////////////
+        emit('consoleSetting', alarmBill)
+      }
+    }, 900);
+  } else {
+    emit('consoleSetting', { name: 'alarmBill', value: '' })
+  }
+
+})
 </script>
 <template>
   <div class="flex flex-col w-full overflow-visible items-center">

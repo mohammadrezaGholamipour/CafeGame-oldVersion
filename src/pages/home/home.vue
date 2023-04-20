@@ -4,6 +4,8 @@ import { useStore } from '@/store/index'
 ///////////////////////////////////////
 const store = useStore()
 ////////////////////////
+
+////////////////////////
 const requestGetBills = () => {
   store.requestGetBills()
 };

@@ -34,6 +34,14 @@ const state = reactive({
   }
 });
 /////////////////////
+window.onfocus = () => {
+  props.consoleList.forEach((playstation) => {
+    clearInterval(playstation.timer)
+    playstation.timer = "";
+  })
+  emit('requestGetBills')
+};
+/////////////////////
 onMounted(() => {
   if (props.billList.length) {
     const billsNotFinished = props.billList.filter((items) => !items.endTime);
@@ -41,13 +49,15 @@ onMounted(() => {
       handleBillNotFinished(billsNotFinished);
     }
   }
-  props.consoleList.forEach((playstation) => {
-    for (const alarmItem of JSON.parse(localStorage.getItem("alarmList"))) {
-      if (playstation.id === alarmItem.playstationId) {
-        playstation.alarm = alarmItem
+  if (props.consoleList.length) {
+    props.consoleList.forEach((playstation) => {
+      for (const alarmItem of JSON.parse(localStorage.getItem("alarmList"))) {
+        if (playstation.id === alarmItem.playstationId) {
+          playstation.alarm = alarmItem
+        }
       }
-    }
-  })
+    })
+  }
 })
 /////////////////////
 watch(
@@ -502,10 +512,10 @@ const handleRemoveAlarm = (playstation) => {
             playstation.time.seconds
           }}
         </p>
-        <transition-scale group>
+        <transition-slide group>
           <img src="@/assets/image/timer.png" v-if="!playstation.status" width="35" />
           <img v-else src="@/assets/image/timer.gif" width="35" />
-        </transition-scale>
+        </transition-slide>
       </div>
       <!-- /////////////////////////////// -->
       <transition-fade>

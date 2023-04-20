@@ -85,6 +85,26 @@ export const useStore = defineStore('pinia', {
           let billSort = []
           ///////////////////
           response.forEach(item => {
+            item.totalMoney = 0
+            if (item.billFoods.length) {
+              item.moneyPlayGame = item.finalCost
+              for (const foodBill of item.billFoods) {
+                for (const food of this.foodList) {
+                  if (foodBill.foodId === food.id) {
+                    item.moneyPlayGame -= food.cost * foodBill.count
+                    foodBill.total = food.cost * foodBill.count;
+                    foodBill.name = food.name
+                    foodBill.cost = food.cost
+                  }
+                }
+              }
+              item.totalMoney += item.moneyPlayGame
+              // ////////////////////////
+            } else {
+              item.totalMoney += item.finalCost
+            }
+            item.totalMoney = item.totalMoney ? `${item.totalMoney.toLocaleString()} تومان` : '-'
+            // ////////////////
             if (item.endTime) {
               billSort.push(item)
             } else {

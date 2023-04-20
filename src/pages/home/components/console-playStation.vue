@@ -488,7 +488,7 @@ const handleRemoveAlarm = (playstation) => {
 }
 </script>
 <template>
-  <div class="w-full h-full mt-10 p-3 flex flex-wrap items-center justify-center">
+  <div class="w-full h-full mt-15 p-3 flex flex-wrap items-center justify-center">
     <div v-for="(playstation, index) in props.consoleList" :key="playstation.id"
       :class="{ 'bg-amber-400': playstation.alarmStatus }" class="Console">
       <!-- //////////////////////////////// -->

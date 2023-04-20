@@ -182,25 +182,6 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
   }
 
 }
-//////////////////////////
-const handlePlayMoney = (bill) => {
-  let totalMoney = 0
-  if (bill.billFoods.length) {
-    bill.moneyPlayGame = bill.finalCost
-    for (const foodBill of bill.billFoods) {
-      for (const food of props.foods) {
-        if (foodBill.foodId === food.id) {
-          bill.moneyPlayGame -= food.cost * foodBill.count
-        }
-      }
-    }
-    totalMoney += bill.moneyPlayGame
-  } else {
-    totalMoney += bill.finalCost
-  }
-  return totalMoney ? `${totalMoney.toLocaleString()} تومان` : '-'
-}
-
 </script>
 <template>
   <div class="overflow-y-scroll h-[86vh] flex items-center flex-col justify-start mt-15 rounded-md w-[90vw]">
@@ -248,7 +229,7 @@ const handlePlayMoney = (bill) => {
               <p v-else>بدون خوراکی</p>
             </div>
           </td>
-          <td>{{ handlePlayMoney(items) }}</td>
+          <td>{{ items.totalMoney }}</td>
           <td>{{ handleFindConsole(items.systemId) }}</td>
           <td>{{ handlePaymentMethod(items.paymentMethod, items.finalCost) }}</td>
           <td>

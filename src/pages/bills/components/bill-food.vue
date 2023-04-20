@@ -23,27 +23,11 @@ const state = reactive({
       icon: "fa-duotone fa-cash-register text-blue-500",
     },
   ],
-  foodList: [],
 });
 ///////////////////////////////
-const handleFood = computed(() => {
-  state.foodList = [];
-  for (const food of props.foods) {
-    for (const billFood of props.billFood) {
-      if (food.id === billFood.foodId) {
-        billFood.name = food.name;
-        billFood.cost = food.cost;
-        billFood.total = billFood.cost * billFood.count;
-        state.foodList.push(billFood);
-      }
-    }
-  }
-  return state.foodList;
-});
-////////////////////////////
 const handleTotalFoodMoney = computed(() => {
   const foodMoney = [];
-  for (const item of state.foodList) {
+  for (const item of props.billFood) {
     foodMoney.push(item.total);
   }
   const totalFoodMoney = foodMoney.reduce((total, item) => {
@@ -66,15 +50,15 @@ const handleTotalFoodMoney = computed(() => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(items, index) in handleFood.reverse()" :key="items.id">
+        <tr v-for="(items, index) in props.billFood" :key="items.id">
           <td>{{ index + 1 }}</td>
           <td>{{ items.name }}</td>
-          <td>{{ items.cost.toLocaleString() }} تومان</td>
+          <td>{{ items.cost?.toLocaleString() }} تومان</td>
           <td>{{ items.count }}</td>
-          <td>{{ items.total.toLocaleString() }} تومان</td>
+          <td>{{ items.total?.toLocaleString() }} تومان</td>
         </tr>
       </tbody>
-      <tfoot v-if="handleFood.length > 1">
+      <tfoot v-if="props.billFood.length > 1">
         <tr class="bg-red-500 text-white">
           <td class="p-2" colspan="4">
             <p class="text-center text-xl">جمع کل</p>
@@ -89,7 +73,7 @@ const handleTotalFoodMoney = computed(() => {
     </table>
     <!-- ///////////////////////////// -->
     <div v-else class="w-full flex flex-col items-center justify-start">
-      <div v-for="(items, index) in handleFood.reverse()" :key="index" class="parent-mobile-table bg-slate-200">
+      <div v-for="(items, index) in props.billFood" :key="index" class="parent-mobile-table bg-slate-200">
         <div class="flex flex-col justify-between items-end">
           <!-- ////////////////////////////// -->
           <div class="flex items-center justify-end">
@@ -119,10 +103,10 @@ const handleTotalFoodMoney = computed(() => {
           <p>{{ items.name }}</p>
           <p>{{ items.cost?.toLocaleString() }} تومان</p>
           <p>{{ items.count }}</p>
-          <p>{{ items.total.toLocaleString() }} تومان</p>
+          <p>{{ items.total?.toLocaleString() }} تومان</p>
         </div>
       </div>
-      <div v-if="handleFood.length > 1"
+      <div v-if="props.billFood.length > 1"
         class="bg-red-500 flex flex-col items-center rounded-md shadow-md overflow-hidden mt-3 justify-center w-full text-white">
         <div class="flex w-full justify-between items-center p-2">
           <p> {{ handleTotalFoodMoney.toLocaleString() }} تومان</p>

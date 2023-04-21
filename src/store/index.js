@@ -112,7 +112,7 @@ export const useStore = defineStore('pinia', {
             }
           })
           /////////////////
-          billSort.sort((a, b) => Number(moment(a.endTime).locale("fa").format("DD")) - Number(moment(b.endTime).locale("fa").format("DD")))
+          billSort.sort((a, b) => Number(moment(a.endTime).locale("fa").format("YY/MM/DD")) - Number(moment(b.endTime).locale("fa").format("YY/MM/DD")))
           billSort.reverse()
           /////////////////
           this.billList = [...notFinished, ...billSort]

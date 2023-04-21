@@ -182,6 +182,8 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
   }
 
 }
+//////////////////////////////
+
 </script>
 <template>
   <div class="overflow-y-scroll h-[86vh] flex items-center flex-col justify-start mt-15 rounded-md w-[90vw]">
@@ -205,15 +207,14 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
           <td>
             <div class="flex items-center justify-between">
               <p class="ml-2">{{ items.endTime ? handleShowEndTime(items.endTime) : ' تمام نشده است' }}</p>
-              <button @click="
-                handleShowDialog(
-                  {
-                    start: items.startTime,
-                    end: items.endTime,
-                  },
-                  'time'
-                )
-              " class="BtnChange mr-0">
+              <button @click="handleShowDialog(
+                {
+                  start: items.startTime,
+                  end: items.endTime,
+                },
+                'time'
+              )
+                " class="BtnChange mr-0">
                 نمایش
               </button>
 
@@ -251,6 +252,15 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
           </td>
         </tr>
       </tbody>
+      <tfoot>
+        <tr class="sticky bottom-0 text-center text-lg text-white bg-green-700">
+          <td class="p-1 ">امروز</td>
+          <td colspan="2">تعداد فاکتور :29</td>
+          <td colspan="2">خوراکی ها : 153.157</td>
+          <td colspan="2"> بازی شده :756,598</td>
+          <td colspan="2">جمع کل : 451.5784</td>
+        </tr>
+      </tfoot>
     </table>
     <!-- ///////////////////// -->
     <div v-else class="w-full flex flex-col items-center justify-start">

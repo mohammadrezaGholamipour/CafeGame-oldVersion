@@ -76,11 +76,6 @@ const handleShowDialog = (billSelected, type) => {
 /////////////////////////////////
 const handleCloseDialog = () => {
   state.dialog.status = false;
-  setTimeout(() => {
-    state.dialog.headerInfo = "";
-    state.dialog.data = {};
-    state.dialog.component = "";
-  }, 200);
 };
 //////////////////////////////
 const handleShowEndTime = (endTime) => {
@@ -270,40 +265,40 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
       <div v-for="(items, index) in state.billList" :key="index" class="parent-mobile-table min-w-[300px] flex-row">
         <div class="flex flex-col justify-between items-start">
           <!-- ////////////////////////////// -->
-          <div class="flex items-center justify-end py-1">
+          <div class="flex items-center justify-end py-2">
             <p class="ml-1">ردیف</p>
             <i class="fa-duotone fa-arrow-down-wide-short" />
           </div>
-          <div class="flex items-center justify-end py-1">
+          <div class="flex items-center justify-end py-2">
             <p class="ml-1">اطلاعات زمان</p>
             <i class="fa-duotone fa-hourglass-start text-red-500" />
           </div>
-          <div class="flex items-center justify-end py-1">
+          <div class="flex items-center justify-end py-2">
             <p class="ml-1">هزینه بازی</p>
             <i class="fa-duotone fa-money-bill-1-wave text-green-500" />
           </div>
-          <div class="flex items-center justify-end py-1">
+          <div class="flex items-center justify-end py-2">
             <p class="ml-1">خوراکی ها</p>
             <i class="fa-duotone fa-burger-soda text-yellow-700" />
           </div>
-          <div class="flex items-center justify-end py-1">
+          <div class="flex items-center justify-end py-2">
             <p class="ml-1">شماره دستگاه</p>
             <i class="fa-brands fa-playstation text-blue-500" />
           </div>
-          <div class="flex items-center justify-end py-1">
+          <div class="flex items-center justify-end py-2">
             <p class="ml-1">روش پرداخت</p>
             <i class="fa-duotone fa-cash-register text-red-700" />
           </div>
-          <div class="flex items-center justify-end py-1">
+          <div class="flex items-center justify-end py-2">
             <p class="ml-1">پرداخت شده</p>
             <i class="fa-duotone fa-money-bill-1-wave text-green-500" />
           </div>
           <!-- ////////////////////////////// -->
         </div>
         <div class="flex flex-col justify-between items-center">
-          <p class="py-1">{{ index + 1 }}</p>
+          <p class="py-2">{{ index + 1 }}</p>
           <p>
-          <div class="flex items-center justify-between py-1">
+          <div class="flex items-center justify-between py-2">
             <p class="ml-2">{{ items.endTime ? handleShowEndTime(items.endTime) : 'تمام نشده است' }}</p>
             <p class="text-red-500 font-bold"
               @click="handleShowDialog({ start: items.startTime, end: items.endTime, }, 'time')">
@@ -311,9 +306,9 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
             </p>
           </div>
           </p>
-          <p class="py-1">{{ handleFindMoney(items.hourRateId) }}</p>
+          <p class="py-2">{{ handleFindMoney(items.hourRateId) }}</p>
           <p>
-          <div class="flex justify-center py-1">
+          <div class="flex justify-center py-2">
             <p @click="handleShowDialog(items.billFoods, 'food')" v-if="items.billFoods.length"
               class="text-red-500 font-bold">
               نمایش
@@ -322,9 +317,9 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
             <p v-else>بدون خوراکی</p>
           </div>
           </p>
-          <p class="py-1">{{ handleFindConsole(items.systemId) }}</p>
-          <p class="py-1">{{ handlePaymentMethod(items.paymentMethod, items.finalCost) }}</p>
-          <p class="font-bold py-1"> {{
+          <p class="py-2">{{ handleFindConsole(items.systemId) }}</p>
+          <p class="py-2">{{ handlePaymentMethod(items.paymentMethod, items.finalCost) }}</p>
+          <p class="font-bold py-2"> {{
             items.finalCost
             ? `${items.finalCost?.toLocaleString()} تومان`
             : "-"

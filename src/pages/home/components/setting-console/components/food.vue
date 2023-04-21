@@ -119,24 +119,24 @@ const handleCount = (foodId, type) => {
         class="parent-mobile-table">
         <div class="flex flex-col justify-between items-end">
           <!-- ////////////////////////////// -->
-          <div class="flex items-center justify-end">
-            <i class="fa-duotone fa-plate-utensils" />
+          <div class="flex items-center justify-end py-1">
+            <i class="fa-duotone fa-plate-utensils text-red-500" />
             <p class="ml-1">نام محصول</p>
           </div>
-          <div class="flex items-center justify-end">
-            <i class="fa-duotone fa-money-bill-1-wave" />
+          <div class="flex items-center justify-end py-1">
+            <i class="fa-duotone fa-money-bill-1-wave text-green-700" />
             <p class="ml-1">قیمت محصول</p>
           </div>
-          <div class="flex items-center justify-end">
-            <i class="fa-duotone fa-cash-register" />
+          <div class="flex items-center justify-end py-1">
+            <i class="fa-duotone fa-cash-register text-blue-500" />
             <p class="ml-1">تعداد</p>
           </div>
           <!-- ////////////////////////////// -->
         </div>
         <div class="flex flex-col justify-between items-center">
-          <p>{{ items.name }}</p>
-          <p>{{ items.cost?.toLocaleString() }}</p>
-          <div class="inline-flex justify-center items-center">
+          <p class="py-1 font-bold">{{ items.name }}</p>
+          <p class="py-1 font-bold">{{ items.cost?.toLocaleString() }}</p>
+          <div class="inline-flex justify-center items-center py-1">
             <i class="fa-duotone fa-circle-minus text-red-500 cursor-pointer"
               @click="handleCount(items.id, 'Decrease')"></i>
             <p class="mx-3 font-bold">{{ items.count }}</p>

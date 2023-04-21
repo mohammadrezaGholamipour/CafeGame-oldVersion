@@ -76,34 +76,34 @@ const handleTotalFoodMoney = computed(() => {
       <div v-for="(items, index) in props.billFood" :key="index" class="parent-mobile-table bg-slate-200">
         <div class="flex flex-col justify-between items-end">
           <!-- ////////////////////////////// -->
-          <div class="flex items-center justify-end">
+          <div class="flex items-center justify-end py-1">
             <i class="fa-duotone fa-arrow-down-wide-short" />
             <p class="ml-1">ردیف</p>
           </div>
-          <div class="flex items-center justify-end">
+          <div class="flex items-center justify-end py-1">
             <i class="fa-duotone fa-burger-soda text-yellow-700" />
             <p class="ml-1">نام محصول</p>
           </div>
-          <div class="flex items-center justify-end">
+          <div class="flex items-center justify-end py-1">
             <i class="fa-duotone fa-money-bill-1-wave text-green-500" />
             <p class="ml-1">قیمت واحد</p>
           </div>
-          <div class="flex items-center justify-end">
+          <div class="flex items-center justify-end py-1">
             <i class="fa-duotone fa-cash-register" />
             <p class="ml-1">تعداد</p>
           </div>
-          <div class="flex items-center justify-end">
+          <div class="flex items-center justify-end py-1">
             <i class="fa-duotone fa-cash-register text-blue-500" />
             <p class="ml-1">جمع کل</p>
           </div>
           <!-- ////////////////////////////// -->
         </div>
         <div class="flex flex-col justify-between items-center">
-          <p>{{ index + 1 }}</p>
-          <p>{{ items.name }}</p>
-          <p>{{ items.cost?.toLocaleString() }} تومان</p>
-          <p>{{ items.count }}</p>
-          <p>{{ items.total?.toLocaleString() }} تومان</p>
+          <p class="py-1">{{ index + 1 }}</p>
+          <p class="py-1">{{ items.name }}</p>
+          <p class="py-1">{{ items.cost?.toLocaleString() }} تومان</p>
+          <p class="py-1">{{ items.count }}</p>
+          <p class="py-1">{{ items.total?.toLocaleString() }} تومان</p>
         </div>
       </div>
       <div v-if="props.billFood.length > 1"

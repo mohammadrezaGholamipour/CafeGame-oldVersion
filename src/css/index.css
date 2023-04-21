@@ -358,7 +358,7 @@
     width: 100vw;
   }
   .parent-mobile-table {
-    @apply flex items-center flex-row-reverse justify-between mt-3 w-full p-2 bg-white shadow-lg rounded-md;
+    @apply flex items-center flex-row-reverse justify-between mt-3 w-full p-4 bg-white shadow-lg rounded-md;
   }
   .bill-tools {
     position: absolute;

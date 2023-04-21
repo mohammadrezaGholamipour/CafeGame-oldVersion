@@ -49,10 +49,31 @@ const state = reactive({
     status: false,
     filterStatus: false
   },
+  costList: {
+    costPlayGame: 0,
+    totalBills: 0,
+    totalCost: 0,
+    costFood: 0,
+    time: 0,
+  }
 });
 /////////////////////////////////
 onMounted(() => {
-  state.billList = props.bills
+  state.costList.time = moment().locale("fa").format("YYYY/MM/DD")
+  /////////////
+  if (props.bills.length) {
+    state.billList = props.bills
+    for (const bill of state.billList) {
+      if (bill.endTime) {
+        if (moment(bill.endTime).locale("fa").format("YYYY/MM/DD") === state.costList.time) {
+          state.costList.totalCost += (bill.costFood + bill.costPlayGame)
+          state.costList.costPlayGame += bill.costPlayGame
+          state.costList.costFood += bill.costFood
+          state.costList.totalBills++
+        }
+      }
+    }
+  }
 });
 /////////////////////////////////
 const handleFindMoney = (hourRateId) => {
@@ -178,7 +199,6 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
 
 }
 //////////////////////////////
-
 </script>
 <template>
   <div class="overflow-y-scroll h-[86vh] flex items-center flex-col justify-start mt-15 rounded-md w-[90vw]">
@@ -225,7 +245,7 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
               <p v-else>بدون خوراکی</p>
             </div>
           </td>
-          <td>{{ items.totalMoney }}</td>
+          <td>{{ items.costPlayGame ? `${items.costPlayGame.toLocaleString()} تومان` : '-' }}</td>
           <td>{{ handleFindConsole(items.systemId) }}</td>
           <td>{{ handlePaymentMethod(items.paymentMethod, items.finalCost) }}</td>
           <td>
@@ -247,13 +267,13 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
           </td>
         </tr>
       </tbody>
-      <tfoot>
-        <tr class="sticky bottom-0 text-center text-lg text-white bg-green-700">
-          <td class="p-1 ">امروز</td>
-          <td colspan="2">تعداد فاکتور :29</td>
-          <td colspan="2">خوراکی ها : 153.157</td>
-          <td colspan="2"> بازی شده :756,598</td>
-          <td colspan="2">جمع کل : 451.5784</td>
+      <tfoot v-if="state.billList.length">
+        <tr class="sticky bottom-0 text-center text-lg text-white">
+          <td class="p-2 bg-slate-500">امروز</td>
+          <td class="bg-yellow-500">تعداد فاکتور : {{ state.costList.totalBills }}</td>
+          <td colspan="2" class="bg-red-600">خوراکی ها : {{ state.costList.costFood.toLocaleString() }}</td>
+          <td colspan="2" class="bg-blue-500">بازی شده : {{ state.costList.costPlayGame.toLocaleString() }}</td>
+          <td colspan="2" class="bg-green-600">جمع کل : {{ state.costList.totalCost.toLocaleString() }}</td>
         </tr>
       </tfoot>
     </table>
@@ -274,12 +294,16 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
             <i class="fa-duotone fa-hourglass-start text-red-500" />
           </div>
           <div class="flex items-center justify-end py-2">
-            <p class="ml-1">هزینه بازی</p>
+            <p class="ml-1">مبلغ واحد</p>
             <i class="fa-duotone fa-money-bill-1-wave text-green-500" />
           </div>
           <div class="flex items-center justify-end py-2">
             <p class="ml-1">خوراکی ها</p>
-            <i class="fa-duotone fa-burger-soda text-yellow-700" />
+            <i class="fa-duotone fa-burger-soda text-red-700" />
+          </div>
+          <div class="flex items-center justify-end py-2">
+            <p class="ml-1">هزینه بازی شده</p>
+            <i class="fa-duotone fa-coin text-green-600" />
           </div>
           <div class="flex items-center justify-end py-2">
             <p class="ml-1">شماره دستگاه</p>
@@ -317,6 +341,7 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
             <p v-else>بدون خوراکی</p>
           </div>
           </p>
+          <p class="py-2">{{ items.costPlayGame ? `${items.costPlayGame.toLocaleString()} تومان` : '-' }}</p>
           <p class="py-2">{{ handleFindConsole(items.systemId) }}</p>
           <p class="py-2">{{ handlePaymentMethod(items.paymentMethod, items.finalCost) }}</p>
           <p class="font-bold py-2"> {{

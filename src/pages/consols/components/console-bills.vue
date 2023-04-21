@@ -24,7 +24,7 @@ const handleCloseModal = () => {
           <p class="bg-yellow-500 p-2 text-lg rounded-md mb-2 text-white shadow-md">هزینه بازی شده با دستگاه</p>
           <div class="flex items-center text-xl font-bold mt-3">
             <p class="mr-2">تومان</p>
-            <p> {{ props.dialog.data.totalMoney.toLocaleString() }}</p>
+            <p> {{ props.dialog.data.costPlayGame.toLocaleString() }}</p>
           </div>
         </div>
       </div>

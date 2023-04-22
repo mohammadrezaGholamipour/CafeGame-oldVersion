@@ -8,9 +8,9 @@ const emit = defineEmits(["newConsole", "deleteConsole"]);
 ////////////////////////
 const state = reactive({
   totalTime: {
-    hours: '',
-    minutes: '',
-    seconds: ''
+    hours: 0,
+    minutes: 0,
+    seconds: 0
   },
   totalMoney: '',
   confirmDialog: {
@@ -48,8 +48,9 @@ const handleShowDialog = (consoleSelected) => {
   const consoleBills = props.billList.filter((items) => items.systemId === consoleSelected.id && items.endTime)
   for (const bill of consoleBills) {
     //////////////////////////
-    const startTime = new Date(`${bill.startTime}Z`);
-    const endTime = new Date(`${bill.endTime}Z`);
+    let startTime = new Date(bill.startTime);
+    let endTime = new Date(bill.endTime);
+    ///////////////
     let delta = Math.abs(endTime.getTime() - startTime.getTime()) / 1000;
     let days = Math.floor(delta / 86400);
     delta -= days * 86400;
@@ -58,30 +59,11 @@ const handleShowDialog = (consoleSelected) => {
     let minutes = Math.floor(delta / 60) % 60;
     delta -= minutes * 60;
     let seconds = Math.floor(delta % 60);
-    bill.time = {
-      hours,
-      minutes,
-      seconds,
-    };
     //////////////////////////
-    state.totalTime.hours += bill.time.hours
-    state.totalTime.minutes += bill.time.minutes
-    state.totalTime.seconds += bill.time.seconds
-    //////////////////////////
-    if (bill.billFoods.length) {
-      bill.moneyPlayGame = bill.finalCost
-      for (const foodBill of bill.billFoods) {
-        for (const food of props.foodList) {
-          if (foodBill.foodId === food.id) {
-            bill.moneyPlayGame -= food.cost * foodBill.count
-          }
-        }
-      }
-      state.totalMoney += bill.moneyPlayGame
-    } else {
-      state.totalMoney += bill.finalCost
-    }
-
+    state.totalTime.hours += hours
+    state.totalTime.minutes += minutes
+    state.totalTime.seconds += seconds
+    state.totalMoney += bill.costPlayGame
     //////////////////////////
   }
   state.dialog.headerInfo = "فاکتور های ثبت شده در این دستگاه";

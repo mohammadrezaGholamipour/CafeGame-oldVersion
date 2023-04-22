@@ -2,6 +2,7 @@
 import BillFilterDialog from "./bill-filter-dialog.vue";
 import { computed, reactive, onMounted } from "vue";
 import BillInfoDialog from "./bill-info-dialog.vue";
+import BillsReport from "./billsReport.vue";
 import { useWindowSize } from '@vueuse/core'
 import BillTime from "./bill-time.vue";
 import BillFood from "./bill-food.vue";
@@ -82,15 +83,16 @@ const handleFindMoney = (hourRateId) => {
     ?.rate?.toLocaleString()} تومان`;
 };
 /////////////////////////////////
-const handleShowDialog = (billSelected, type) => {
+const handleShowDialog = (data, type) => {
+  state.dialog.data = data;
+  state.dialog.component = type;
+  //////////////////////////
   if (type === "time") {
     state.dialog.headerInfo = "اطلاعات زمان شروع و پایان فاکتور";
-    state.dialog.data = billSelected;
-    state.dialog.component = type;
-  } else {
+  } else if (type === "food") {
     state.dialog.headerInfo = "لیست خوراکی های ثبت شده";
-    state.dialog.data = billSelected;
-    state.dialog.component = type;
+  } else {
+    state.dialog.headerInfo = "آمار فاکتور های ثبت شده";
   }
   state.dialog.status = true;
 };
@@ -279,9 +281,15 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
     </table>
     <!-- ///////////////////// -->
     <div v-else class="w-full flex flex-col items-center justify-start">
-      <button @click="handleFilter" class="bg-white shadow-lg font-bold text-black p-3 rounded-md">فیلتر ها <i
-          class="fa-duotone fa-magnifying-glass fa-beat-fade mr-2 cursor-pointer text-xl"
-          :style="styleBtnSearch"></i></button>
+      <div class="flex justify-center items-center">
+        <button @click="handleFilter"
+          class="border-2 border-solid border-yellow-500 shadow-lg font-bold text-white p-2 rounded-md">فیلتر ها <i
+            class="fa-duotone fa-magnifying-glass fa-beat-fade mr-2 cursor-pointer text-xl"
+            :style="styleBtnSearch"></i></button>
+        <button @click="handleShowDialog(state.costList, 'billsReport')"
+          class="border-2 border-solid border-red-500 mr-2 shadow-lg font-bold text-white p-2 rounded-md">آمار
+          فاکتورها <i class="fa-duotone fa-cash-register fa-beat-fade text-red-700 text-xl" /></button>
+      </div>
       <div v-for="(items, index) in state.billList" :key="index" class="parent-mobile-table min-w-[300px] flex-row">
         <div class="flex flex-col justify-between items-start">
           <!-- ////////////////////////////// -->
@@ -357,6 +365,7 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
   <BillInfoDialog :dialog="state.dialog" @close="handleCloseDialog">
     <BillTime v-if="state.dialog.component === 'time'" :billTime="state.dialog.data" />
     <BillFood :foods="props.foods" :billFood="state.dialog.data" v-if="state.dialog.component === 'food'" />
+    <BillsReport :billsReport="state.dialog.data" v-if="state.dialog.component === 'billsReport'" />
   </BillInfoDialog>
   <!-- ///////////////////////////////// -->
   <BillFilterDialog :dialog="state.filterDialog" @acceptOrCansel="handleAcceptOrCanselFilter" />

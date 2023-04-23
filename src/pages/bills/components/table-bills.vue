@@ -56,7 +56,8 @@ const state = reactive({
     totalCost: 0,
     costFood: 0,
     time: 0,
-  }
+  },
+  showAndHideDatePicker: false
 });
 /////////////////////////////////
 onMounted(() => {
@@ -292,7 +293,7 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
       </tbody>
       <tfoot v-if="state.billList.length">
         <tr class="sticky bottom-0 text-center text-lg text-white">
-          <td class="p-2 bg-slate-500">امروز</td>
+          <td @click="state.showAndHideDatePicker = true" class="p-2 bg-slate-500">{{ state.costList.time }}</td>
           <td class="bg-yellow-500">تعداد فاکتور : {{ state.costList.totalBills }}</td>
           <td colspan="2" class="bg-red-600">خوراکی ها : {{ state.costList.costFood.toLocaleString() }}</td>
           <td colspan="2" class="bg-blue-500">بازی شده : {{ state.costList.costPlayGame.toLocaleString() }}</td>
@@ -391,4 +392,12 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
   </BillInfoDialog>
   <!-- ///////////////////////////////// -->
   <BillFilterDialog :dialog="state.filterDialog" @acceptOrCansel="handleAcceptOrCanselFilter" />
+  <date-picker @change="changeDateBillsReport($event.format('jYYYY/jMM/jDD'))" :show="state.showAndHideDatePicker"
+    format="jYYYY/jMM/jDD" simple id="dataBillsReport" @close="state.showAndHideDatePicker = false" />
 </template>
+<style>
+#dataBillsReport .vpd-input-group {
+  display: none;
+}
+</style>
+

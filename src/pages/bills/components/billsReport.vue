@@ -1,5 +1,19 @@
 <script setup>
+import { reactive, watch } from 'vue';
+// //////////////////////
+const emit = defineEmits(["changeDateBillsReport"]);
 const props = defineProps(["billsReport"]);
+/////////////////////////
+const state = reactive({
+  time: '',
+  showAndHideDatePicker: false
+})
+///////////////////////////
+watch(() => state.time, (value) => {
+  if (props.billsReport.time !== value) {
+    emit('changeDateBillsReport', value)
+  }
+})
 </script>
 <template>
   <div class="flex w-full items-center justify-between flex-row-reverse p-3 bg-white">
@@ -7,7 +21,7 @@ const props = defineProps(["billsReport"]);
       <!-- ////////////////////////////// -->
       <div class="flex items-center py-2">
         <p class="mr-1">تاریخ</p>
-        <i class="fa-duotone fa-hourglass-start text-red-500" />
+        <i class="fa-duotone fa-hourglass-start text-red-500" @click="state.showAndHideDatePicker = true" />
       </div>
       <div class="flex items-center py-2">
         <p class="mr-1">تعداد فاکتور</p>
@@ -28,7 +42,8 @@ const props = defineProps(["billsReport"]);
       <!-- ////////////////////////////// -->
     </div>
     <div class="flex flex-col font-bold justify-between items-center">
-      <p class="py-2">{{ props.billsReport.time }}</p>
+      <p class="py-2">{{ props.billsReport.time }}<date-picker v-model="state.time" :show="state.showAndHideDatePicker"
+          format="jYYYY/jMM/jDD" simple id="dataBillsReport" @close="state.showAndHideDatePicker = false" /></p>
       <p class="py-2">{{ props.billsReport.totalBills }}</p>
       <p class="py-2">{{ props.billsReport.costFood.toLocaleString() }}</p>
       <p class="py-2">{{ props.billsReport.costPlayGame.toLocaleString() }}</p>
@@ -36,4 +51,9 @@ const props = defineProps(["billsReport"]);
     </div>
   </div>
 </template>
+<style>
+#dataBillsReport .vpd-input-group {
+  display: none;
+}
+</style>
 

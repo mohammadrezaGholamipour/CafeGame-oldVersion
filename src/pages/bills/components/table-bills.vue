@@ -77,6 +77,27 @@ onMounted(() => {
   }
 });
 /////////////////////////////////
+const changeDateBillsReport = (date) => {
+  state.costList.time = date
+  state.costList.costPlayGame = 0
+  state.costList.costFood = 0
+  state.costList.totalBills = 0
+  state.costList.totalCost = 0
+  /////////////////////////
+  if (props.bills.length) {
+    for (const bill of state.billList) {
+      if (bill.endTime) {
+        if (moment(bill.endTime).locale("fa").format("YYYY/MM/DD") === state.costList.time) {
+          state.costList.totalCost += (bill.costFood + bill.costPlayGame)
+          state.costList.costPlayGame += bill.costPlayGame
+          state.costList.costFood += bill.costFood
+          state.costList.totalBills++
+        }
+      }
+    }
+  }
+}
+/////////////////////////////////
 const handleFindMoney = (hourRateId) => {
   return `${props.moneys
     .find((items) => items.id === hourRateId)
@@ -365,7 +386,8 @@ const handlePaymentMethod = (paymentMethod, finalCost) => {
   <BillInfoDialog :dialog="state.dialog" @close="handleCloseDialog">
     <BillTime v-if="state.dialog.component === 'time'" :billTime="state.dialog.data" />
     <BillFood :foods="props.foods" :billFood="state.dialog.data" v-if="state.dialog.component === 'food'" />
-    <BillsReport :billsReport="state.dialog.data" v-if="state.dialog.component === 'billsReport'" />
+    <BillsReport @changeDateBillsReport="changeDateBillsReport" :billsReport="state.dialog.data"
+      v-if="state.dialog.component === 'billsReport'" />
   </BillInfoDialog>
   <!-- ///////////////////////////////// -->
   <BillFilterDialog :dialog="state.filterDialog" @acceptOrCansel="handleAcceptOrCanselFilter" />

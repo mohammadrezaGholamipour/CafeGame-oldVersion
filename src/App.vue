@@ -1,10 +1,9 @@
 <script setup>
 import BtnQuickAccess from "@/components/btn-quick-access.vue";
 import MenuFeatures from "@/components/menu-features.vue";
-import { onMounted, watch, computed, ref } from "vue";
+import { onMounted, watch, computed } from "vue";
 import Loading from "./components/loading.vue";
 import AuthService from "./util/AuthService";
-import { useFullscreen } from "@vueuse/core";
 import { useStore } from '@/store/index'
 import { useRoute } from "vue-router";
 ///////////////////////////////////////
